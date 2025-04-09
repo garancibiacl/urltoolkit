@@ -174,9 +174,14 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
     const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
     parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
 
-    const urlFinal = tempUrl.toString();
+    // ✅ Reemplazar comas en el pathname
+    const segmentos = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-'));
+    tempUrl.pathname = segmentos.join('/');
 
-    // ✅ Construcción del href con AMPscript
+    // ✅ Construcción del href con AMPscript (sin codificación de %C3...)
+    const urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
+    document.getElementById('hrefInput').value = urlFinal;
+
     const nuevoHref = `%%=RedirectTo(concat('${urlFinal}?',@prefix))=%%`;
     enlaceActual.setAttribute('href', nuevoHref);
 
@@ -208,6 +213,7 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
     actualizarVistaPrevia();
   }
 });
+
 
 
 
@@ -296,33 +302,34 @@ if (iframeModal) iframeModal.src = 'about:blank';
 
 
 
-
+// START TOGGLE DARK Y LIGTH
 
 const toggleBtn = document.getElementById('toggleThemeBtn');
 const body = document.body;
 
-// Función para aplicar el tema
 function aplicarTema(modo) {
-  body.setAttribute('data-bs-theme', modo); 
-  toggleBtn.textContent = modo === 'dark' ? '☀️' : '🌙';
+  body.setAttribute('data-bs-theme', modo);
   localStorage.setItem('modoVisual', modo);
+
+  // Si tienes CodeMirror activo, cambia su tema también
+  if (typeof codeMirrorTabla !== 'undefined') {
+    codeMirrorTabla.setOption('theme', modo === 'dark' ? 'material-darker' : 'eclipse');
+  }
 }
 
-// Cargar tema guardado al iniciar
 window.addEventListener('DOMContentLoaded', () => {
-  const modoGuardado = localStorage.getItem('modoVisual') || 'light';
-  aplicarTema(modoGuardado);
+  const guardado = localStorage.getItem('modoVisual') || 'light';
+  aplicarTema(guardado);
 });
 
-// Alternar entre claro y oscuro al hacer clic
 toggleBtn.addEventListener('click', () => {
-  const modoActual = body.getAttribute('data-bs-theme') || 'light';
-  const nuevoModo = modoActual === 'light' ? 'dark' : 'light';
-  aplicarTema(nuevoModo);
+  const actual = body.getAttribute('data-bs-theme') || 'light';
+  const nuevo = actual === 'light' ? 'dark' : 'light';
+  aplicarTema(nuevo);
 });
 
 
-
+// FIN TOGGLE DARK Y LIGTH
 
 // START Función para mostrar una vista y ocultar las otras
 const vistaEditor = document.getElementById('vistaEditor');
@@ -637,6 +644,10 @@ const inputFtp = document.getElementById('ftpInputMultiple');
 
 
 //  FIN Conversor de múltiples URLs FTP → HTTPS
+
+
+
+
 
    // START FUNCION TOAST
 
