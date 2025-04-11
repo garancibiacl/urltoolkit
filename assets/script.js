@@ -160,10 +160,6 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
   // ✅ Usamos nuestra lógica filtrada
   enlacesConPatron = obtenerEnlacesFiltrados();
 
-  if (enlacesConPatron.length === 0) {
-    alert('⚠️ No se encontraron enlaces válidos');
-    return;
-  }
 
   indiceActual = 0;
   document.getElementById('editorHref').classList.remove('d-none');
