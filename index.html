@@ -4,8 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editor de Enlacest</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/{toggle name}.min.css">
   <link rel="stylesheet" href="assets/styles.css">
+  
 <body class="bg-light">
 
   
@@ -27,11 +28,16 @@
           <li class="nav-item">
             <a class="nav-link" href="#" id="navConversor">Conversor FTP</a>
           </li>
+          <li class="nav-item">
+          <a class="nav-link" href="#" id="navAmp">Editor URL/Imagen</a>
+          </li>
+
         </ul>
 
          <!-- Toggle modo oscuro/claro -->
-
          <div id="toggleThemeBtn" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema" role="button" tabindex="0"></div>
+
+       
 
 
         
@@ -43,7 +49,7 @@
 
 
   <!-- Vista 1: Editor de URLs -->
-  <div class="container py-4">
+  <div class="container-fluid py-4">
   
     <div class="row justify-content-center">
       <div class="col-md-12  py-4">
@@ -96,10 +102,18 @@
                             <span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
                             <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/sodimac-cl/content/categoria-1">
                            
-                            <button class="btn btn-primary" id="aplicarCambioBtn">Guardar</button>
+                            <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar</button>
                           </div>
                         </div>
-              
+                        <div class="mb-3">
+                          <label for="carpetaSelector" class="form-label fw-semibold">🗂️ Selecciona carpeta de imágenes:</label>
+                          <select id="carpetaSelector" class="form-select w-auto">
+                            <option value="04-abril">04-abril</option>
+                            <option value="05-mayo">05-mayo</option>
+                            <option value="06-junio">06-junio</option>
+                            <!-- Agrega más meses si lo necesitas -->
+                          </select>
+                        </div>
                         <div class="col-md-12 d-flex justify-content-between">
                           <div class="d-flex gap-3">
                             <button id="anteriorBtn" class="btn btn-primary btn-sm">⏮ Anterior</button>
@@ -121,45 +135,49 @@
       </div>
 
       <!-- Vista SKUs con soporte de tema -->
-<div id="vistaSku" style="display: none;">
-  <div class="card p-4 bg-body text-body border-0 shadow-sm rounded-4">
-    <h3 class="mb-4 text-center">🎯 Generador Automático de SKUs (AMPscript)</h3>
+    <div class="row justify-content-center">
+       <div class="col-md-10">
+              <div id="vistaSku" style="display: none;">
+              <div class="card p-4 bg-body text-body border-0 shadow-sm rounded-4">
+              <h3 class="mb-4 text-center">🎯 Generador Automático de SKUs (AMPscript)</h3>
 
-    <div class="row g-4 align-items-start">
-      <!-- Input SKUs -->
-      <div class="col-md-6">
-        <label for="skuInput" class="form-label">📦 Ingresa los SKUs separados por línea:</label>
-        <textarea id="skuInput" class="form-control" rows="10" placeholder="130597089 "></textarea>
-        <small id="skuContador" class="form-text text-muted mt-1">0 de 16 SKUs</small>
-        <div class="d-flex justify-content-center mt-4">
-          <button id="generarSkuBtn" class="btn btn-primary w-100">🛠️ Generar Código</button>
-        </div>
-      </div>
+              <div class="row g-4 align-items-start">
+              <!-- Input SKUs -->
+              <div class="col-md-3">
+                <label for="skuInput" class="form-label">📦 Ingresa los SKUs separados por línea:</label>
+                <textarea id="skuInput" class="form-control" rows="10" placeholder="130597089 "></textarea>
+                <small id="skuContador" class="form-text text-muted mt-1">0 de 16 SKUs</small>
+                <div class="d-flex justify-content-center mt-4">
+                  <button id="generarSkuBtn" class="btn btn-primary w-100">🛠️ Generar Código</button>
+                </div>
+              </div>
 
-      <!-- Resultado AMPscript -->
-      <div class="col-md-6">
-        <label for="resultadoSKU" class="form-label">📄 Resultado AMPscript:</label>
-        <textarea id="resultadoSKU" class="form-control mb-2" rows="10" readonly></textarea>
-        <div class="d-flex justify-content-center mt-4">
-          <button id="copiarAmpBtn" class="btn btn-warning w-100 d-none">📋 Copiar AMPscript generado</button>
-        </div>
-      </div>
+              <!-- Resultado AMPscript -->
+              <div class="col-md-9">
+                <label for="resultadoSKU" class="form-label">📄 Resultado AMPscript:</label>
+                <textarea id="resultadoSKU" class="form-control mb-2" rows="10" readonly></textarea>
+                <div class="d-flex justify-content-center mt-4">
+                  <button id="copiarAmpBtn" class="btn btn-warning w-100 d-none">📋 Copiar AMPscript generado</button>
+                </div>
+              </div>
+              </div>
+
+              <!-- OCR -->
+              <div class="mb-4 mt-4">
+              <label for="imagenSku" class="form-label fw-semibold">📷 Subir imagen para detectar SKUs:</label>
+              <input type="file" id="imagenSku" accept="image/*" class="form-control mb-2" />
+
+              <div class="d-flex gap-2 mt-2">
+                <button id="detectarSkuBtn" class="btn btn-outline-primary">🔍 Detectar SKUs desde imagen</button>
+                <button id="limpiarImagenBtn" class="btn btn-outline-danger">🧹 Limpiar imagen y SKUs</button>
+              </div>
+
+              <div id="ocrProgreso" class="mt-2 small text-muted"></div>
+              </div>
+              </div>
+              </div>
+         </div>
     </div>
-
-    <!-- OCR -->
-    <div class="mb-4 mt-4">
-      <label for="imagenSku" class="form-label fw-semibold">📷 Subir imagen para detectar SKUs:</label>
-      <input type="file" id="imagenSku" accept="image/*" class="form-control mb-2" />
-
-      <div class="d-flex gap-2 mt-2">
-        <button id="detectarSkuBtn" class="btn btn-outline-primary">🔍 Detectar SKUs desde imagen</button>
-        <button id="limpiarImagenBtn" class="btn btn-outline-danger">🧹 Limpiar imagen y SKUs</button>
-      </div>
-
-      <div id="ocrProgreso" class="mt-2 small text-muted"></div>
-    </div>
-  </div>
-</div>
   </div>
 
 
@@ -199,12 +217,57 @@
         <textarea class="form-control text-success fw-semibold" id="urlListaResultado" rows="6" readonly></textarea>
       </div>
 
-      <button class="btn btn-primary w-100" onclick="copiarListaResultado()">📋 Copiar URLs</button>
+      <button class="btn btn-primary w-100" onclick="copiarListaResultado('urlListaResultado')">📋 Copiar URLs</button>
     </div>
   </div>
     
   </div>
 </div>
+
+
+
+
+          <!-- Vista del Editor AMPscript -->
+            <div class="row justify-content-center">
+              <div class="col-md-8 col-lg-6">
+            <div id="vistaAmpEditor" style="display: none">
+              <div class="card p-4 bg-white dark:bg-dark">
+                <h2 class="text-center mb-4">Editor de URL e Imagen con AMPscript</h2>
+
+                <div class="mb-3">
+                  <label id="hrefInputUrlImage" class="form-label">URL del enlace (AMPscript)</label>
+                  <input type="text" class="form-control" id="uhrefInputUrlImage" placeholder="https://sodimac.cl/ruta/ejemplo?param=x">
+                </div>
+
+                <div class="mb-3">
+                  <label for="ftpInputMultiple1" class="form-label">URL de la imagen (FTP o HTTP)</label>
+                  <textarea class="form-control" id="ftpInputMultiple1" rows="3" placeholder="ftp://soclAdmin@10.1.3.63/produccion/..."></textarea>
+                </div>
+
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="removeLastImageNumber">
+                  <label class="form-check-label" for="removeLastImageNumber">
+                    Quitar número final antes de la extensión (ej: -1.jpg → .jpg)
+                  </label>
+                </div>
+
+                <button class="btn btn-primary w-100 mb-3" onclick="aplicarCambios()">Aplicar Cambios</button>
+                    <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar</button>
+
+                <h5 class="fw-bold">Tabla AMPscript generada:</h5>
+                <pre id="vistaPrevia" class="bg-light p-3 rounded">Aquí verás el resultado…</pre>
+
+                <button class="btn btn-success w-100 mb-3" onclick="copiarCodigo()">📋 Copiar código</button>
+
+                <h6 class="fw-bold">Vista previa de imagen:</h6>
+                <div id="imgPreview" class="text-center border rounded p-2">
+                  <p class="text-muted">Sin imagen aún</p>
+                </div>
+              </div>
+            </div>
+            </div>
+            </div>
+
 
 </div>
 

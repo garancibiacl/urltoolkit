@@ -90,13 +90,41 @@ function mostrarHrefActual() {
 }
 
 
+function obtenerEnlacesFiltrados() {
+  const celdas = template.content.querySelectorAll('td[colspan="2"][align="center"]');
+  const setUnico = new Set();
+  const enlacesValidos = [];
+
+  celdas.forEach(td => {
+    const a = td.querySelector('a[href*="%%=RedirectTo"]');
+    const carpetaSeleccionada = obtenerCarpetaSeleccionada();
+    const img = td.querySelector(`img[src*="${carpetaSeleccionada}"]`);
+
+    if (a && img) {
+      const href = a.getAttribute('href') || '';
+      const src = img.getAttribute('src') || '';
+      const hash = `${href}|${src}`;
+
+      if (!setUnico.has(hash)) {
+        setUnico.add(hash);
+        enlacesValidos.push(a); // solo agregamos el <a> al array
+      }
+    }
+  });
+
+  return enlacesValidos;
+}
+
+
 const descripcionesEnlaces = [
   'Vitrina',
   'Categoría 1',
   'Categoría 2',
   'Categoría 3',
+  'Categoría 4',
   'Categoría Compl 1',
   'Categoría Compl 2',
+  'Categoría Compl 3  ',
 
 ];
 
@@ -115,24 +143,25 @@ function actualizarVistaPrevia() {
   const iframe = document.getElementById('vistaPrevia');
   iframe.srcdoc = template.innerHTML;
 }
+function obtenerCarpetaSeleccionada() {
+  const mes = document.getElementById('carpetaSelector').value;
+  return `/static/envioweb/2025/${mes}/`;
+}
+
 
 document.getElementById('cargarBtn').addEventListener('click', () => {
-  const entrada = document.getElementById('htmlInput').value;
-  originalHtml = entrada;
-  const procesado = conservarAmpScript(entrada);
-  template.innerHTML = procesado;
+  const rawHtml = document.getElementById('htmlInput').value;
+  template.innerHTML = conservarAmpScript(rawHtml); // si estás usando AMP tokens
 
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
   inyectarEstiloResaltado();
 
-  const enlaces = template.content.querySelectorAll('a[href]');
-  enlacesConPatron = Array.from(enlaces).filter(a =>
-    a.getAttribute('href')?.match(/^%%=RedirectTo\(concat\('.*?[\?&]',@prefix\)\)=%%$/)
-  );
+  // ✅ Usamos nuestra lógica filtrada
+  enlacesConPatron = obtenerEnlacesFiltrados();
 
   if (enlacesConPatron.length === 0) {
-    mostrarToast('⚠️ No se encontró ningún href con el patrón esperado.', 'danger');
+    alert('⚠️ No se encontraron enlaces válidos');
     return;
   }
 
@@ -144,9 +173,10 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
 
 
 
+
  // START FUNCION BOTON APLICAR CAMBIOS
 
- document.getElementById('aplicarCambioBtn').addEventListener('click', () => {
+ /*document.getElementById('aplicarCambioBtn').addEventListener('click', () => {
   let nuevaUrl = document.getElementById('hrefInput').value.trim();
 
   if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
@@ -212,8 +242,73 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
     document.getElementById('copiarHtmlBtn').classList.remove('d-none');
     actualizarVistaPrevia();
   }
-});
+});*/
 
+function aplicarCambioHref(idInput = 'hrefInput') {
+  let nuevaUrl = document.getElementById(idInput).value.trim();
+
+  if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
+
+  const enlaceActual = enlacesConPatron[indiceActual];
+  if (!enlaceActual) return;
+
+  // Normalizar y quitar acentos
+  nuevaUrl = nuevaUrl.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+
+  // Agrega https:// si no tiene
+  if (!/^https?:\/\//i.test(nuevaUrl)) {
+    nuevaUrl = 'https://' + nuevaUrl;
+  }
+
+  try {
+    const tempUrl = new URL(nuevaUrl);
+
+    if (!tempUrl.hostname.startsWith('www.')) {
+      tempUrl.hostname = 'www.' + tempUrl.hostname;
+    }
+
+    // Eliminar parámetros innecesarios
+    const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
+    parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
+
+    // Reemplazar comas en el pathname
+    const segmentos = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-'));
+    tempUrl.pathname = segmentos.join('/');
+
+    const urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
+    document.getElementById(idInput).value = urlFinal;
+
+    const nuevoHref = `%%=RedirectTo(concat('${urlFinal}?',@prefix))=%%`;
+    enlaceActual.setAttribute('href', nuevoHref);
+
+    // Alt automático
+    const segmentosSignificativos = tempUrl.pathname
+      .split('/')
+      .filter(seg => seg && !/^\d+$/.test(seg));
+
+    let altSegment = segmentosSignificativos[3] || segmentosSignificativos.at(-1);
+    if (altSegment && /^[\w\-]+$/.test(altSegment)) {
+      altSegment = altSegment.replace(/[-_]/g, ' ').trim().replace(/\s+/g, ' ');
+      altSegment = altSegment.charAt(0).toUpperCase() + altSegment.slice(1);
+
+      const img = enlaceActual.querySelector('img');
+      if (img) img.setAttribute('alt', `Ir a ${altSegment}`);
+    }
+
+  } catch (e) {
+    console.warn('❌ URL inválida:', e);
+    return alert('❌ La URL ingresada no es válida.');
+  }
+
+  if (indiceActual < enlacesConPatron.length - 1) {
+    indiceActual++;
+    mostrarHrefActual();
+  } else {
+    alert('✅ Todos los enlaces fueron modificados.');
+    document.getElementById('copiarHtmlBtn').classList.remove('d-none');
+    actualizarVistaPrevia();
+  }
+}
 
 
 
@@ -335,50 +430,34 @@ toggleBtn.addEventListener('click', () => {
 const vistaEditor = document.getElementById('vistaEditor');
 const vistaSku = document.getElementById('vistaSku');
 const vistaConversor = document.getElementById('vistaConversor');
+const vistaAmpEditor = document.getElementById('vistaAmpEditor');
 
 const navEditor = document.getElementById('navEditor');
 const navSku = document.getElementById('navSku');
 const navConversor = document.getElementById('navConversor');
+const navAmp = document.getElementById('navAmp');
 
-// Función para mostrar una vista y ocultar las otras
 function mostrarVista(vista) {
-  if (vista === 'editor') {
-    vistaEditor.style.display = 'block';
-    vistaSku.style.display = 'none';
-    vistaConversor.style.display = 'none';
+  vistaEditor.style.display = vista === 'editor' ? 'block' : 'none';
+  vistaSku.style.display = vista === 'sku' ? 'block' : 'none';
+  vistaConversor.style.display = vista === 'conversor' ? 'block' : 'none';
+  vistaAmpEditor.style.display = vista === 'amp' ? 'block' : 'none';
 
-    navEditor.classList.add('active');
-    navSku.classList.remove('active');
-    navConversor.classList.remove('active');
-
-  } else if (vista === 'sku') {
-    vistaEditor.style.display = 'none';
-    vistaSku.style.display = 'block';
-    vistaConversor.style.display = 'none';
-
-    navEditor.classList.remove('active');
-    navSku.classList.add('active');
-    navConversor.classList.remove('active');
-
-  } else if (vista === 'conversor') {
-    vistaEditor.style.display = 'none';
-    vistaSku.style.display = 'none';
-    vistaConversor.style.display = 'block';
-
-    navEditor.classList.remove('active');
-    navSku.classList.remove('active');
-    navConversor.classList.add('active');
-  }
+  navEditor.classList.toggle('active', vista === 'editor');
+  navSku.classList.toggle('active', vista === 'sku');
+  navConversor.classList.toggle('active', vista === 'conversor');
+  navAmp.classList.toggle('active', vista === 'amp');
 }
 
-
-// Listeners del navbar
+// Listeners
 navEditor.addEventListener('click', () => mostrarVista('editor'));
 navSku.addEventListener('click', () => mostrarVista('sku'));
 navConversor.addEventListener('click', () => mostrarVista('conversor'));
+navAmp.addEventListener('click', () => mostrarVista('amp'));
 
-// Mostrar vista por defecto
+// Vista por defecto
 mostrarVista('editor');
+
 
 // FIN Función para mostrar una vista y ocultar las otras
 
@@ -583,64 +662,89 @@ document.getElementById('ftpInputMultiple').addEventListener('paste', function (
 
 //  START Conversor de múltiples URLs FTP → HTTPS
 
-const inputFtp = document.getElementById('ftpInputMultiple');
-  const salida = document.getElementById('urlListaResultado');
-  const checkQuitarFinal = document.getElementById('removeLastImageNumber');
+function inicializarConversorFTP(idInput, idSalida, idCheckbox) {
+  const input = document.getElementById(idInput);
+  const salida = document.getElementById(idSalida);
+  const checkbox = document.getElementById(idCheckbox);
 
-  inputFtp.addEventListener('input', actualizarResultado);
-  checkQuitarFinal.addEventListener('change', actualizarResultado);
-
-  inputFtp.addEventListener('paste', function (e) {
-    e.preventDefault();
-    const clipboardData = e.clipboardData || window.clipboardData;
-    const pastedText = clipboardData.getData('text');
-    const textoActual = inputFtp.value.trim();
-    const nuevaEntrada = (textoActual ? textoActual + '\n' : '') + pastedText;
-    inputFtp.value = nuevaEntrada + '\n';
-    actualizarResultado();
-  });
-
-  function actualizarResultado() {
-    const urls = formatearFTPUrlMultiple(inputFtp.value);
+  function actualizar() {
+    const urls = formatearFTPUrlMultiple(input.value, checkbox.checked);
     salida.value = urls.join('\n');
   }
 
-  function formatearFTPUrlMultiple(texto) {
-    const baseEsperada = 'ftp://soclAdmin@10.1.3.63/produccion';
-    const nuevoDominio = 'https://www.sodimac.cl';
-    const quitarNumeroFinal = checkQuitarFinal.checked;
+  input.addEventListener('input', actualizar);
 
-    return texto
-      .split(/\r?\n/)
-      .map(linea => linea.trim().replace(/\\/g, '/'))
-      .filter(linea => linea.length > 0 && linea.includes(baseEsperada))
-      .map(linea => {
-        let urlTransformada = nuevoDominio + linea.replace(baseEsperada, '');
-        if (quitarNumeroFinal) {
-          urlTransformada = urlTransformada.replace(/-\d+\.(png|jpg|gif)$/i, '')
-          .replace(/\.(png|jpg|gif)$/i, '');
-        }
-        return urlTransformada;
-      });
-  }
+  checkbox.addEventListener('change', actualizar);
 
-  function copiarListaResultado() {
-    const texto = salida.value;
-    if (!texto) {
-      mostrarToast('⚠️ No hay URLs para copiar', 'warning');
-      return;
-    }
-  
-    navigator.clipboard.writeText(texto).then(() => {
-      mostrarToast('✅ URLs copiadas al portapapeles', 'success');
-      inputFtp.value = '';
-      salida.value = '';
-      inputFtp.focus();
+  input.addEventListener('paste', function (e) {
+    e.preventDefault();
+    const clipboardData = e.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData('text');
+    const textoActual = input.value.trim();
+    input.value = (textoActual ? textoActual + '\n' : '') + pastedText + '\n';
+    actualizar();
+  });
+
+  input.addEventListener('paste', function () {
+    setTimeout(() => {
+      const urls = formatearFTPUrlMultiple(input.value, checkbox.checked);
+      salida.value = urls.join('\n');
+
+      if (urls.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'No se encontró ninguna URL válida',
+          text: 'Asegúrate de que las URLs tengan el patrón correcto.',
+          confirmButtonColor: '#0d6efd'
+        });
+      }
+    }, 100);
+  });
+}
+
+
+function formatearFTPUrlMultiple(texto, quitarNumeroFinal = false) {
+  const baseEsperada = 'ftp://soclAdmin@10.1.3.63/produccion';
+  const nuevoDominio = 'https://www.sodimac.cl';
+
+  return texto
+    .split(/\r?\n/)
+    .map(linea => linea.trim().replace(/\\/g, '/'))
+    .filter(linea => linea.length > 0 && linea.includes(baseEsperada))
+    .map(linea => {
+      let url = nuevoDominio + linea.replace(baseEsperada, '');
+      if (quitarNumeroFinal) {
+        url = url.replace(/-\d+\.(png|jpg|gif)$/i, '').replace(/\.(png|jpg|gif)$/i, '');
+      }
+      return url;
     });
+}
+
+
+// Inicializar múltiples bloques
+inicializarConversorFTP('ftpInputMultiple', 'urlListaResultado', 'removeLastImageNumber');
+inicializarConversorFTP('ftpInput2', 'urlResultado2', 'checkFinal2');
+// puedes seguir agregando más...
+
+
+
+// Funcion copiar  URLs FTP:
+function copiarListaResultado(idTextarea) {
+  const textarea = document.getElementById(idTextarea);
+  const contenido = textarea.value.trim();
+
+  if (!contenido) {
+    mostrarToast('⚠️ No hay URLs para copiar', 'warning');
+    return;
   }
-  
-  
-  
+
+  navigator.clipboard.writeText(contenido)
+    .then(() => mostrarToast('✅ URLs copiadas al portapapeles', 'success'))
+    .catch(err => {
+      console.error('Error al copiar:', err);
+      mostrarToast('❌ Error al copiar', 'error');
+    });
+}
 
 
 //  FIN Conversor de múltiples URLs FTP → HTTPS
@@ -688,3 +792,6 @@ function mostrarToast(mensaje, tipo = 'success') {
 
 
  // FIN FUNCION TOAST
+
+
+ 
