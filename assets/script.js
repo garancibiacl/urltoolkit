@@ -55,27 +55,40 @@ function inyectarEstiloResaltado() {
 }
 
 
-
+let ultimaImagenEditada = '';
 function mostrarHrefActual() {
+  // 🔁 Antes de cambiar, guardar si cambió la imagen anterior
+  const srcActualInput = document.getElementById('imgSrcInput').value.trim();
+
+
+  
+  if (ultimaImagenEditada && srcActualInput !== ultimaImagenEditada) {
+    guardarImagenActual(srcActualInput);
+  }
+
   const enlaceActual = enlacesConPatron[indiceActual];
   const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
 
-  // Mostrar URL en el input
+  // Mostrar URL
   document.getElementById('hrefInput').value = extraerUrl(enlaceActual.getAttribute('href'));
 
-  // Mostrar descripción con índice
+  // Mostrar descripción
   document.getElementById('estadoEnlace').textContent =
     `🔗 Editando enlace ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
 
-  // Limpiar resaltado anterior y resaltar el actual
+  // Resaltado
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   enlaceActual.classList.add('resaltado');
 
-  // ✅ Mostrar imagen desde el <td> relacionado al enlace actual
+  // Buscar imagen actual y mostrar en input
   const tdContenedor = enlaceActual.closest('td');
   const img = tdContenedor?.querySelector('img');
   const src = img?.getAttribute('src') || '';
 
+  document.getElementById('imgSrcInput').value = src;
+  ultimaImagenEditada = src; // ⏺️ Guardamos el valor actual como referencia
+
+  // Mostrar preview visual
   const vistaImg = document.getElementById('previewImagenInline');
   if (src) {
     vistaImg.src = src;
@@ -85,7 +98,6 @@ function mostrarHrefActual() {
     vistaImg.style.display = 'none';
   }
 
-  // Refrescar iframe o vista previa
   actualizarVistaPrevia();
 }
 
@@ -160,10 +172,8 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
   // ✅ Usamos nuestra lógica filtrada
   enlacesConPatron = obtenerEnlacesFiltrados();
 
-  if (enlacesConPatron.length === 0) {
-    alert('⚠️ No se encontraron enlaces válidos');
-    return;
-  }
+  
+
 
   indiceActual = 0;
   document.getElementById('editorHref').classList.remove('d-none');
@@ -278,10 +288,11 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     const urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
     document.getElementById(idInput).value = urlFinal;
 
+    // Aplicar href con AMPscript
     const nuevoHref = `%%=RedirectTo(concat('${urlFinal}?',@prefix))=%%`;
     enlaceActual.setAttribute('href', nuevoHref);
 
-    // Alt automático
+    // 🖼️ ALT automático desde segmento significativo
     const segmentosSignificativos = tempUrl.pathname
       .split('/')
       .filter(seg => seg && !/^\d+$/.test(seg));
@@ -293,6 +304,27 @@ function aplicarCambioHref(idInput = 'hrefInput') {
 
       const img = enlaceActual.querySelector('img');
       if (img) img.setAttribute('alt', `Ir a ${altSegment}`);
+    }
+
+    // ✅ También actualizar imagen si el input imgSrcInput tiene un valor válido
+    const nuevaImagen = document.getElementById('imgSrcInput')?.value.trim();
+    if (nuevaImagen) {
+      const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+      const dominioHTTPS = 'https://www.sodimac.cl';
+      const srcFinal = nuevaImagen.startsWith(baseFTP)
+        ? nuevaImagen.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/')
+        : nuevaImagen;
+
+      const tdContenedor = enlaceActual.closest('td');
+      const img = tdContenedor?.querySelector('img');
+      if (img) {
+        img.setAttribute('src', srcFinal);
+        const preview = document.getElementById('previewImagenInline');
+        if (preview) {
+          preview.src = srcFinal;
+          preview.style.display = 'block';
+        }
+      }
     }
 
   } catch (e) {
@@ -341,57 +373,72 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
 
+  // 🔁 Validar si se modificó imagen desde el input
+  const nuevaImagen = document.getElementById('imgSrcInput')?.value.trim();
+  if (nuevaImagen) {
+    const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+    const dominioHTTPS = 'https://www.sodimac.cl';
+    let imagenFinal = nuevaImagen.startsWith(baseFTP)
+      ? nuevaImagen.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/')
+      : nuevaImagen;
+
+    const enlaceActual = enlacesConPatron[indiceActual];
+    if (enlaceActual) {
+      let img = enlaceActual.querySelector('img') ||
+                enlaceActual.closest('td')?.querySelector('img');
+      if (img) img.setAttribute('src', imagenFinal);
+    }
+  }
+
+  // Copiar HTML limpio
   let finalHTML = template.innerHTML;
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
 
   navigator.clipboard.writeText(finalHTML).then(() => {
-    mostrarToast('✅ URLs copiadas al portapapeles');
+    mostrarToast('✅ HTML limpio copiado al portapapeles', 'success');
 
-    
-       // ✅ LIMPIEZA COMPLETA
-document.getElementById('htmlInput').value = '';
-document.getElementById('skuInput').value = '';
-document.getElementById('ocrProgreso').textContent = '';
-document.getElementById('resultadoSKU').value = '';
+    // ✅ LIMPIEZA
+    document.getElementById('htmlInput').value = '';
+    document.getElementById('skuInput').value = '';
+    document.getElementById('ocrProgreso').textContent = '';
+    document.getElementById('resultadoSKU').value = '';
+    document.getElementById('imgSrcInput').value = '';
 
-// ✅ Limpiar iframe de vista previa
-const iframe = document.getElementById('vistaPrevia');
-iframe.removeAttribute('srcdoc');
-iframe.src = 'about:blank';
+    const iframe = document.getElementById('vistaPrevia');
+    iframe.removeAttribute('srcdoc');
+    iframe.src = 'about:blank';
 
-// (Opcional) también limpia el iframe del modal si se usa
-const iframeModal = document.getElementById('vistaPreviaModal');
-if (iframeModal) iframeModal.src = 'about:blank';
+    const iframeModal = document.getElementById('vistaPreviaModal');
+    if (iframeModal) iframeModal.src = 'about:blank';
 
-    
     const copiarBtn = document.getElementById('copiarAmpBtn');
     if (copiarBtn) copiarBtn.classList.add('d-none');
 
-    // ✅ LIMPIAR CONTENIDO HTML TEMPORAL Y VARIABLES
     template.innerHTML = '';
     enlacesConPatron = [];
     indiceActual = 0;
 
-    // ✅ OCULTAR EDITOR Y MOSTRAR INICIO
     document.getElementById('editorHref').classList.add('d-none');
     document.getElementById('copiarHtmlBtn').classList.add('d-none');
 
-    // ✅ OPCIONAL: limpiar zona de imagen inline
     const imgInline = document.getElementById('previewImagenInline');
     if (imgInline) {
       imgInline.src = '';
       imgInline.style.display = 'none';
     }
 
-    // ✅ OPCIONAL: hacer scroll arriba
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // ✅ Opcional: mostrar mensaje visual o reiniciar texto en input HTML
-    document.getElementById('htmlInput').value = '';
+    // 🔁 Recargar página luego de unos segundos (opcional)
+    setTimeout(() => {
+      location.reload();
+    }, 1500);
   }).catch(err => {
-    console.error('Error al copiar HTML:', err);
+    console.error('❌ Error al copiar HTML:', err);
+    mostrarToast('❌ Error al copiar HTML', 'error');
   });
 });
+
 
 
 
@@ -755,43 +802,92 @@ function copiarListaResultado(idTextarea) {
 
    // START FUNCION TOAST
 
-function mostrarToast(mensaje, tipo = 'success') {
-  const toastContainerId = 'toastContainer';
-
-  // Si no existe el contenedor, lo creamos una vez
-  if (!document.getElementById(toastContainerId)) {
-    const container = document.createElement('div');
-    container.id = toastContainerId;
-    container.className = 'position-fixed bottom-0 end-0 p-3';
-    container.style.zIndex = '9999';
-    document.body.appendChild(container);
+   function mostrarToast(mensaje, tipo = 'success') {
+    const toastContainerId = 'toastContainer';
+  
+    // Si no existe el contenedor, lo creamos una vez
+    if (!document.getElementById(toastContainerId)) {
+      const container = document.createElement('div');
+      container.id = toastContainerId;
+      container.className = 'position-fixed bottom-0 end-0 p-3';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    }
+  
+    // Crear el toast dinámico
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast align-items-center text-white bg-${tipo} border-0 mb-2`;
+    toastEl.setAttribute('role', 'alert');
+    toastEl.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">${mensaje}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    `;
+  
+    document.getElementById(toastContainerId).appendChild(toastEl);
+  
+    // Iniciar y mostrar el toast
+    const bsToast = new bootstrap.Toast(toastEl);
+    bsToast.show();
+  
+    // Eliminar el toast del DOM cuando termine
+    toastEl.addEventListener('hidden.bs.toast', () => {
+      toastEl.remove();
+    });
   }
-
-  // Crear el toast dinámico
-  const toastEl = document.createElement('div');
-  toastEl.className = `toast align-items-center text-white bg-${tipo} border-0 mb-2`;
-  toastEl.setAttribute('role', 'alert');
-  toastEl.innerHTML = `
-    <div class="d-flex">
-      <div class="toast-body">${mensaje}</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>
-  `;
-
-  document.getElementById(toastContainerId).appendChild(toastEl);
-
-  // Iniciar y mostrar el toast
-  const bsToast = new bootstrap.Toast(toastEl);
-  bsToast.show();
-
-  // Eliminar el toast del DOM cuando termine
-  toastEl.addEventListener('hidden.bs.toast', () => {
-    toastEl.remove();
-  });
-}
-
 
  // FIN FUNCION TOAST
 
 
- 
+
+ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
+  if (!rutaFtpUsuario || !rutaFtpUsuario.includes('/static/envioweb/')) {
+    return alert('❌ La ruta debe contener /static/envioweb/');
+  }
+
+  const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+  const dominioHTTPS = 'https://www.sodimac.cl';
+
+  // Convertir ruta FTP → HTTPS
+  const nuevaBase = rutaFtpUsuario
+    .replace(baseFTP, dominioHTTPS)
+    .replace(/\\/g, '/')
+    .trim();
+
+  const nuevaRelativa = nuevaBase.split('/static/envioweb/')[1];
+  if (!nuevaRelativa) {
+    return alert('❌ Ruta no válida para reemplazo');
+  }
+
+  const imgs = template.content.querySelectorAll('img');
+  let contador = 0;
+
+  imgs.forEach(img => {
+    const src = img.getAttribute('src');
+    if (!src || !src.includes('/static/envioweb/')) return;
+
+    // Detectar segmento clave /mes-carpeta/images/mes-carpeta-
+    const matchBase = src.match(/\/\d{2}-[a-z]+\/images\/\d{2}-[a-z]+-/i);
+    const matchNumero = src.match(/(\d+\.(png|jpg|jpeg|gif))$/i);
+
+    if (!matchBase || !matchNumero) return;
+
+    const numeroFinal = matchNumero[1];
+    const nuevaRuta = `${dominioHTTPS}/static/envioweb/${nuevaRelativa}${numeroFinal}`;
+
+    img.setAttribute('src', nuevaRuta);
+    contador++;
+  });
+
+  actualizarVistaPrevia();
+  mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`);
+}
+
+
+
+
+
+
+
+

@@ -103,8 +103,35 @@
                             <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/sodimac-cl/content/categoria-1">
                            
                             <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar</button>
+
+                            <div class=" col-md-12 mt-3">
+                              <label for="imgSrcInput" class="form-label">URL actual de la imagen</label>
+                              <input type="text" id="imgSrcInput" class="form-control mb-2" placeholder="URL de la imagen actual">
+
+                      
+
+
+                              <button id="guardarImagenBtn" class="btn btn-success mt-2">
+                                💾 Guardar imagen
+                              </button>
+                              
+                            </div>
+                            
                           </div>
                         </div>
+
+                        <input type="text" id="inputRutaFtpReemplazo" class="form-control mb-2"
+                        placeholder="ftp://.../04-abril/10-muebles/images/10-muebles-">
+                 
+                 <button class="btn btn-warning w-100 mb-3" onclick="
+                   const ruta = document.getElementById('inputRutaFtpReemplazo').value;
+                   reemplazarRutaBaseDetectandoCarpeta(ruta);
+                 ">
+                   🔁 Reemplazar ruta basada en carpeta (sin alterar número final)
+                 </button>
+
+
+
                         <div class="mb-3">
                           <label for="carpetaSelector" class="form-label fw-semibold">🗂️ Selecciona carpeta de imágenes:</label>
                           <select id="carpetaSelector" class="form-select w-auto">
