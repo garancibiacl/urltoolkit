@@ -104,20 +104,33 @@
                            
                             <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar</button>
 
-                            <div class=" col-md-12 mt-3">
-                              <label for="imgSrcInput" class="form-label">URL actual de la imagen</label>
-                              <input type="text" id="imgSrcInput" class="form-control mb-2" placeholder="URL de la imagen actual">
-
-                      
-
-
-                              <button id="guardarImagenBtn" class="btn btn-success mt-2">
-                                💾 Guardar imagen
-                              </button>
-                              
+                            <div class="col-md-12 d-flex justify-content-between">
+                              <div class="d-flex gap-3">
+                                <button id="anteriorBtn" class="btn btn-primary btn-sm">⏮ Anterior</button>
+                                <button id="siguienteBtn" class="btn btn-primary btn-sm">⏭ Siguiente</button>
+                              </div>
+                              <div>
+                                <button id="copiarHtmlBtn" class="btn btn-warning btn-sm d-none">📋 Copiar HTML limpio</button>
+                              </div>
                             </div>
+
+                           
                             
                           </div>
+                       
+                        </div>
+
+                        <div class=" col-md-12 mt-3">
+                          <label for="imgSrcInput" class="form-label">URL actual de la imagen</label>
+                          <input type="text" id="imgSrcInput" class="form-control" placeholder="URL de la imagen relacionada">
+
+                          <div class="d-grid gap-2 mt-2">
+                            <button id="guardarImagenBtn" class="btn btn-success" onclick="guardarImagenDesdeInput()">
+                              💾 Guardar imagen
+                            </button>
+                          </div>
+                          
+                          
                         </div>
 
                         <input type="text" id="inputRutaFtpReemplazo" class="form-control mb-2"
@@ -141,15 +154,7 @@
                             <!-- Agrega más meses si lo necesitas -->
                           </select>
                         </div>
-                        <div class="col-md-12 d-flex justify-content-between">
-                          <div class="d-flex gap-3">
-                            <button id="anteriorBtn" class="btn btn-primary btn-sm">⏮ Anterior</button>
-                            <button id="siguienteBtn" class="btn btn-primary btn-sm">⏭ Siguiente</button>
-                          </div>
-                          <div>
-                            <button id="copiarHtmlBtn" class="btn btn-warning btn-sm d-none">📋 Copiar HTML limpio</button>
-                          </div>
-                        </div>
+                   
                       </div>
                     </div>
                   </div>

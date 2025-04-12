@@ -336,7 +336,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     indiceActual++;
     mostrarHrefActual();
   } else {
-    alert('✅ Todos los enlaces fueron modificados.');
+    mostrarToast('✅ Todos los enlaces fueron modificados.', 'success');
     document.getElementById('copiarHtmlBtn').classList.remove('d-none');
     actualizarVistaPrevia();
   }
@@ -350,7 +350,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
 
 
 
-document.getElementById('siguienteBtn').addEventListener('click', () => {
+ document.getElementById('siguienteBtn').addEventListener('click', () => {
   if (indiceActual < enlacesConPatron.length - 1) {
     indiceActual++;
     mostrarHrefActual();
@@ -840,7 +840,7 @@ function copiarListaResultado(idTextarea) {
  // FIN FUNCION TOAST
 
 
-
+// START FUNCION reamplzado imagenes masivas
  function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   if (!rutaFtpUsuario || !rutaFtpUsuario.includes('/static/envioweb/')) {
     return alert('❌ La ruta debe contener /static/envioweb/');
@@ -883,11 +883,73 @@ function copiarListaResultado(idTextarea) {
   actualizarVistaPrevia();
   mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`);
 }
+// FIN FUNCION reamplAzado imagenes masivas
 
 
 
 
 
 
+function guardarImagenDesdeInput() {
+  const input = document.getElementById('imgSrcInput');
+  let nuevaSrc = input?.value.trim();
+  const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+  const dominioHTTPS = 'https://www.sodimac.cl';
 
+  if (!nuevaSrc) return mostrarToast('⚠️ Ingresa una URL de imagen válida', 'warning');
+
+  // ⚠️ Solo convertir si realmente comienza con base FTP
+  if (nuevaSrc.startsWith(baseFTP)) {
+    const nuevaConvertida = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
+
+    // Solo si es diferente de lo ya mostrado, actualizar input y usar nuevo valor
+    if (nuevaSrc !== nuevaConvertida) {
+      nuevaSrc = nuevaConvertida;
+      input.value = nuevaSrc; // evita recodificación infinita
+    }
+  }
+
+  const enlaceActual = enlacesConPatron?.[indiceActual];
+  if (!enlaceActual) return mostrarToast('❌ No se encontró el enlace actual', 'danger');
+
+  let img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
+  if (!img) return mostrarToast('❌ No se encontró imagen relacionada al enlace', 'danger');
+
+  const srcActual = img.getAttribute('src');
+  if (srcActual === nuevaSrc) {
+    return mostrarToast('⚠️ La imagen ya tiene esa misma URL. No se realizó ningún cambio.', 'info');
+  }
+
+  img.setAttribute('src', nuevaSrc);
+
+  const previewImg = document.getElementById('previewImagenInline');
+  if (previewImg) {
+    previewImg.src = nuevaSrc;
+    previewImg.style.display = 'block';
+  }
+
+  if (typeof actualizarVistaPrevia === 'function') actualizarVistaPrevia();
+
+  mostrarToast('✅ Imagen actualizada con éxito', 'success');
+}
+
+
+
+
+
+function inputRutaFtpReemplazo(ruta) {
+  if (!ruta.includes('/static/envioweb/')) return ruta;
+
+  // Extrae número final si existe
+  const match = ruta.match(/(-\d+\.(png|jpg|jpeg|gif))$/i);
+  const numeroFinal = match ? match[1] : '';
+
+  // Elimina todo lo anterior a partir de "static/envioweb"
+  const base = ruta.split('/static/envioweb/')[1];
+  if (!base) return ruta;
+
+  // Generar nueva ruta limpia
+  const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
+  return nuevoPath;
+}
 
