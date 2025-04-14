@@ -56,50 +56,51 @@ function inyectarEstiloResaltado() {
 
 
 let ultimaImagenEditada = '';
+
 function mostrarHrefActual() {
-  // 🔁 Antes de cambiar, guardar si cambió la imagen anterior
-  const srcActualInput = document.getElementById('imgSrcInput').value.trim();
+  const inputImg = document.getElementById('imgSrcInput');
+  const srcActualInput = inputImg.value.trim();
 
-
-  
+  // 🔁 Si hubo un cambio en la imagen anterior, se guarda automáticamente
   if (ultimaImagenEditada && srcActualInput !== ultimaImagenEditada) {
-    guardarImagenActual(srcActualInput);
+    guardarImagenDesdeInput(); // Usamos tu función actual
   }
 
   const enlaceActual = enlacesConPatron[indiceActual];
   const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
 
-  // Mostrar URL
+  // Mostrar href en input
   document.getElementById('hrefInput').value = extraerUrl(enlaceActual.getAttribute('href'));
 
-  // Mostrar descripción
+  // Mostrar estado
   document.getElementById('estadoEnlace').textContent =
     `🔗 Editando enlace ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
 
-  // Resaltado
+  // Resaltar el enlace actual
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   enlaceActual.classList.add('resaltado');
 
-  // Buscar imagen actual y mostrar en input
+  // Mostrar src de imagen en input
   const tdContenedor = enlaceActual.closest('td');
   const img = tdContenedor?.querySelector('img');
   const src = img?.getAttribute('src') || '';
 
-  document.getElementById('imgSrcInput').value = src;
-  ultimaImagenEditada = src; // ⏺️ Guardamos el valor actual como referencia
+  inputImg.value = src;
+  ultimaImagenEditada = src; // 💾 Referencia para saber si se modificó luego
 
   // Mostrar preview visual
-  const vistaImg = document.getElementById('previewImagenInline');
+  const preview = document.getElementById('previewImagenInline');
   if (src) {
-    vistaImg.src = src;
-    vistaImg.style.display = 'block';
+    preview.src = src;
+    preview.style.display = 'block';
   } else {
-    vistaImg.src = '';
-    vistaImg.style.display = 'none';
+    preview.src = '';
+    preview.style.display = 'none';
   }
 
   actualizarVistaPrevia();
 }
+
 
 
 function obtenerEnlacesFiltrados() {
@@ -352,6 +353,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
 
  document.getElementById('siguienteBtn').addEventListener('click', () => {
   if (indiceActual < enlacesConPatron.length - 1) {
+    mostrarHrefActual(); // autoguarda si detecta cambio
     indiceActual++;
     mostrarHrefActual();
   }
@@ -359,45 +361,61 @@ function aplicarCambioHref(idInput = 'hrefInput') {
 
 document.getElementById('anteriorBtn').addEventListener('click', () => {
   if (indiceActual > 0) {
+    mostrarHrefActual(); // autoguarda si detecta cambio
     indiceActual--;
     mostrarHrefActual();
   }
 });
 
-document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
-  enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
 
+// START COPIAR HTML BTN
+document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
+  const inputImg = document.getElementById('imgSrcInput');
+  const nuevaSrc = inputImg?.value.trim();
+
+  const enlaceActual = enlacesConPatron[indiceActual];
+  if (enlaceActual) {
+    let img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
+    const srcActual = img?.getAttribute('src') || '';
+
+    // ⚠️ Si hubo cambios en el input de imagen, se guardan automáticamente
+    if (nuevaSrc && nuevaSrc !== srcActual) {
+      const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+      const dominioHTTPS = 'https://www.sodimac.cl';
+
+      let srcFinal = nuevaSrc;
+      if (nuevaSrc.startsWith(baseFTP)) {
+        srcFinal = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
+        inputImg.value = srcFinal; // actualizar visualmente también
+      }
+
+      img?.setAttribute('src', srcFinal);
+
+      const preview = document.getElementById('previewImagenInline');
+      if (preview) {
+        preview.src = srcFinal;
+        preview.style.display = 'block';
+      }
+
+      actualizarVistaPrevia?.();
+    }
+  }
+
+  // ✅ Eliminar resaltado visual
+  enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   const styleTag = template.content.querySelector('style[data-resaltado]');
   if (styleTag) styleTag.remove();
 
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
 
-  // 🔁 Validar si se modificó imagen desde el input
-  const nuevaImagen = document.getElementById('imgSrcInput')?.value.trim();
-  if (nuevaImagen) {
-    const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
-    const dominioHTTPS = 'https://www.sodimac.cl';
-    let imagenFinal = nuevaImagen.startsWith(baseFTP)
-      ? nuevaImagen.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/')
-      : nuevaImagen;
-
-    const enlaceActual = enlacesConPatron[indiceActual];
-    if (enlaceActual) {
-      let img = enlaceActual.querySelector('img') ||
-                enlaceActual.closest('td')?.querySelector('img');
-      if (img) img.setAttribute('src', imagenFinal);
-    }
-  }
-
-  // Copiar HTML limpio
   let finalHTML = template.innerHTML;
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
 
   navigator.clipboard.writeText(finalHTML).then(() => {
     mostrarToast('✅ HTML limpio copiado al portapapeles', 'success');
 
-    // ✅ LIMPIEZA
+    // ✅ Limpiar campos
     document.getElementById('htmlInput').value = '';
     document.getElementById('skuInput').value = '';
     document.getElementById('ocrProgreso').textContent = '';
@@ -427,9 +445,10 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
       imgInline.style.display = 'none';
     }
 
+    // Ir arriba
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // 🔁 Recargar página luego de unos segundos (opcional)
+    // Recargar automáticamente (opcional)
     setTimeout(() => {
       location.reload();
     }, 1500);
@@ -440,6 +459,7 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
 });
 
 
+// FIN COPIAR HTML BTN
 
 
 
@@ -930,7 +950,7 @@ function guardarImagenDesdeInput() {
 
   if (typeof actualizarVistaPrevia === 'function') actualizarVistaPrevia();
 
-  mostrarToast('✅ Imagen actualizada con éxito', 'success');
+  mostrarToast('💾 Imagen guardada automáticamente antes de avanzar', 'info');
 }
 
 
@@ -952,4 +972,8 @@ function inputRutaFtpReemplazo(ruta) {
   const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
   return nuevoPath;
 }
+
+
+
+
 
