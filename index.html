@@ -96,64 +96,91 @@
                     <div id="editorHref" class="d-none">
                       <div class="row g-1">
                         <div class="col-md-12">
-                          <label for="hrefInput" class="form-label">Editar URL del enlace actual:</label>
-                      
-                          <div class="input-group mb-3">
-                            <span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
-                            <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/sodimac-cl/content/categoria-1">
-                           
-                            <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar</button>
+                       <div class="row align-items-start">
+  <!-- Columna izquierda: Label + input group -->
+  <div class="col-md-6">
+    <label for="hrefInput" class="form-label">Editar URL del enlace actual:</label>
+  </div>
 
-                            <div class="col-md-12 d-flex justify-content-between">
-                              <div class="d-flex gap-3">
-                                <button id="anteriorBtn" class="btn btn-primary btn-sm">⏮ Anterior</button>
-                                <button id="siguienteBtn" class="btn btn-primary btn-sm">⏭ Siguiente</button>
-                              </div>
-                              <div>
-                                <button id="copiarHtmlBtn" class="btn btn-warning btn-sm d-none">📋 Copiar HTML limpio</button>
-                              </div>
-                            </div>
+  
+  <div class="col-md-6 d-flex justify-content-md-end gap-2 mb-3">
+    <label for="carpetaSelector" class="form-label">🗂️ Selecciona carpeta de imágenes:</label>
+    <select id="carpetaSelector" class="form-select w-auto">
+      <option value="04-abril">04-abril</option>
+      <option value="05-mayo">05-mayo</option>
+      <option value="06-junio">06-junio</option>
+      <!-- Agrega más meses si lo necesitas -->
+    </select>
+  </div>
 
-                           
-                            
-                          </div>
-                       
-                        </div>
+  <div class="col-md-12 ">
+    <div class="input-group mb-3">
+      <span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
+      <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/sodimac-cl/content/categoria-1">
+    </div>
+  </div>
 
-                        <div class=" col-md-12 mt-3">
-                          <label for="imgSrcInput" class="form-label">URL actual de la imagen</label>
-                          <input type="text" id="imgSrcInput" class="form-control" placeholder="URL de la imagen relacionada">
+  <div class=" col-md-12 ">
 
-                          <div class="d-grid gap-2 mt-2">
-                            <button id="guardarImagenBtn" class="btn btn-success mt-2" style="display: none;">
-                              💾 Guardar imagen
-                            </button>
-                          </div>
-                          
-                          
-                        </div>
+    <div class="row align-items-center">
+      <!-- Columna izquierda: input -->
+      <div class="col-md-7 mb-3">
+        <div class="input-group">
+          <input type="text" id="imgSrcInput" class="form-control" placeholder="URL de la imagen relacionada">
+          <button id="anteriorBtn" class="btn btn-outline-secondary" type="button">⏮ Anterior</button>
+          <button id="siguienteBtn" class="btn btn-outline-secondary" type="button">⏭ Siguiente</button>
+        </div>
+      </div>
+<!-- Columna derecha: botones -->
+    
+      <div class="col-md-5 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
+        <div class="input-group mb-3">
+          <input type="text" id="inputRutaFtpReemplazo" class="form-control"
+          placeholder=" Reemplazar ruta basada en carpeta (sin alterar número final)">
 
-                        <input type="text" id="inputRutaFtpReemplazo" class="form-control mb-2"
-                        placeholder="ftp://.../04-abril/10-muebles/images/10-muebles-">
-                 
-                 <button class="btn btn-warning w-100 mb-3" onclick="
-                   const ruta = document.getElementById('inputRutaFtpReemplazo').value;
-                   reemplazarRutaBaseDetectandoCarpeta(ruta);
-                 ">
-                   🔁 Reemplazar ruta basada en carpeta (sin alterar número final)
-                 </button>
+          
+          <button class="btn btn-outline-secondary" onclick="
+          const ruta = document.getElementById('inputRutaFtpReemplazo').value;
+          reemplazarRutaBaseDetectandoCarpeta(ruta);
+        ">
+          Reemplazar ruta
+        </button>
+      </div>
+    </div>
+            </div>
+
+            <div class="row align-items-center">
+              <!-- Columna izquierda: input -->
+              <div class="col-md-6">
+                <button id="copiarHtmlBtn" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
+
+                </div>
+                      <!-- Columna derecha: Botón copiar HTML -->
+                      <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 ">
+                      <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar Cambios</button>
+
+                      </div>
+
+                         </div>
+            
+            </div>
+            
+
+    </div>
+
+
+                     
+                    </div>
+                </div>
+              
+              </div>
+
+              
+                     
 
 
 
-                        <div class="mb-3">
-                          <label for="carpetaSelector" class="form-label fw-semibold">🗂️ Selecciona carpeta de imágenes:</label>
-                          <select id="carpetaSelector" class="form-select w-auto">
-                            <option value="04-abril">04-abril</option>
-                            <option value="05-mayo">05-mayo</option>
-                            <option value="06-junio">06-junio</option>
-                            <!-- Agrega más meses si lo necesitas -->
-                          </select>
-                        </div>
+
                    
                       </div>
                     </div>
