@@ -187,74 +187,6 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
 
  // START FUNCION BOTON APLICAR CAMBIOS
 
- /*document.getElementById('aplicarCambioBtn').addEventListener('click', () => {
-  let nuevaUrl = document.getElementById('hrefInput').value.trim();
-
-  if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
-
-  const enlaceActual = enlacesConPatron[indiceActual];
-  if (!enlaceActual) return;
-
-  // ✅ Normalizar y quitar acentos
-  nuevaUrl = nuevaUrl.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
-
-  // ✅ Agrega https:// si no tiene
-  if (!/^https?:\/\//i.test(nuevaUrl)) {
-    nuevaUrl = 'https://' + nuevaUrl;
-  }
-
-  try {
-    const tempUrl = new URL(nuevaUrl);
-
-    // ✅ Agrega www. si el dominio no lo tiene
-    if (!tempUrl.hostname.startsWith('www.')) {
-      tempUrl.hostname = 'www.' + tempUrl.hostname;
-    }
-
-    // ✅ Eliminar parámetros innecesarios
-    const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
-    parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
-
-    // ✅ Reemplazar comas en el pathname
-    const segmentos = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-'));
-    tempUrl.pathname = segmentos.join('/');
-
-    // ✅ Construcción del href con AMPscript (sin codificación de %C3...)
-    const urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
-    document.getElementById('hrefInput').value = urlFinal;
-
-    const nuevoHref = `%%=RedirectTo(concat('${urlFinal}?',@prefix))=%%`;
-    enlaceActual.setAttribute('href', nuevoHref);
-
-    // ✅ Alt automático (4º segmento significativo o último)
-    const segmentosSignificativos = tempUrl.pathname
-      .split('/')
-      .filter(seg => seg && !/^\d+$/.test(seg));
-
-    let altSegment = segmentosSignificativos[3] || segmentosSignificativos.at(-1);
-    if (altSegment && /^[\w\-]+$/.test(altSegment)) {
-      altSegment = altSegment.replace(/[-_]/g, ' ').trim().replace(/\s+/g, ' ');
-      altSegment = altSegment.charAt(0).toUpperCase() + altSegment.slice(1);
-      const img = enlaceActual.querySelector('img');
-      if (img) img.setAttribute('alt', `Ir a ${altSegment}`);
-    }
-
-  } catch (e) {
-    console.warn('❌ URL inválida:', e);
-    return alert('❌ La URL ingresada no es válida.');
-  }
-
-  // ✅ Avanzar al siguiente enlace
-  if (indiceActual < enlacesConPatron.length - 1) {
-    indiceActual++;
-    mostrarHrefActual();
-  } else {
-    alert('✅ Todos los enlaces fueron modificados.');
-    document.getElementById('copiarHtmlBtn').classList.remove('d-none');
-    actualizarVistaPrevia();
-  }
-});*/
-
 function aplicarCambioHref(idInput = 'hrefInput') {
   let nuevaUrl = document.getElementById(idInput).value.trim();
   if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
@@ -262,8 +194,10 @@ function aplicarCambioHref(idInput = 'hrefInput') {
   const enlaceActual = enlacesConPatron[indiceActual];
   if (!enlaceActual) return;
 
+  // 🔠 Normalizar caracteres
   nuevaUrl = nuevaUrl.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
+  // Agrega https:// si no tiene
   if (!/^https?:\/\//i.test(nuevaUrl)) {
     nuevaUrl = 'https://' + nuevaUrl;
   }
@@ -271,32 +205,40 @@ function aplicarCambioHref(idInput = 'hrefInput') {
   try {
     const tempUrl = new URL(nuevaUrl);
 
-    if (!tempUrl.hostname.startsWith('www.')) {
+    // Agrega www. si falta
+    if (!tempUrl.hostname.startsWith('www.') && tempUrl.hostname.includes('sodimac.cl')) {
       tempUrl.hostname = 'www.' + tempUrl.hostname;
     }
 
+    // Eliminar parámetros innecesarios
     const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
     parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
 
-    const segmentos = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-'));
-    tempUrl.pathname = segmentos.join('/');
+    // Reemplazar comas en el pathname
+    tempUrl.pathname = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-')).join('/');
 
+    // Construir URL final limpia
     let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
     document.getElementById(idInput).value = urlFinal;
 
+    // 🔍 Validaciones especiales para AMPscript
+    const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+    const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
+    const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
+    const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
+
     let nuevoHref = '';
 
-    // 🟡 Validación para NO usar AMPscript si es de Decolovers Blog
-    const esDecoloversBlog = tempUrl.hostname.includes('sodimac.decolovers.cl') && tempUrl.pathname.startsWith('/blog/articulos');
-    if (esDecoloversBlog) {
+    if (esDecolovers) {
+      // ❌ No usar AMPscript
       nuevoHref = urlFinal;
-    } else {
-      // 🟠 Validación especial para buscador con parámetros
-      const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
-      const tieneFacet = urlFinal.includes('facetSelected=true') || urlFinal.includes('sellerId=SODIMAC');
+    } else if (usaAmp) {
+      // ✅ Aplicar AMPscript
       const separadorAmp = (esBusqueda || tieneFacet) ? '&' : '?';
-
       nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
+    } else {
+      // ❌ Para dominios distintos no usar AMPscript
+      nuevoHref = urlFinal;
     }
 
     enlaceActual.setAttribute('href', nuevoHref);
@@ -311,7 +253,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
       if (img) img.setAttribute('alt', `Ir a ${altSegment}`);
     }
 
-    // ✅ Guardar imagen si hay input lleno
+    // 🖼️ Guardar imagen si hay input lleno
     const nuevaImagen = document.getElementById('imgSrcInput')?.value.trim();
     if (nuevaImagen) {
       const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
@@ -337,7 +279,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     return alert('❌ La URL ingresada no es válida.');
   }
 
-  // ✅ Avanza al siguiente enlace o termina
+  // Avanzar al siguiente
   if (indiceActual < enlacesConPatron.length - 1) {
     indiceActual++;
     mostrarHrefActual();
@@ -347,9 +289,6 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     actualizarVistaPrevia();
   }
 }
-
-
-
 
  // FIN FUNCION BOTON APLICAR CAMBIOS
 
@@ -378,44 +317,66 @@ document.getElementById('anteriorBtn').addEventListener('click', () => {
 document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   const inputImg = document.getElementById('imgSrcInput');
   const nuevaSrc = inputImg?.value.trim();
-  const enlaceActual = enlacesConPatron[indiceActual];
+  const hrefInput = document.getElementById('hrefInput')?.value.trim();
 
-  // ✅ Guardar imagen si hubo cambios antes de copiar
+  const enlaceActual = enlacesConPatron[indiceActual];
   if (enlaceActual) {
-    let img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
+    // ✅ Validación y guardado de imagen si no coincide con el DOM
+    const img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
     const srcActual = img?.getAttribute('src') || '';
 
     if (nuevaSrc && nuevaSrc !== srcActual) {
       const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
       const dominioHTTPS = 'https://www.sodimac.cl';
-
-      let srcFinal = nuevaSrc.startsWith(baseFTP)
+      const srcFinal = nuevaSrc.startsWith(baseFTP)
         ? nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/')
         : nuevaSrc;
 
-      inputImg.value = srcFinal;
-      img?.setAttribute('src', srcFinal);
-
-      const preview = document.getElementById('previewImagenInline');
-      if (preview) {
-        preview.src = srcFinal;
-        preview.style.display = 'block';
+      if (img) {
+        img.setAttribute('src', srcFinal);
+        inputImg.value = srcFinal;
+        const preview = document.getElementById('previewImagenInline');
+        if (preview) {
+          preview.src = srcFinal;
+          preview.style.display = 'block';
+        }
       }
-
-      actualizarVistaPrevia?.();
     }
 
-    // ✅ Detectar si el enlace actual es del buscador
-    const hrefOriginal = enlaceActual.getAttribute('href');
-    const matchBuscar = hrefOriginal.match(/^%%=RedirectTo\(concat\('(https:\/\/www\.sodimac\.cl\/sodimac-cl\/buscar)\?(.+?)',@prefix\)\)=%%$/);
-    
-    if (matchBuscar) {
-      const nuevaHref = `%%=RedirectTo(concat('${matchBuscar[1]}&${matchBuscar[2]}',@prefix))=%%`;
-      enlaceActual.setAttribute('href', nuevaHref);
+    // ✅ Validación y guardado de href
+    if (hrefInput) {
+      try {
+        let tempUrl = new URL(hrefInput);
+        if (!tempUrl.hostname.startsWith('www.') && tempUrl.hostname.includes('sodimac.cl')) {
+          tempUrl.hostname = 'www.' + tempUrl.hostname;
+        }
+
+        // Eliminar parámetros innecesarios
+        const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
+        parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
+
+        tempUrl.pathname = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-')).join('/');
+        let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
+
+        // Detectar AMPscript válido
+        const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
+        const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+        const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
+        const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
+        const separadorAmp = (esBusqueda || tieneFacet) ? '&' : '?';
+
+        const nuevoHref = (usaAmp && !esDecolovers)
+          ? `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`
+          : urlFinal;
+
+        enlaceActual.setAttribute('href', nuevoHref);
+      } catch (e) {
+        console.warn('❌ No se pudo validar el href al copiar:', e);
+      }
     }
   }
 
-  // 🔁 Limpiar resaltados
+  // ✅ Limpiar estilo, clases vacías, tbody y etiquetas no deseadas
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   const styleTag = template.content.querySelector('style[data-resaltado]');
   if (styleTag) styleTag.remove();
@@ -425,17 +386,15 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
 
   let finalHTML = template.innerHTML;
 
-  // ✅ Eliminar etiquetas <custom>
-  finalHTML = finalHTML.replace(/<\/?custom>/gi, '');
 
-  // ✅ Restaurar AMPscript y limpiar entidades HTML
+
+  // ✅ Restaurar AMPscript y reemplazos
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
 
-  // ✅ Copiar al portapapeles
+  // ✅ Copiar y limpiar
   navigator.clipboard.writeText(finalHTML).then(() => {
     mostrarToast('✅ HTML limpio copiado al portapapeles', 'success');
 
-    // 🧼 Limpieza visual e inputs
     document.getElementById('htmlInput').value = '';
     document.getElementById('skuInput').value = '';
     document.getElementById('ocrProgreso').textContent = '';
@@ -465,18 +424,15 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
       imgInline.style.display = 'none';
     }
 
-    // Scroll arriba
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Recarga final opcional
-    setTimeout(() => {
-      location.reload();
-    }, 1500);
+    setTimeout(() => location.reload(), 1500);
   }).catch(err => {
     console.error('❌ Error al copiar HTML:', err);
     mostrarToast('❌ Error al copiar HTML', 'error');
   });
 });
+
 
 
 
@@ -905,7 +861,7 @@ function copiarListaResultado(idTextarea) {
 
 
 // START FUNCION reamplzado imagenes masivas
- function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
+function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   if (!rutaFtpUsuario || !rutaFtpUsuario.includes('/static/envioweb/')) {
     return alert('❌ La ruta debe contener /static/envioweb/');
   }
@@ -913,7 +869,6 @@ function copiarListaResultado(idTextarea) {
   const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
   const dominioHTTPS = 'https://www.sodimac.cl';
 
-  // Convertir ruta FTP → HTTPS
   const nuevaBase = rutaFtpUsuario
     .replace(baseFTP, dominioHTTPS)
     .replace(/\\/g, '/')
@@ -927,11 +882,14 @@ function copiarListaResultado(idTextarea) {
   const imgs = template.content.querySelectorAll('img');
   let contador = 0;
 
+  const enlaceActual = enlacesConPatron[indiceActual];
+  const tdActual = enlaceActual?.closest('td');
+  const imgActual = tdActual?.querySelector('img');
+
   imgs.forEach(img => {
     const src = img.getAttribute('src');
     if (!src || !src.includes('/static/envioweb/')) return;
 
-    // Detectar segmento clave /mes-carpeta/images/mes-carpeta-
     const matchBase = src.match(/\/\d{2}-[a-z]+\/images\/\d{2}-[a-z]+-/i);
     const matchNumero = src.match(/(\d+\.(png|jpg|jpeg|gif))$/i);
 
@@ -939,14 +897,29 @@ function copiarListaResultado(idTextarea) {
 
     const numeroFinal = matchNumero[1];
     const nuevaRuta = `${dominioHTTPS}/static/envioweb/${nuevaRelativa}${numeroFinal}`;
-
     img.setAttribute('src', nuevaRuta);
+
     contador++;
+
+    // Si esta imagen es la del enlace actual, actualiza vista previa también
+    if (img === imgActual) {
+      const preview = document.getElementById('previewImagenInline');
+      const input = document.getElementById('imgSrcInput');
+      if (preview) {
+        preview.src = nuevaRuta;
+        preview.style.display = 'block';
+      }
+      if (input) {
+        input.value = nuevaRuta;
+      }
+    }
   });
 
   actualizarVistaPrevia();
-  mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`);
+  mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`, 'success');
 }
+
+
 // FIN FUNCION reamplAzado imagenes masivas
 
 
