@@ -257,16 +257,13 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
 
 function aplicarCambioHref(idInput = 'hrefInput') {
   let nuevaUrl = document.getElementById(idInput).value.trim();
-
   if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
 
   const enlaceActual = enlacesConPatron[indiceActual];
   if (!enlaceActual) return;
 
-  // Normalizar y quitar acentos
   nuevaUrl = nuevaUrl.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
-  // Agrega https:// si no tiene
   if (!/^https?:\/\//i.test(nuevaUrl)) {
     nuevaUrl = 'https://' + nuevaUrl;
   }
@@ -278,36 +275,43 @@ function aplicarCambioHref(idInput = 'hrefInput') {
       tempUrl.hostname = 'www.' + tempUrl.hostname;
     }
 
-    // Eliminar parámetros innecesarios
     const parametrosAEliminar = ['domain', 'exp', 'sc', 'gclid', 'utm_source', 'utm_medium', 'utm_campaign'];
     parametrosAEliminar.forEach(param => tempUrl.searchParams.delete(param));
 
-    // Reemplazar comas en el pathname
     const segmentos = tempUrl.pathname.split('/').map(seg => seg.replace(/,/g, '-'));
     tempUrl.pathname = segmentos.join('/');
 
-    const urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
+    let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
     document.getElementById(idInput).value = urlFinal;
 
-    // Aplicar href con AMPscript
-    const nuevoHref = `%%=RedirectTo(concat('${urlFinal}?',@prefix))=%%`;
+    let nuevoHref = '';
+
+    // 🟡 Validación para NO usar AMPscript si es de Decolovers Blog
+    const esDecoloversBlog = tempUrl.hostname.includes('sodimac.decolovers.cl') && tempUrl.pathname.startsWith('/blog/articulos');
+    if (esDecoloversBlog) {
+      nuevoHref = urlFinal;
+    } else {
+      // 🟠 Validación especial para buscador con parámetros
+      const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+      const tieneFacet = urlFinal.includes('facetSelected=true') || urlFinal.includes('sellerId=SODIMAC');
+      const separadorAmp = (esBusqueda || tieneFacet) ? '&' : '?';
+
+      nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
+    }
+
     enlaceActual.setAttribute('href', nuevoHref);
 
-    // 🖼️ ALT automático desde segmento significativo
-    const segmentosSignificativos = tempUrl.pathname
-      .split('/')
-      .filter(seg => seg && !/^\d+$/.test(seg));
-
+    // 🖼️ ALT automático
+    const segmentosSignificativos = tempUrl.pathname.split('/').filter(seg => seg && !/^\d+$/.test(seg));
     let altSegment = segmentosSignificativos[3] || segmentosSignificativos.at(-1);
     if (altSegment && /^[\w\-]+$/.test(altSegment)) {
       altSegment = altSegment.replace(/[-_]/g, ' ').trim().replace(/\s+/g, ' ');
       altSegment = altSegment.charAt(0).toUpperCase() + altSegment.slice(1);
-
       const img = enlaceActual.querySelector('img');
       if (img) img.setAttribute('alt', `Ir a ${altSegment}`);
     }
 
-    // ✅ También actualizar imagen si el input imgSrcInput tiene un valor válido
+    // ✅ Guardar imagen si hay input lleno
     const nuevaImagen = document.getElementById('imgSrcInput')?.value.trim();
     if (nuevaImagen) {
       const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
@@ -333,6 +337,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     return alert('❌ La URL ingresada no es válida.');
   }
 
+  // ✅ Avanza al siguiente enlace o termina
   if (indiceActual < enlacesConPatron.length - 1) {
     indiceActual++;
     mostrarHrefActual();
@@ -342,6 +347,7 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     actualizarVistaPrevia();
   }
 }
+
 
 
 
@@ -372,23 +378,22 @@ document.getElementById('anteriorBtn').addEventListener('click', () => {
 document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   const inputImg = document.getElementById('imgSrcInput');
   const nuevaSrc = inputImg?.value.trim();
-
   const enlaceActual = enlacesConPatron[indiceActual];
+
+  // ✅ Guardar imagen si hubo cambios antes de copiar
   if (enlaceActual) {
     let img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
     const srcActual = img?.getAttribute('src') || '';
 
-    // ⚠️ Si hubo cambios en el input de imagen, se guardan automáticamente
     if (nuevaSrc && nuevaSrc !== srcActual) {
       const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
       const dominioHTTPS = 'https://www.sodimac.cl';
 
-      let srcFinal = nuevaSrc;
-      if (nuevaSrc.startsWith(baseFTP)) {
-        srcFinal = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
-        inputImg.value = srcFinal; // actualizar visualmente también
-      }
+      let srcFinal = nuevaSrc.startsWith(baseFTP)
+        ? nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/')
+        : nuevaSrc;
 
+      inputImg.value = srcFinal;
       img?.setAttribute('src', srcFinal);
 
       const preview = document.getElementById('previewImagenInline');
@@ -399,9 +404,18 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
 
       actualizarVistaPrevia?.();
     }
+
+    // ✅ Detectar si el enlace actual es del buscador
+    const hrefOriginal = enlaceActual.getAttribute('href');
+    const matchBuscar = hrefOriginal.match(/^%%=RedirectTo\(concat\('(https:\/\/www\.sodimac\.cl\/sodimac-cl\/buscar)\?(.+?)',@prefix\)\)=%%$/);
+    
+    if (matchBuscar) {
+      const nuevaHref = `%%=RedirectTo(concat('${matchBuscar[1]}&${matchBuscar[2]}',@prefix))=%%`;
+      enlaceActual.setAttribute('href', nuevaHref);
+    }
   }
 
-  // ✅ Eliminar resaltado visual
+  // 🔁 Limpiar resaltados
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   const styleTag = template.content.querySelector('style[data-resaltado]');
   if (styleTag) styleTag.remove();
@@ -410,12 +424,18 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   limpiarClasesVacias();
 
   let finalHTML = template.innerHTML;
+
+  // ✅ Eliminar etiquetas <custom>
+  finalHTML = finalHTML.replace(/<\/?custom>/gi, '');
+
+  // ✅ Restaurar AMPscript y limpiar entidades HTML
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
 
+  // ✅ Copiar al portapapeles
   navigator.clipboard.writeText(finalHTML).then(() => {
     mostrarToast('✅ HTML limpio copiado al portapapeles', 'success');
 
-    // ✅ Limpiar campos
+    // 🧼 Limpieza visual e inputs
     document.getElementById('htmlInput').value = '';
     document.getElementById('skuInput').value = '';
     document.getElementById('ocrProgreso').textContent = '';
@@ -445,10 +465,10 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
       imgInline.style.display = 'none';
     }
 
-    // Ir arriba
+    // Scroll arriba
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Recargar automáticamente (opcional)
+    // Recarga final opcional
     setTimeout(() => {
       location.reload();
     }, 1500);
@@ -457,6 +477,8 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
     mostrarToast('❌ Error al copiar HTML', 'error');
   });
 });
+
+
 
 
 // FIN COPIAR HTML BTN
@@ -539,42 +561,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // START Generador de SKUs
 
-document.getElementById('generarSkuBtn').addEventListener('click', () => {
-  const input = document.getElementById('skuInput').value.trim();
-  if (!input) return alert('⚠️ Ingresa al menos un SKU.');
-
-  const skus = input.split(/\n/).map(s => s.trim()).filter(s => s !== '').slice(0, 12);
-  const bloquearCampos = skus.length === 9;
-  const camposBloqueadosCondicional = ['04', '08', '12'];
-
-  let usableIndex = 0;
-  let output = '';
-
-  for (let fila = 0; fila < 3; fila++) {
-    output += `/*** Fila ${fila + 1} ***/\n`;
-
-    for (let i = 0; i < 4; i++) {
-      const numSKU = fila * 4 + i + 1; // de 1 a 12
-      const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`; // SKU_01...SKU_12
-      const aliasSKU = numSKU < 10 ? `0${numSKU}${numSKU}` : `01${numSKU}`; // @SKU_011, @SKU_0110
-
-      const debeBloquear = bloquearCampos && camposBloqueadosCondicional.includes(idSKU);
-
-      if (debeBloquear) {
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='0' ENDIF\n`;
-      } else {
-        const valor = skus[usableIndex] || '0';
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
-        usableIndex++;
-      }
+  document.getElementById('generarSkuBtn').addEventListener('click', () => {
+    const input = document.getElementById('skuInput').value.trim();
+    if (!input) return alert('⚠️ Ingresa al menos un SKU.');
+  
+    // ✅ Extraer solo números de 9 dígitos
+    const posiblesSKUs = [...input.matchAll(/\b\d{9}\b/g)].map(m => m[0]);
+    const skus = [...new Set(posiblesSKUs)].slice(0, 12); // sin duplicados
+  
+    // ✅ Mostrar contador visual
+    const contador = document.getElementById('skuContador');
+    contador.textContent = `${skus.length} de 16 SKUs`;
+  
+    if (skus.length === 0) {
+      contador.classList.remove('text-muted');
+      contador.classList.add('text-danger');
+      return alert('❌ No se encontraron SKUs válidos de 9 dígitos.');
     }
-
-    output += '\n';
-  }
-
-  document.getElementById('resultadoSKU').value = output.trim();
-  copiarAmpBtn.classList.remove('d-none');
-});
+  
+    if (skus.length > 16) {
+      contador.classList.remove('text-muted');
+      contador.classList.add('text-danger', 'fw-bold');
+    } else {
+      contador.classList.remove('text-danger', 'fw-bold');
+      contador.classList.add('text-muted');
+    }
+  
+    const bloquearCampos = skus.length === 9;
+    const camposBloqueadosCondicional = ['04', '08', '12'];
+  
+    let usableIndex = 0;
+    let output = '';
+  
+    for (let fila = 0; fila < 3; fila++) {
+      output += `/*** Fila ${fila + 1} ***/\n`;
+  
+      for (let i = 0; i < 4; i++) {
+        const numSKU = fila * 4 + i + 1;
+        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
+        const aliasSKU = numSKU < 10 ? `0${numSKU}${numSKU}` : `01${numSKU}`;
+        const debeBloquear = bloquearCampos && camposBloqueadosCondicional.includes(idSKU);
+  
+        if (debeBloquear) {
+          output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='0' ENDIF\n`;
+        } else {
+          const valor = skus[usableIndex] || '0';
+          output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
+          usableIndex++;
+        }
+      }
+  
+      output += '\n';
+    }
+  
+    document.getElementById('resultadoSKU').value = output.trim();
+    copiarAmpBtn.classList.remove('d-none');
+  });
+  
+  
 
 
 // FIN Generador de SKUs
