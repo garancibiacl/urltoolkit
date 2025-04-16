@@ -56,39 +56,38 @@ function inyectarEstiloResaltado() {
 
 
 let ultimaImagenEditada = '';
+let ultimaHrefEditado = '';
 
 function mostrarHrefActual() {
   const inputImg = document.getElementById('imgSrcInput');
-  const srcActualInput = inputImg.value.trim();
-
-  // 🔁 Si hubo un cambio en la imagen anterior, se guarda automáticamente
-  if (ultimaImagenEditada && srcActualInput !== ultimaImagenEditada) {
-    guardarImagenDesdeInput(); // Usamos tu función actual
-  }
+  const inputHref = document.getElementById('hrefInput');
 
   const enlaceActual = enlacesConPatron[indiceActual];
   const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
 
-  // Mostrar href en input
-  document.getElementById('hrefInput').value = extraerUrl(enlaceActual.getAttribute('href'));
+  // 🔗 Obtener href limpio y mostrar en input
+  const hrefRaw = enlaceActual.getAttribute('href') || '';
+  const hrefExtraido = extraerUrl(hrefRaw);
+  inputHref.value = hrefExtraido;
+  ultimaHrefEditado = hrefExtraido;
 
-  // Mostrar estado
+  // 🏷️ Mostrar descripción/posición actual
   document.getElementById('estadoEnlace').textContent =
     `🔗 Editando enlace ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
 
-  // Resaltar el enlace actual
+  // 🔲 Resaltado visual del enlace
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
   enlaceActual.classList.add('resaltado');
 
-  // Mostrar src de imagen en input
+  // 🖼️ Obtener imagen asociada y actualizar input + preview
   const tdContenedor = enlaceActual.closest('td');
   const img = tdContenedor?.querySelector('img');
   const src = img?.getAttribute('src') || '';
 
   inputImg.value = src;
-  ultimaImagenEditada = src; // 💾 Referencia para saber si se modificó luego
+  ultimaImagenEditada = src; // 💾 Guardar estado original para comparar cambios
 
-  // Mostrar preview visual
+  // 🔍 Mostrar vista previa visual
   const preview = document.getElementById('previewImagenInline');
   if (src) {
     preview.src = src;
@@ -100,6 +99,7 @@ function mostrarHrefActual() {
 
   actualizarVistaPrevia();
 }
+
 
 
 
@@ -143,9 +143,24 @@ const descripcionesEnlaces = [
 
 
 function extraerUrl(href) {
-  const match = href.match(/^%%=RedirectTo\(concat\('(.+?[\?&])',@prefix\)\)=%%$/);
-  return match ? match[1].slice(0, -1) : '';
+  if (!href) return '';
+
+  // ✅ Detectar si está envuelto en AMPscript y extraer la URL base
+  const ampMatch = href.match(/%%=RedirectTo\(concat\('(.+?)['"]?,@prefix\)\)=%%/);
+  if (ampMatch) {
+    return ampMatch[1]; // Retorna la URL base sin AMPscript
+  }
+
+  // ✅ Detectar si es una URL AMPscript con separador "&" en vez de "?"
+  const ampAltMatch = href.match(/%%=RedirectTo\(concat\('(.+?)&',@prefix\)\)=%%/);
+  if (ampAltMatch) {
+    return ampAltMatch[1];
+  }
+
+  // ✅ Si no es AMPscript, retornar la URL tal cual (para casos como decolovers o linkedin)
+  return href.trim();
 }
+
 
 function construirHref(nuevaUrl) {
   const separador = nuevaUrl.includes('?') ? '&' : '?';
@@ -295,22 +310,115 @@ function aplicarCambioHref(idInput = 'hrefInput') {
 
 
 
-
  document.getElementById('siguienteBtn').addEventListener('click', () => {
-  if (indiceActual < enlacesConPatron.length - 1) {
-    mostrarHrefActual(); // autoguarda si detecta cambio
+  const inputHref = document.getElementById('hrefInput')?.value.trim();
+  const inputImg = document.getElementById('imgSrcInput')?.value.trim();
+  const enlaceActual = enlacesConPatron[indiceActual];
+  if (!enlaceActual) return;
+
+  const hrefActual = extraerUrl(enlaceActual.getAttribute('href'));
+  const img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
+  const srcActual = img?.getAttribute('src') || '';
+
+  let huboCambio = false;
+
+  // ✅ Verificar y aplicar cambio en HREF
+  if (inputHref && inputHref !== hrefActual) {
+    aplicarCambioHref('hrefInput', false); // NO avanzar automáticamente
+    huboCambio = true;
+  }
+
+  // ✅ Verificar y aplicar cambio en SRC imagen
+  if (inputImg && inputImg !== srcActual) {
+    let nuevaSrc = inputImg;
+    const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+    const dominioHTTPS = 'https://www.sodimac.cl';
+
+    if (nuevaSrc.startsWith(baseFTP)) {
+      const nuevaConvertida = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
+      if (nuevaSrc !== nuevaConvertida) {
+        nuevaSrc = nuevaConvertida;
+        document.getElementById('imgSrcInput').value = nuevaSrc;
+      }
+    }
+
+    if (img && srcActual !== nuevaSrc) {
+      img.setAttribute('src', nuevaSrc);
+
+      const preview = document.getElementById('previewImagenInline');
+      if (preview) {
+        preview.src = nuevaSrc;
+        preview.style.display = 'block';
+      }
+
+      actualizarVistaPrevia?.();
+      mostrarToast('💾 Imagen guardada correctamente', 'info');
+      huboCambio = true;
+    }
+  }
+
+  // ✅ Solo avanzar si no hubo cambios
+  if (!huboCambio && indiceActual < enlacesConPatron.length - 1) {
     indiceActual++;
     mostrarHrefActual();
   }
 });
 
 document.getElementById('anteriorBtn').addEventListener('click', () => {
-  if (indiceActual > 0) {
-    mostrarHrefActual(); // autoguarda si detecta cambio
+  const inputHref = document.getElementById('hrefInput')?.value.trim();
+  const inputImg = document.getElementById('imgSrcInput')?.value.trim();
+  const enlaceActual = enlacesConPatron[indiceActual];
+  if (!enlaceActual) return;
+
+  const hrefActual = extraerUrl(enlaceActual.getAttribute('href'));
+  const img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
+  const srcActual = img?.getAttribute('src') || '';
+
+  let huboCambio = false;
+
+  // ✅ Verificar y aplicar cambio en HREF
+  if (inputHref && inputHref !== hrefActual) {
+    aplicarCambioHref('hrefInput', false); // NO avanzar automáticamente
+    huboCambio = true;
+  }
+
+  // ✅ Verificar y aplicar cambio en SRC imagen
+  if (inputImg && inputImg !== srcActual) {
+    let nuevaSrc = inputImg;
+    const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+    const dominioHTTPS = 'https://www.sodimac.cl';
+
+    if (nuevaSrc.startsWith(baseFTP)) {
+      const nuevaConvertida = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
+      if (nuevaSrc !== nuevaConvertida) {
+        nuevaSrc = nuevaConvertida;
+        document.getElementById('imgSrcInput').value = nuevaSrc;
+      }
+    }
+
+    if (img && srcActual !== nuevaSrc) {
+      img.setAttribute('src', nuevaSrc);
+
+      const preview = document.getElementById('previewImagenInline');
+      if (preview) {
+        preview.src = nuevaSrc;
+        preview.style.display = 'block';
+      }
+
+      actualizarVistaPrevia?.();
+      mostrarToast('💾 Imagen guardada correctamente', 'info');
+      huboCambio = true;
+    }
+  }
+
+  // ✅ Solo retroceder si no hubo cambios
+  if (!huboCambio && indiceActual > 0) {
     indiceActual--;
     mostrarHrefActual();
   }
 });
+
+
 
 
 // START COPIAR HTML BTN
@@ -918,58 +1026,7 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   actualizarVistaPrevia();
   mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`, 'success');
 }
-
-
 // FIN FUNCION reamplAzado imagenes masivas
-
-
-
-
-
-
-function guardarImagenDesdeInput() {
-  const input = document.getElementById('imgSrcInput');
-  let nuevaSrc = input?.value.trim();
-  const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
-  const dominioHTTPS = 'https://www.sodimac.cl';
-
-  if (!nuevaSrc) return mostrarToast('⚠️ Ingresa una URL de imagen válida', 'warning');
-
-  // ⚠️ Solo convertir si realmente comienza con base FTP
-  if (nuevaSrc.startsWith(baseFTP)) {
-    const nuevaConvertida = nuevaSrc.replace(baseFTP, dominioHTTPS).replace(/\\/g, '/');
-
-    // Solo si es diferente de lo ya mostrado, actualizar input y usar nuevo valor
-    if (nuevaSrc !== nuevaConvertida) {
-      nuevaSrc = nuevaConvertida;
-      input.value = nuevaSrc; // evita recodificación infinita
-    }
-  }
-
-  const enlaceActual = enlacesConPatron?.[indiceActual];
-  if (!enlaceActual) return mostrarToast('❌ No se encontró el enlace actual', 'danger');
-
-  let img = enlaceActual.querySelector('img') || enlaceActual.closest('td')?.querySelector('img');
-  if (!img) return mostrarToast('❌ No se encontró imagen relacionada al enlace', 'danger');
-
-  const srcActual = img.getAttribute('src');
-  if (srcActual === nuevaSrc) {
-    return mostrarToast('⚠️ La imagen ya tiene esa misma URL. No se realizó ningún cambio.', 'info');
-  }
-
-  img.setAttribute('src', nuevaSrc);
-
-  const previewImg = document.getElementById('previewImagenInline');
-  if (previewImg) {
-    previewImg.src = nuevaSrc;
-    previewImg.style.display = 'block';
-  }
-
-  if (typeof actualizarVistaPrevia === 'function') actualizarVistaPrevia();
-
-  mostrarToast('💾 Imagen guardada automáticamente antes de avanzar', 'info');
-}
-
 
 
 
