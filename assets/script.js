@@ -639,21 +639,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // START Generador de SKUs
 
-  document.getElementById('generarSkuBtn').addEventListener('click', () => {
+ document.getElementById('generarSkuBtn').addEventListener('click', () => {
     const input = document.getElementById('skuInput').value.trim();
     if (!input) return alert('⚠️ Ingresa al menos un SKU.');
   
-    // ✅ Extraer solo números de 9 dígitos
+    // ✅ Detectar solo SKUs de 9 dígitos
     const posiblesSKUs = [...input.matchAll(/\b\d{9}\b/g)].map(m => m[0]);
-    const skus = [...new Set(posiblesSKUs)].slice(0, 12); // sin duplicados
+    const skus = [...new Set(posiblesSKUs)].slice(0, 12); // únicos, máximo 12
   
-    // ✅ Mostrar contador visual
+    // ✅ Contador visual
     const contador = document.getElementById('skuContador');
     contador.textContent = `${skus.length} de 16 SKUs`;
   
     if (skus.length === 0) {
       contador.classList.remove('text-muted');
-      contador.classList.add('text-danger');
+      contador.classList.add('text-danger', 'fw-bold');
       return alert('❌ No se encontraron SKUs válidos de 9 dígitos.');
     }
   
@@ -693,8 +693,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     document.getElementById('resultadoSKU').value = output.trim();
-    copiarAmpBtn.classList.remove('d-none');
+    document.getElementById('copiarAmpBtn').classList.remove('d-none');
   });
+  
   
   
 
