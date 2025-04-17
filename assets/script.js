@@ -145,27 +145,41 @@ const descripcionesEnlaces = [
 function extraerUrl(href) {
   if (!href) return '';
 
-  // ✅ Detectar si está envuelto en AMPscript y extraer la URL base
-  const ampMatch = href.match(/%%=RedirectTo\(concat\('(.+?)['"]?,@prefix\)\)=%%/);
-  if (ampMatch) {
-    return ampMatch[1]; // Retorna la URL base sin AMPscript
-  }
+  // ✅ Detectar y extraer URL desde AMPscript con separador ?
+  const matchPregunta = href.match(/%%=RedirectTo\(concat\('(.+?)\?',@prefix\)\)=%%/);
+  if (matchPregunta) return matchPregunta[1];
 
-  // ✅ Detectar si es una URL AMPscript con separador "&" en vez de "?"
-  const ampAltMatch = href.match(/%%=RedirectTo\(concat\('(.+?)&',@prefix\)\)=%%/);
-  if (ampAltMatch) {
-    return ampAltMatch[1];
-  }
+  // ✅ Detectar y extraer URL desde AMPscript con separador &
+  const matchAmp = href.match(/%%=RedirectTo\(concat\('(.+?)&',@prefix\)\)=%%/);
+  if (matchAmp) return matchAmp[1];
 
-  // ✅ Si no es AMPscript, retornar la URL tal cual (para casos como decolovers o linkedin)
+  // ✅ Si no es AMPscript, retornar la URL limpia
   return href.trim();
 }
 
 
+
 function construirHref(nuevaUrl) {
-  const separador = nuevaUrl.includes('?') ? '&' : '?';
+  const tieneParametrosEspeciales =
+    nuevaUrl.includes('facetSelected=true') ||
+    nuevaUrl.includes('sellerId=SODIMAC') ||
+    nuevaUrl.includes('f.product.L2_category_paths=') ||
+    nuevaUrl.includes('/sodimac-cl/buscar?Ntt=');
+
+  // ✅ Si hay parámetros especiales, reemplazar el primer ? por &
+  if (tieneParametrosEspeciales && nuevaUrl.includes('?')) {
+    const idx = nuevaUrl.indexOf('?');
+    nuevaUrl = nuevaUrl.slice(0, idx) + '&' + nuevaUrl.slice(idx + 1);
+  }
+
+  const separador = nuevaUrl.includes('?') || nuevaUrl.includes('&') ? '&' : '?';
   return `%%=RedirectTo(concat('${nuevaUrl}${separador}',@prefix))=%%`;
 }
+
+
+
+
+
 
 function actualizarVistaPrevia() {
   const iframe = document.getElementById('vistaPrevia');
