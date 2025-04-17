@@ -639,64 +639,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // START Generador de SKUs
 
-   document.getElementById('generarSkuBtn').addEventListener('click', () => {
-    const input = document.getElementById('skuInput').value.trim();
-    if (!input) return alert('⚠️ Ingresa al menos un SKU.');
-  
-    // ✅ Detectar solo SKUs de 9 dígitos
-    const posiblesSKUs = [...input.matchAll(/\b\d{9}\b/g)].map(m => m[0]);
-    const skus = [...new Set(posiblesSKUs)].slice(0, 12); // únicos, máximo 12
-  
-    // ✅ Contador visual
-    const contador = document.getElementById('skuContador');
-    contador.textContent = `${skus.length} de 16 SKUs`;
-  
-    if (skus.length === 0) {
-      contador.classList.remove('text-muted');
-      contador.classList.add('text-danger', 'fw-bold');
-      return alert('❌ No se encontraron SKUs válidos de 9 dígitos.');
-    }
-  
-    if (skus.length > 16) {
-      contador.classList.remove('text-muted');
-      contador.classList.add('text-danger', 'fw-bold');
-    } else {
-      contador.classList.remove('text-danger', 'fw-bold');
-      contador.classList.add('text-muted');
-    }
-  
-    const bloquearCampos = skus.length === 9;
-    const camposBloqueadosCondicional = ['04', '08', '12'];
-  
-    let usableIndex = 0;
-    let output = '';
-  
-    for (let fila = 0; fila < 3; fila++) {
-      output += `/*** Fila ${fila + 1} ***/\n`;
-  
-      for (let i = 0; i < 4; i++) {
-        const numSKU = fila * 4 + i + 1;
-        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
-        const aliasSKU = numSKU < 10 ? `0${numSKU}${numSKU}` : `01${numSKU}`;
-        const debeBloquear = bloquearCampos && camposBloqueadosCondicional.includes(idSKU);
-  
-        if (debeBloquear) {
-          output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='0' ENDIF\n`;
-        } else {
-          const valor = skus[usableIndex] || '0';
-          output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
-          usableIndex++;
-        }
+document.getElementById('generarSkuBtn').addEventListener('click', () => {
+  const input = document.getElementById('skuInput').value.trim();
+  if (!input) return alert('⚠️ Ingresa al menos un SKU.');
+
+  const skus = input.split(/\n/).map(s => s.trim()).filter(s => s !== '').slice(0, 16);
+  const bloquearCampos = skus.length === 9;
+  const camposBloqueadosCondicional = ['04', '08', '12'];
+  const camposBloqueadosSiempre = ['15']; // SKU_15 siempre bloqueado
+
+  let usableIndex = 0;
+  let output = '';
+
+  for (let fila = 0; fila < 4; fila++) {
+    output += `/*** Fila ${fila + 1} ***/\n`;
+    for (let i = 0; i < 4; i++) {
+      const numSKU = fila * 4 + i + 1;
+      const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
+      const bloquearPorCondicion = bloquearCampos && camposBloqueadosCondicional.includes(idSKU);
+      const bloquearPorReglaFija = camposBloqueadosSiempre.includes(numSKU.toString());
+
+      if (bloquearPorCondicion || bloquearPorReglaFija) {
+        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_0${idSKU}='0' ELSE SET @SKU_0${idSKU}='0' ENDIF\n`;
+      } else {
+        const valor = skus[usableIndex] || '0';
+        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_0${idSKU}='0' ELSE SET @SKU_0${idSKU}='${valor}' ENDIF\n`;
+        usableIndex++;
       }
-  
-      output += '\n';
     }
-  
-    document.getElementById('resultadoSKU').value = output.trim();
-    document.getElementById('copiarAmpBtn').classList.remove('d-none');
-  });
-  
-  
+    output += '\n';
+  }
+
+  document.getElementById('resultadoSKU').value = output.trim();
+  copiarAmpBtn.classList.remove('d-none'); // Mostrar botón copiar
+});
+
   
   
 
