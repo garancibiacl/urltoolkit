@@ -639,7 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // START Generador de SKUs
 
- document.getElementById('generarSkuBtn').addEventListener('click', () => {
+   document.getElementById('generarSkuBtn').addEventListener('click', () => {
     const input = document.getElementById('skuInput').value.trim();
     if (!input) return alert('⚠️ Ingresa al menos un SKU.');
   
@@ -695,6 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('resultadoSKU').value = output.trim();
     document.getElementById('copiarAmpBtn').classList.remove('d-none');
   });
+  
   
   
   
