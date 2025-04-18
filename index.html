@@ -19,6 +19,8 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarOpciones">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+    
       <div class="collapse navbar-collapse" id="navbarOpciones">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -204,6 +206,11 @@
               <h3 class="mb-4 text-center">🎯 Generador Automático de SKUs (AMPscript)</h3>
 
               <div class="row g-4 align-items-start">
+                <div class="mb-3">
+                  <label class="fw-semibold">Modo de procesamiento:</label><br>
+                  <label><input type="radio" name="modoSKU" value="porFila" checked> Por Fila (manual)</label><br>
+                  <label><input type="radio" name="modoSKU" value="agrupado"> Agrupar Automáticamente</label>
+                </div>
               <!-- Input SKUs -->
               <div class="col-md-3">
                 <label for="skuInput" class="form-label">📦 Ingresa los SKUs separados por línea:</label>

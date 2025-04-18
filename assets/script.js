@@ -630,51 +630,97 @@ mostrarVista('editor');
 
 
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const copiarAmpBtn = document.getElementById('copiarAmpBtn');
   const toastElement = document.getElementById('toastCopiado');
   const toastCopiado = new bootstrap.Toast(toastElement);
 
-  // START Generador de SKUs
 
-document.getElementById('generarSkuBtn').addEventListener('click', () => {
-  const input = document.getElementById('skuInput').value.trim();
-  if (!input) return alert('⚠️ Ingresa al menos un SKU.');
-
-  const skus = input.split(/\n/).map(s => s.trim()).filter(s => s !== '').slice(0, 16);
-  const bloquearCampos = skus.length === 9;
-  const camposBloqueadosCondicional = ['04', '08', '12'];
-  const camposBloqueadosSiempre = ['15']; // SKU_15 siempre bloqueado
-
-  let usableIndex = 0;
-  let output = '';
-
-  for (let fila = 0; fila < 4; fila++) {
-    output += `/*** Fila ${fila + 1} ***/\n`;
-    for (let i = 0; i < 4; i++) {
-      const numSKU = fila * 4 + i + 1;
-      const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
-      const bloquearPorCondicion = bloquearCampos && camposBloqueadosCondicional.includes(idSKU);
-      const bloquearPorReglaFija = camposBloqueadosSiempre.includes(numSKU.toString());
-
-      if (bloquearPorCondicion || bloquearPorReglaFija) {
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_0${idSKU}='0' ELSE SET @SKU_0${idSKU}='0' ENDIF\n`;
-      } else {
-        const valor = skus[usableIndex] || '0';
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_0${idSKU}='0' ELSE SET @SKU_0${idSKU}='${valor}' ENDIF\n`;
-        usableIndex++;
-      }
-    }
-    output += '\n';
-  }
-
-  document.getElementById('resultadoSKU').value = output.trim();
-  copiarAmpBtn.classList.remove('d-none'); // Mostrar botón copiar
-});
 
   
+  // START Generador de SKUs
+  function generarSkuPorFila() {
+    const inputRaw = document.getElementById('skuInput').value.trim();
+    const bloques = inputRaw.split(/Fila\s*\d+\s*:/gi).map(b => b.trim()).filter(Boolean);
+    const filas = [];
+  
+    for (let i = 0; i < 3; i++) {
+      const bloque = bloques[i] || '';
+      const lineas = bloque.split(/\n/).map(l => l.trim()).filter(l => /^\d{9}$/.test(l));
+      const fila = lineas.slice(0, 4);
+      while (fila.length < 4) fila.push('0');
+      filas.push(fila);
+    }
+  
+    const nuevaEntrada = filas
+      .map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`)
+      .join('\n\n');
+    document.getElementById('skuInput').value = nuevaEntrada;
+  
+    let output = '';
+    for (let fila = 0; fila < 3; fila++) {
+      output += `/*** Fila ${fila + 1} ***/\n`;
+      for (let i = 0; i < 4; i++) {
+        const numSKU = fila * 4 + i + 1;
+        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
+        const aliasSKU = numSKU < 10 ? `00${numSKU}` : `01${numSKU}`;
+        const valor = filas[fila][i];
+        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
+      }
+      output += '\n';
+    }
+  
+    document.getElementById('resultadoSKU').value = output.trim();
+    copiarAmpBtn.classList.remove('d-none');
+  }
+  
+  
+
+  function generarSkuAgrupado() {
+    const inputRaw = document.getElementById('skuInput').value.trim();
+    const lineas = inputRaw.split(/\n/).map(l => l.trim());
+    const skusValidos = lineas.filter(l => /^\d{9}$/.test(l)).slice(0, 12); // máximo 12
+    const filas = [];
+  
+    for (let i = 0; i < 3; i++) {
+      const fila = skusValidos.slice(i * 4, i * 4 + 4);
+      while (fila.length < 4) fila.push('0');
+      filas.push(fila);
+    }
+  
+    const nuevaEntrada = filas
+      .map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`)
+      .join('\n\n');
+    document.getElementById('skuInput').value = nuevaEntrada;
+  
+    let output = '';
+    for (let fila = 0; fila < 3; fila++) {
+      output += `/*** Fila ${fila + 1} ***/\n`;
+      for (let i = 0; i < 4; i++) {
+        const numSKU = fila * 4 + i + 1;
+        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
+        const aliasSKU = numSKU < 10 ? `00${numSKU}` : `01${numSKU}`;
+        const valor = filas[fila][i];
+        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
+      }
+      output += '\n';
+    }
+  
+
+
+    
+    document.getElementById('resultadoSKU').value = output.trim();
+    copiarAmpBtn.classList.remove('d-none');
+  }
+  document.getElementById('generarSkuBtn').addEventListener('click', () => {
+    const modo = document.querySelector('input[name="modoSKU"]:checked')?.value;
+    if (modo === 'porFila') {
+      generarSkuPorFila();
+    } else {
+      generarSkuAgrupado();
+    }
+  });
+    
   
 
 
