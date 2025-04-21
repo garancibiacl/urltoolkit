@@ -646,28 +646,47 @@ document.addEventListener("DOMContentLoaded", () => {
   
     for (let i = 0; i < 3; i++) {
       const bloque = bloques[i] || '';
-      const lineas = bloque.split(/\n/).map(l => l.trim()).filter(l => /^\d{9}$/.test(l));
-      const fila = lineas.slice(0, 4);
-      while (fila.length < 4) fila.push('0');
-      filas.push(fila);
+      const lineas = bloque.split(/\n/).map(l => l.trim());
+      const skus = lineas.filter(s => /^\d{9}$/.test(s)).slice(0, 4);
+      while (skus.length < 4) skus.push('0');
+      filas.push(skus);
     }
   
-    const nuevaEntrada = filas
-      .map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`)
-      .join('\n\n');
+    const nuevaEntrada = filas.map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`).join('\n\n');
     document.getElementById('skuInput').value = nuevaEntrada;
   
+    const plantilla = [
+      "IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='SKU USUARIO' ENDIF",
+      "IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='SKU USUARIO' ENDIF",
+      "IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='SKU USUARIO' ENDIF",
+      "IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='SKU USUARIO' ENDIF",
+      "",
+      "IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='SKU USUARIO' ENDIF",
+      "IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='SKU USUARIO' ENDIF",
+      "IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='SKU USUARIO' ENDIF",
+      "IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='SKU USUARIO' ENDIF",
+      "",
+      "IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='SKU USUARIO' ENDIF",
+      "IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='SKU USUARIO' ENDIF",
+      "IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='SKU USUARIO' ENDIF",
+      "IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='SKU USUARIO' ENDIF"
+    ];
+  
+    const skus = filas.flat();
+    let idx = 0;
     let output = '';
-    for (let fila = 0; fila < 3; fila++) {
-      output += `/*** Fila ${fila + 1} ***/\n`;
-      for (let i = 0; i < 4; i++) {
-        const numSKU = fila * 4 + i + 1;
-        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
-        const aliasSKU = numSKU < 10 ? `00${numSKU}` : `01${numSKU}`;
-        const valor = filas[fila][i];
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
+  
+    for (let i = 0; i < plantilla.length; i++) {
+      if (i % 5 === 0) {
+        output += `/*** Fila ${Math.floor(i / 5) + 1} ***/\n`;
       }
-      output += '\n';
+      const linea = plantilla[i];
+      if (linea.includes('SKU USUARIO')) {
+        const valor = skus[idx++] || '0';
+        output += `${linea.replace("'SKU USUARIO'", `'${valor}'`)}\n`;
+      } else {
+        output += `${linea}\n`;
+      }
     }
   
     document.getElementById('resultadoSKU').value = output.trim();
@@ -679,39 +698,57 @@ document.addEventListener("DOMContentLoaded", () => {
   function generarSkuAgrupado() {
     const inputRaw = document.getElementById('skuInput').value.trim();
     const lineas = inputRaw.split(/\n/).map(l => l.trim());
-    const skusValidos = lineas.filter(l => /^\d{9}$/.test(l)).slice(0, 12); // máximo 12
-    const filas = [];
+    const skusValidos = lineas.filter(s => /^\d{9}$/.test(s)).slice(0, 12); // Solo 9 dígitos válidos, máx 12
   
+    const filas = [];
     for (let i = 0; i < 3; i++) {
       const fila = skusValidos.slice(i * 4, i * 4 + 4);
       while (fila.length < 4) fila.push('0');
       filas.push(fila);
     }
   
-    const nuevaEntrada = filas
-      .map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`)
-      .join('\n\n');
+    const nuevaEntrada = filas.map((fila, i) => `Fila ${i + 1} :\n${fila.join('\n')}`).join('\n\n');
     document.getElementById('skuInput').value = nuevaEntrada;
   
+    const plantilla = [
+      "IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='SKU USUARIO' ENDIF",
+      "IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='SKU USUARIO' ENDIF",
+      "IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='SKU USUARIO' ENDIF",
+      "IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='SKU USUARIO' ENDIF",
+      "",
+      "IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='SKU USUARIO' ENDIF",
+      "IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='SKU USUARIO' ENDIF",
+      "IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='SKU USUARIO' ENDIF",
+      "IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='SKU USUARIO' ENDIF",
+      "",
+      "IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='SKU USUARIO' ENDIF",
+      "IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='SKU USUARIO' ENDIF",
+      "IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='SKU USUARIO' ENDIF",
+      "IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='SKU USUARIO' ENDIF"
+    ];
+  
+    const skus = filas.flat();
+    let idx = 0;
     let output = '';
-    for (let fila = 0; fila < 3; fila++) {
-      output += `/*** Fila ${fila + 1} ***/\n`;
-      for (let i = 0; i < 4; i++) {
-        const numSKU = fila * 4 + i + 1;
-        const idSKU = numSKU < 10 ? `0${numSKU}` : `${numSKU}`;
-        const aliasSKU = numSKU < 10 ? `00${numSKU}` : `01${numSKU}`;
-        const valor = filas[fila][i];
-        output += `IF SKU_${idSKU} < 0 THEN SET @SKU_${aliasSKU}='0' ELSE SET @SKU_${aliasSKU}='${valor}' ENDIF\n`;
+  
+    for (let i = 0; i < plantilla.length; i++) {
+      if (i % 5 === 0) {
+        output += `/*** Fila ${Math.floor(i / 5) + 1} ***/\n`;
       }
-      output += '\n';
+      const linea = plantilla[i];
+      if (linea.includes('SKU USUARIO')) {
+        const valor = skus[idx++] || '0';
+        output += `${linea.replace("'SKU USUARIO'", `'${valor}'`)}\n`;
+      } else {
+        output += `${linea}\n`;
+      }
     }
   
-
-
-    
     document.getElementById('resultadoSKU').value = output.trim();
     copiarAmpBtn.classList.remove('d-none');
   }
+  
+  
   document.getElementById('generarSkuBtn').addEventListener('click', () => {
     const modo = document.querySelector('input[name="modoSKU"]:checked')?.value;
     if (modo === 'porFila') {
