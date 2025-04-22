@@ -73,7 +73,7 @@ function mostrarHrefActual() {
 
   // 🏷️ Mostrar descripción/posición actual
   document.getElementById('estadoEnlace').textContent =
-    `🔗 Editando enlace ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
+    `🔗 Url ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
 
   // 🔲 Resaltado visual del enlace
   enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
