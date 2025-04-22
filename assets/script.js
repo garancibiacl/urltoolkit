@@ -55,6 +55,8 @@ function inyectarEstiloResaltado() {
 }
 
 
+
+
 let ultimaImagenEditada = '';
 let ultimaHrefEditado = '';
 
@@ -1157,3 +1159,61 @@ function inputRutaFtpReemplazo(ruta) {
   const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
   return nuevoPath;
 }
+
+
+
+function seleccionarTemplate() {
+  const select = document.getElementById('selectorTemplate');
+  const archivoSeleccionado = select.value;
+
+  if (archivoSeleccionado) {
+    cargarTemplateDesdeAssets(archivoSeleccionado);
+  }
+}
+
+
+
+function cargarTemplateDesdeAssets(nombreArchivo) {
+  fetch(`./assets/template/${nombreArchivo}`)
+    .then(response => {
+      if (!response.ok) throw new Error('No se pudo cargar el archivo.');
+      return response.text();
+    })
+    .then(html => {
+      // ✅ Mostrar en textarea e iframe
+      document.getElementById('htmlInput').value = html;
+      const iframe = document.getElementById('vistaPrevia');
+      if (iframe) {
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+      }
+
+      // ✅ Procesar enlaces AMPscript automáticamente
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+
+      enlacesConPatron = Array.from(tempDiv.querySelectorAll('a')).filter(a =>
+        a.outerHTML.includes("%%=RedirectTo(concat('")
+      );
+
+      htmlOriginal = html;
+      indiceActual = 0;
+
+      if (enlacesConPatron.length > 0) {
+        mostrarHrefActual();
+
+
+        mostrarToast(`✅ Template cargado (${nombreArchivo})`, "success");
+      } else {
+        mostrarToastDinamico('⚠️ Template cargado pero sin enlaces AMPscript', 'warning');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      mostrarToastDinamico("❌ Error al cargar el HTML desde assets", "danger");
+    });
+}
+
+

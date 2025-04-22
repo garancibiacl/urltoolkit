@@ -53,7 +53,7 @@
       <!-- Toggle modo oscuro/claro -->
       <div id="toggleThemeBtn" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema" role="button" tabindex="0"></div>
 
-        
+
     </div>
   </nav>
 
@@ -61,7 +61,7 @@
 
 
   <!-- Vista 1: Editor de URLs -->
-  <div class="container-fluid py-4 ">
+  <div class="container-fluid py-4 mt-4">
   
     <div class="row justify-content-center  ">
       <div class="col-md-9  py-4 ">
@@ -71,9 +71,19 @@
         <div class="card-body bg-body text-body p-4 shadow-sm rounded-4 ">
       <div class="row g-4 d-flex justify-content-center">
         <div class="col-md-6">
+        
+<!-- 🎯 Selector de templates con dropdown y búsqueda -->
+<div class="mb-4">
+  <label for="selectorTemplate" class="form-label fw-semibold text-body-secondary">📂 Selecciona un template prediseñado:</label>
+  <select id="selectorTemplate" class="form-select w-100" onchange="seleccionarTemplate()">
+    <option selected disabled>-- Elige un template --</option>
+    <option value="Hogar-PP-4F.html">Hogar PP 4F</option>
+    <option value="Pro-PP-4F.html">Pro PP 4F</option>
+    <option value="template3.html">HTML3 - Oferta</option>
+    <!-- Puedes agregar más aquí -->
+  </select>
+</div>
 
-          
-          <label for="htmlInput" class="form-label fw-semibold text-body-secondary">📥 Pega tu HTML aquí:</label>
           <textarea id="htmlInput" rows="15" class="form-control text-success " placeholder="Pega aquí el código HTML..."></textarea>
           <button id="cargarBtn" class="btn btn-primary mt-3 w-100">Procesar HTML</button>
         </div>
@@ -220,8 +230,8 @@
                   <label><input type="radio" name="modoSKU" value="agrupado"> Agrupar Automáticamente</label>
                 </div>
               <!-- Input SKUs -->
-              <div class="col-md-3">
-                <label for="skuInput" class="form-label">📦 Ingresa los SKUs separados por línea:</label>
+              <div class="col-md-3 bg-body text-body">
+                <label for="skuInput" class="form-label bg-body text-body">📦 Ingresa los SKUs separados por línea:</label>
                 <textarea id="skuInput" class="form-control" rows="10" placeholder="130597089 "></textarea>
                 <small id="skuContador" class="form-text text-muted mt-1">0 de 16 SKUs</small>
                 <div class="d-flex justify-content-center mt-4">
@@ -272,8 +282,8 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8 col-lg-6">
-<div id="vistaConversor" >
-  <div class="card shadow-lg border-0 rounded-4">
+<div id="vistaConversor" class="bg-body text-body" >
+  <div class="card shadow-lg border-0 rounded-4 ">
     <div class="card-body  p-4">
       <h4 class="mb-4 text-center text-primary">🔁 Conversor de URL FTP a HTTPS</h4>
 
