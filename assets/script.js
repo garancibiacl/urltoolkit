@@ -1161,7 +1161,6 @@ function inputRutaFtpReemplazo(ruta) {
 }
 
 
-
 function seleccionarTemplate() {
   const select = document.getElementById('selectorTemplate');
   const archivoSeleccionado = select.value;
