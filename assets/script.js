@@ -250,27 +250,40 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
     document.getElementById(idInput).value = urlFinal;
 
-    // 🔍 Validaciones especiales para AMPscript
-    const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
-    const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
-    const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
-    const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
 
-    let nuevoHref = '';
+// 🔍 Validaciones especiales para AMPscript
+const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
+const tieneCategoriaL2 = urlFinal.includes('f.product.L2_category_paths=');
+const tieneIsPLP = urlFinal.includes('isPLP=true&Ntt=');
+const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
+const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
 
-    if (esDecolovers) {
-      // ❌ No usar AMPscript
-      nuevoHref = urlFinal;
-    } else if (usaAmp) {
-      // ✅ Aplicar AMPscript
-      const separadorAmp = (esBusqueda || tieneFacet) ? '&' : '?';
-      nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
-    } else {
-      // ❌ Para dominios distintos no usar AMPscript
-      nuevoHref = urlFinal;
-    }
+// 🛠️ Reemplazar el primer "?" por "&" si hay parámetros especiales
+const contieneParametrosEspeciales = tieneFacet || tieneCategoriaL2 || tieneIsPLP;
+if (contieneParametrosEspeciales) {
+  const primerInterrogacion = urlFinal.indexOf('?');
+  if (primerInterrogacion !== -1) {
+    urlFinal = urlFinal.slice(0, primerInterrogacion) + '&' + urlFinal.slice(primerInterrogacion + 1);
+  }
+}
 
-    enlaceActual.setAttribute('href', nuevoHref);
+let nuevoHref = '';
+
+if (esDecolovers) {
+  // ❌ No usar AMPscript
+  nuevoHref = urlFinal;
+} else if (usaAmp) {
+  // ✅ Aplicar AMPscript
+  const separadorAmp = (esBusqueda || contieneParametrosEspeciales) ? '&' : '?';
+  nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
+} else {
+  // ❌ Para dominios distintos no usar AMPscript
+  nuevoHref = urlFinal;
+}
+
+enlaceActual.setAttribute('href', nuevoHref);
+
 
     // 🖼️ ALT automático
     const segmentosSignificativos = tempUrl.pathname.split('/').filter(seg => seg && !/^\d+$/.test(seg));
@@ -481,15 +494,39 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
         let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
 
         // Detectar AMPscript válido
-        const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
-        const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
-        const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
-        const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
-        const separadorAmp = (esBusqueda || tieneFacet) ? '&' : '?';
+      // 🔍 Validaciones especiales para AMPscript
+const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
+const tieneCategoriaL2 = urlFinal.includes('f.product.L2_category_paths=');
+const tieneIsPLP = urlFinal.includes('isPLP=true&Ntt=');
+const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
+const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
 
-        const nuevoHref = (usaAmp && !esDecolovers)
-          ? `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`
-          : urlFinal;
+// 🛠️ Reemplazar el primer "?" por "&" si hay parámetros especiales
+const contieneParametrosEspeciales = tieneFacet || tieneCategoriaL2 || tieneIsPLP;
+if (contieneParametrosEspeciales) {
+  const primerInterrogacion = urlFinal.indexOf('?');
+  if (primerInterrogacion !== -1) {
+    urlFinal = urlFinal.slice(0, primerInterrogacion) + '&' + urlFinal.slice(primerInterrogacion + 1);
+  }
+}
+
+let nuevoHref = '';
+
+if (esDecolovers) {
+  // ❌ No usar AMPscript
+  nuevoHref = urlFinal;
+} else if (usaAmp) {
+  // ✅ Aplicar AMPscript
+  const separadorAmp = (esBusqueda || contieneParametrosEspeciales) ? '&' : '?';
+  nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
+} else {
+  // ❌ Para dominios distintos no usar AMPscript
+  nuevoHref = urlFinal;
+}
+
+
+
 
         enlaceActual.setAttribute('href', nuevoHref);
       } catch (e) {
@@ -758,8 +795,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
     
-  
-
 
 // FIN Generador de SKUs
 
