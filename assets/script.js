@@ -1157,8 +1157,3 @@ function inputRutaFtpReemplazo(ruta) {
   const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
   return nuevoPath;
 }
-
-
-
-
-
