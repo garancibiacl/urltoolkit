@@ -78,19 +78,19 @@
   <select id="selectorTemplate" class="form-select w-100" onchange="seleccionarTemplate()">
     <option selected disabled>-- Elige un template --</option>
 
-    <optgroup label="🛒 Hogar">
+    <optgroup label="🏠 Hogar">
       <option value="Hogar-PP-4F.html">Hogar PP 4F</option>
-      <option value="template4.html">HTML4 - Vitrina con Descuento</option>
+      <option value="Plantilla-informativo-SHC.html">Hogar Informativo</option>
     </optgroup>
 
-    <optgroup label="🧱 Pro">
+    <optgroup label="🏗️ Pro">
       <option value="Pro-PP-4F.html">Pro PP 4F</option>
-      <option value="template5.html">HTML5 - Grid 3x1</option>
+      <option value="Plantilla-informativo-SCO.html">Pro Informativo</option>
     </optgroup>
 
-    <optgroup label="🏷️ Pisos">
-      <option value="template3.html">HTML3 - Oferta Flash</option>
-      <option value="template6.html">HTML6 - Oferta Extendida</option>
+    <optgroup label="📐 Pisos">
+      <option value="Hogar-PP-pisos-4F.html">Hogar PP Pisos 4F</option>
+      <option value="Pro-PP-pisos-4F.html">Pro PP Pisos 4F</option>
     </optgroup>
   </select>
 </div>
@@ -186,11 +186,12 @@
             <div class="row align-items-center">
               <!-- Columna izquierda: input -->
               <div class="col-md-6">
-                <button id="copiarHtmlBtn" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
+                <button id="copia" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
 
                 </div>
                       <!-- Columna derecha: Botón copiar HTML -->
-                      <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 ">
+                      <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 gap-3">
+                        <button id="copiarHtmlBtn" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
                       <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar Cambios</button>
 
                       </div>

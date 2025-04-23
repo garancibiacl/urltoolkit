@@ -1,0 +1,136 @@
+%%[
+
+
+/*********************************** Seccion Variables Adobe ************************************/
+ 
+set @negocio = 'CO' /*CO HC*/
+set @canal = 'EMAIL' /*CANAL PUSH WA SMS EMAIL GEOPUSH*/
+set @tipo = 'INFO' /*PPA PPM CAT INFO PDP XLP PAGE GF BEACON*/
+ 
+set @prefix  = concat('eid=666_NEGOCIO=',@negocio,'_CANAL=',@canal,'_TIPO=',@tipo,'_PROCESO_ID=',proceso_id)                     
+ 
+/*********************************** Fin Seccion Variables Adobe *******************************/
+
+
+]%%
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sbgMail">
+  <tr>
+    <td align="center" class="cuerpoMail" style="padding-top: 8px;">
+      
+      <custom name="opencounter" type="tracking">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Sodimac</title>
+        
+        <!-- Custom Logo -->
+        
+        <div itemscope="" itemtype="http://schema.org/Organization">
+          <meta itemprop="name" content="Sodimac">
+          <meta itemprop="logo" content="https://www.sodimac.cl/static/envioweb/2019/shared/logo-sodimac-avatar.png">
+          <meta name="color-scheme" content="light dark">
+          <meta name="supported-color-schemes" content="light dark">
+        </div>
+        <style type="text/css">
+/* body{background-color: #FFFFFF !important;} */
+html{-webkit-text-size-adjust:none; -ms-text-size-adjust:none; color: inherit;}
+body{width:100%; margin:0 auto; padding:0px;}
+a,a:link,a:visited{text-decoration:none; color:#0072ce;}
+a,body,table,td{-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%}
+:root {Color-scheme: light dark; supported-color-schemes:light dark;}
+/*** media para dark mode - lo toman algunas versiones de outlook ***/
+@media (prefers-color-scheme: dark ) {
+/* body{background-color: #3c3c3c !important;} */
+.sbgMail tbody tr td.cuerpoMail {background-color: #FFFFFF !important;}
+}
+</style>
+        
+      <!--HEADER-->
+        <table width="600" cellspacing="0" cellpadding="0" align="center" style="  display:block; background-color:#000000; " bgcolor="#000000">
+          <tr>
+            <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?',@prefix))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/logo-pro-header.png" alt="Ir a Todo Constructor" width="257" height="68" style="display:block; margin:auto;" title="Sodimac"> </a></td>
+            <td align="center"><a href="https://api.whatsapp.com/send?phone=56935328223" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wsp-pro-header.png" alt="Compra telefónica" width="169" height="68" class="width100" style="display:block; margin:auto; border:none; " title="venta telefónica a través del 600 600 1230"> </a></td>
+            <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/app-pro-header.png" alt="Descargue nuestra app Sodimac desde Google Play" width="174" height="68" style="display:block; margin:auto; border:none; " title="Sodimac"> </a></td>
+          </tr>
+        </table>
+        <!--Fin HEADER-->
+
+        <!--START BODY-->
+        <table width="600" cellspacing="0" cellpadding="0" align="center">
+    
+          <tr>
+            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110272625/Plancha-Recubrimiento-AZM150-Zinc-Acanalada-0.35-mm-85.1x366-cm-Gris/110272627?',@prefix))=%%" target="_blank"> 
+              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-tabiqueria/images/17-tabiqueria-0.png" alt="Ir a Carro-de-carga-3-posiciones-aluminio" style="display:block;" border="0"> </a>
+            </td>
+          </tr>
+        </table> 
+
+
+   
+
+        <!---FIN BODY --->
+
+      
+                     
+
+
+        <!-- ***** FOOTER ***** --> 
+<!--- SCOM --->
+<table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td style="font-size: 0px; line-height: 0px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/sodcompro2-ban.png" alt="ir a sodimac.com" width="600" height="62" style="display:block; " border="0"></a></td>
+    </tr>
+  </table>
+  <!---FIN - SCOM --->
+  <!--- Venta Telefónica y whatssap --->              
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/telfpro-link.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56999129057" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wspces-link.png" alt="Whatssap CES" width="300" height="21" style="display:block; " border="0"></a></td>
+    </tr>
+  </table>
+  <!--- FIN - Venta Telefónica y whatssap --->  
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
+    </tr>
+  </table>
+  
+  
+  
+  
+  <!--- RRSS --->
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2" class="">
+    <tr>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank2.png" alt="blank rrss 2" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.instagram.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/instagram-icon.png" alt="instagram constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank3.png" alt="blank rrss 3" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://twitter.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/x-icon.png" alt="Twitter sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank4.png" alt="blank rrss 4" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.pinterest.es/homecentercl/_created/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/pinterest-icon.png" alt="Pinterest sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank5.png" alt="blank rrss 5" width="29" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.tiktok.com/@sodimac.cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/tiktok-icon.png" alt="Tik Tok" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank5-18.png" alt="blank rrss 6" width="30" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.youtube.com/user/lacasadechile" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/youtube-icon.png" alt="Youtube constructor" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank6.png" alt="blank rrss 7" width="111" height="42" style="display:block" border="0"></td>
+    </tr>
+  </table>
+  <!--- FIN - RRSS --->
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td align="center"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/cierreblank.png" alt="blank cierre" width="600" height="26" style="display:block;" border="0"></td>
+    </tr>
+  </table>
+                      
+
+                      <!-- ***** FIN - FOOTER ***** --> 
+
+        
+
+        
+      </custom></td>
+  </tr>
+</table>
