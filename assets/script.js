@@ -253,22 +253,18 @@ function aplicarCambioHref(idInput = 'hrefInput') {
     document.getElementById(idInput).value = urlFinal;
 
 
-// 🔍 Validaciones especiales para AMPscript
+// 🔍 Validaciones especiales para AMPscript BOTON APLICAR CAMBIOS
 const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
 const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
 const tieneCategoriaL2 = urlFinal.includes('f.product.L2_category_paths=');
+const tieneCategoriaL3 = urlFinal.includes('f.product.brandName=');
 const tieneIsPLP = urlFinal.includes('isPLP=true&Ntt=');
 const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
 const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
 
 // 🛠️ Reemplazar el primer "?" por "&" si hay parámetros especiales
-const contieneParametrosEspeciales = tieneFacet || tieneCategoriaL2 || tieneIsPLP;
-if (contieneParametrosEspeciales) {
-  const primerInterrogacion = urlFinal.indexOf('?');
-  if (primerInterrogacion !== -1) {
-    urlFinal = urlFinal.slice(0, primerInterrogacion) + '&' + urlFinal.slice(primerInterrogacion + 1);
-  }
-}
+const contieneParametrosEspeciales =  esBusqueda || tieneFacet || tieneCategoriaL2 || tieneCategoriaL3 || tieneIsPLP;
+
 
 let nuevoHref = '';
 
@@ -496,36 +492,34 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
         let urlFinal = `${tempUrl.protocol}//${tempUrl.hostname}${tempUrl.pathname}${tempUrl.search}`;
 
         // Detectar AMPscript válido
-      // 🔍 Validaciones especiales para AMPscript
-const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
-const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
-const tieneCategoriaL2 = urlFinal.includes('f.product.L2_category_paths=');
-const tieneIsPLP = urlFinal.includes('isPLP=true&Ntt=');
-const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
-const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
-
-// 🛠️ Reemplazar el primer "?" por "&" si hay parámetros especiales
-const contieneParametrosEspeciales = tieneFacet || tieneCategoriaL2 || tieneIsPLP;
-if (contieneParametrosEspeciales) {
-  const primerInterrogacion = urlFinal.indexOf('?');
-  if (primerInterrogacion !== -1) {
-    urlFinal = urlFinal.slice(0, primerInterrogacion) + '&' + urlFinal.slice(primerInterrogacion + 1);
-  }
-}
-
-let nuevoHref = '';
-
-if (esDecolovers) {
-  // ❌ No usar AMPscript
-  nuevoHref = urlFinal;
-} else if (usaAmp) {
-  // ✅ Aplicar AMPscript
-  const separadorAmp = (esBusqueda || contieneParametrosEspeciales) ? '&' : '?';
-  nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
-} else {
-  // ❌ Para dominios distintos no usar AMPscript
-  nuevoHref = urlFinal;
-}
+      // 🔍 Validaciones especiales para AMPscript copiar html
+      const esBusqueda = urlFinal.includes('/sodimac-cl/buscar?Ntt=');
+      const tieneFacet = urlFinal.includes('facetSelected=true') && urlFinal.includes('sellerId=SODIMAC');
+      const tieneCategoriaL2 = urlFinal.includes('f.product.L2_category_paths=');
+      const tieneCategoriaL3 = urlFinal.includes('f.product.brandName=');
+      const tieneIsPLP = urlFinal.includes('isPLP=true&Ntt=');
+      const esDecolovers = tempUrl.hostname.includes('sodimac.decolovers.cl');
+      const usaAmp = urlFinal.startsWith('https://www.sodimac.cl/sodimac-cl');
+      
+      // 🛠️ Reemplazar el primer "?" por "&" si hay parámetros especiales
+      const contieneParametrosEspeciales =  esBusqueda || tieneFacet || tieneCategoriaL2 || tieneCategoriaL3 || tieneIsPLP;
+      
+      
+      let nuevoHref = '';
+      
+      if (esDecolovers) {
+        // ❌ No usar AMPscript
+        nuevoHref = urlFinal;
+      } else if (usaAmp) {
+        // ✅ Aplicar AMPscript
+        const separadorAmp = (esBusqueda || contieneParametrosEspeciales) ? '&' : '?';
+        nuevoHref = `%%=RedirectTo(concat('${urlFinal}${separadorAmp}',@prefix))=%%`;
+      } else {
+        // ❌ Para dominios distintos no usar AMPscript
+        nuevoHref = urlFinal;
+      }
+      
+      enlaceActual.setAttribute('href', nuevoHref);
 
 
 
@@ -917,6 +911,10 @@ document.getElementById('detectarSkuBtn').addEventListener('click', async () => 
 
 
 
+
+
+
+
 // Botón limpiar imagen + SKUs
 document.getElementById('limpiarImagenBtn').addEventListener('click', () => {
   document.getElementById('imagenSku').value = '';
@@ -1274,3 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bloque.innerHTML = bloque.innerHTML
   .replace('{{FECHA_RANGO}}', textoFecha);
 });
+
+
+
+
