@@ -545,12 +545,29 @@ if (esDecolovers) {
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
 
+// 🔹 Generar rango de fecha dinámico en formato DD/MM/YYYY
+const hoy = new Date();
+const fin = new Date();
+fin.setDate(hoy.getDate() + 2);
+
+const formatear = f => {
+  const d = String(f.getDate()).padStart(2, '0');
+  const m = String(f.getMonth() + 1).padStart(2, '0');
+  const y = f.getFullYear();
+  return `${d}/${m}/${y}`;
+};
+
+const fechaFinal = `desde el ${formatear(hoy)} hasta el ${formatear(fin)}`;
+
   let finalHTML = template.innerHTML;
 
-
+// 🔹 Reemplazar marcador {{FECHA_RANGO}} en el HTML que se copiará
+finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, fechaFinal);
 
   // ✅ Restaurar AMPscript y reemplazos
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
+
+  finalHTML = finalHTML.replace(/\s+id="bloquePlantillaFecha"/g, ''); 
 
   // ✅ Copiar y limpiar
   navigator.clipboard.writeText(finalHTML).then(() => {
@@ -1216,3 +1233,44 @@ function cargarTemplateDesdeAssets(nombreArchivo) {
 }
 
 
+function limpiarCamposUrl() {
+  // Limpiar todos los input y textarea del documento
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.value = '';
+  });
+
+  // Limpiar todos los elementos con contenido textual que quieras resetear
+  const elementosTexto = ['ocrProgreso', 'resultadoSKU']; // Agrega más IDs si necesitas
+  elementosTexto.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '';
+  });
+
+  // Mostrar notificación si tienes toast integrado
+  if (typeof mostrarToast === 'function') {
+    mostrarToast('🔄 Campos limpiados, recargando...', 'info');
+  }
+
+  // Recargar la página después de una pequeña pausa
+  setTimeout(() => {
+    location.reload();
+  }, 800); // Da un pequeño tiempo para ver el toast antes del refresh
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const bloque = document.getElementById('bloquePlantillaFecha');
+  if (!bloque) return;
+
+  // Calcula la fecha dinámica
+  const hoy = new Date();
+  const fin = new Date();
+  fin.setDate(hoy.getDate() + 2);
+
+  const f = d => d.toLocaleDateString('es-CL');
+  const textoFecha = `desde el ${f(hoy)} hasta el ${f(fin)}`;
+
+  // Reemplaza el marcador {{FECHA_RANGO}} por la fecha generada
+  bloque.innerHTML = bloque.innerHTML
+  .replace('{{FECHA_RANGO}}', textoFecha);
+});

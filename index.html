@@ -83,7 +83,7 @@
       <option value="Plantilla-informativo-SHC.html">Hogar Informativo</option>
     </optgroup>
 
-    <optgroup label="🏗️ Pro">
+    <optgroup label="🚧 Pro">
       <option value="Pro-PP-4F.html">Pro PP 4F</option>
       <option value="Plantilla-informativo-SCO.html">Pro Informativo</option>
     </optgroup>
@@ -95,7 +95,7 @@
   </select>
 </div>
 
-          <textarea id="htmlInput" rows="15" class="form-control text-success " placeholder="Pega aquí el código HTML..."></textarea>
+          <textarea id="htmlInput" rows="5" class="form-control text-success " placeholder="Pega aquí el código HTML..."></textarea>
           <button id="cargarBtn" class="btn btn-primary mt-3 w-100">Procesar HTML</button>
         </div>
     
@@ -186,7 +186,9 @@
             <div class="row align-items-center">
               <!-- Columna izquierda: input -->
               <div class="col-md-6">
-                <button id="copia" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
+                <button onclick="limpiarCamposUrl()" class="btn btn-outline-danger mt-3 me-2">
+                  🧹 Limpiar Campos
+                </button>
 
                 </div>
                       <!-- Columna derecha: Botón copiar HTML -->
