@@ -71,7 +71,17 @@
         <div class="card-body bg-body text-body p-4 shadow-sm rounded-4 ">
       <div class="row g-4 d-flex justify-content-center">
         <div class="col-md-6">
-        
+          <div class="btn-group mb-4" role="group" id="grupoFecha">
+            <input type="radio" class="btn-check" name="fecha" id="checkHoy" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="checkHoy">
+              Today <span id="labelHoy"></span>
+            </label>
+          
+            <input type="radio" class="btn-check" name="fecha" id="checkManana" autocomplete="off">
+            <label class="btn btn-outline-primary" for="checkManana">
+              Tomorrow <span id="labelManana"></span>
+            </label>
+          </div>
 <!-- 🎯 Selector de templates con dropdown y búsqueda -->
 <div class="mb-4">
   <label for="selectorTemplate" class="form-label fw-semibold text-body-secondary">📂 Selecciona un template prediseñado:</label>
@@ -242,8 +252,8 @@
               <div class="row g-4 align-items-start">
                 <div class="mb-3">
                   <label class="fw-semibold">Modo de procesamiento:</label><br>
-                  <label><input type="radio" name="modoSKU" value="porFila" checked> Por Fila (manual)</label><br>
-                  <label><input type="radio" name="modoSKU" value="agrupado"> Agrupar Automáticamente</label>
+                  <label><input type="radio" name="modoSKU" value="porFila" checked> 3 Filas (9 Sku)</label><br>
+                  <label><input type="radio" name="modoSKU" value="agrupado"> 3 Filas (12 Sku)</label>
                 </div>
               <!-- Input SKUs -->
               <div class="col-md-3 bg-body text-body">

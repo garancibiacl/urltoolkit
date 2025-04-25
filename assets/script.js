@@ -540,23 +540,41 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   limpiarClasesVacias();
 
 // 🔹 Generar rango de fecha dinámico en formato DD/MM/YYYY
-const hoy = new Date();
-const fin = new Date();
-fin.setDate(hoy.getDate() + 2);
+function obtenerRangoSeleccionado() {
+  const hoy = new Date();
+  const manana = new Date();
+  manana.setDate(hoy.getDate() + 1);
 
-const formatear = f => {
-  const d = String(f.getDate()).padStart(2, '0');
-  const m = String(f.getMonth() + 1).padStart(2, '0');
-  const y = f.getFullYear();
-  return `${d}/${m}/${y}`;
-};
+  const formatear = d => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
-const fechaFinal = `desde el ${formatear(hoy)} hasta el ${formatear(fin)}`;
+  let inicio = null;
+
+  if (document.getElementById('checkHoy')?.checked) {
+    inicio = hoy;
+  } else if (document.getElementById('checkManana')?.checked) {
+    inicio = manana;
+  }
+
+  if (!inicio) return null;
+
+  const fin = new Date(inicio);
+  fin.setDate(inicio.getDate() + 2); // ✅ Rango de 2 días
+
+  return `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
+}
+
+
+// ✅ Obtener rango desde selección del usuario
+const rango = obtenerRangoSeleccionado();
+if (!rango) {
+  mostrarToast('⚠️ Debes seleccionar Hoy o Mañana para generar el rango', 'warning');
+  return;
+}
 
   let finalHTML = template.innerHTML;
 
-// 🔹 Reemplazar marcador {{FECHA_RANGO}} en el HTML que se copiará
-finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, fechaFinal);
+// ✅ Reemplazar marcador {{FECHA_RANGO}} por el valor generado
+finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, rango);
 
   // ✅ Restaurar AMPscript y reemplazos
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
@@ -869,44 +887,98 @@ document.getElementById('detectarSkuBtn').addEventListener('click', async () => 
     return;
   }
 
-  progreso.textContent = '🕐 Procesando imagen con OCR...';
+  progreso.textContent = '🕐 Procesando imagen con sensibilidad para líneas delgadas...';
 
-  try {
-    const { data: { text } } = await Tesseract.recognize(archivo, 'eng', {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          progreso.textContent = `⏳ OCR progreso: ${Math.round(m.progress * 100)}%`;
-        }
+  const img = new Image();
+  img.src = URL.createObjectURL(archivo);
+
+  img.onload = async () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const src = cv.imread(canvas);
+    const gray = new cv.Mat();
+    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+
+    // 🔍 Suavizar ligeramente la imagen para estabilidad
+    const blurred = new cv.Mat();
+    cv.GaussianBlur(gray, blurred, new cv.Size(3, 3), 0, 0, cv.BORDER_DEFAULT);
+
+    // 🧠 Umbral inverso para resaltar líneas oscuras muy finas
+    const binary = new cv.Mat();
+    cv.threshold(blurred, binary, 60, 255, cv.THRESH_BINARY_INV);
+
+    // 📏 Detección de contornos horizontales finos
+    const contours = new cv.MatVector();
+    const hierarchy = new cv.Mat();
+    cv.findContours(binary, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+    const lineasY = [];
+    for (let i = 0; i < contours.size(); i++) {
+      const rect = cv.boundingRect(contours.get(i));
+      // 🎯 Ajustar tolerancia para línea extremadamente delgada
+      if (rect.height <= 2 && rect.width > src.cols * 0.7) {
+        lineasY.push(rect.y);
+        cv.rectangle(src, new cv.Point(rect.x, rect.y), new cv.Point(rect.x + rect.width, rect.y + rect.height), [255, 0, 0, 255], 1);
       }
-    });
-
-    // ✅ Buscar SKUs de 9 dígitos en todo el texto, sin importar formato
-    let posiblesSKUs = [...text.matchAll(/\b\d{9}\b/g)].map(m => m[0]);
-
-    // Eliminar duplicados
-    posiblesSKUs = [...new Set(posiblesSKUs)];
-
-    // Ignorar el 5.º si hay 5 o más
-    if (posiblesSKUs.length >= 5) {
-      posiblesSKUs.splice(4, 1);
     }
 
-    const final = posiblesSKUs.slice(0, 12);
+    if (lineasY.length < 2) {
+      progreso.textContent = '❌ Línea demasiado delgada. No se detectaron suficientes separadores.';
+      return;
+    }
+
+    const lineasUnicas = [...new Set(lineasY.map(y => Math.round(y / 2) * 2))].sort((a, b) => a - b);
+    const resultadosOCR = [];
+
+    for (let i = 0; i < lineasUnicas.length - 1; i++) {
+      const y1 = lineasUnicas[i];
+      const y2 = lineasUnicas[i + 1];
+      const height = y2 - y1;
+
+      if (height < 5) continue;
+
+      const roi = src.roi(new cv.Rect(0, y1, src.cols, height));
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = roi.cols;
+      tempCanvas.height = roi.rows;
+      cv.imshow(tempCanvas, roi);
+
+      const blob = await new Promise(res => tempCanvas.toBlob(res));
+      const { data: { text } } = await Tesseract.recognize(blob, 'eng');
+
+      const cleaned = text
+        .replace(/[O]/g, '0')
+        .replace(/[I|l]/g, '1')
+        .replace(/[^0-9]/g, '')
+        .trim();
+
+      if (/^\d{9}$/.test(cleaned)) {
+        resultadosOCR.push(cleaned);
+      }
+
+      roi.delete();
+    }
+
+    const skus = [...new Set(resultadosOCR)];
+    if (skus.length >= 5) skus.splice(4, 1);
+    const final = skus.slice(0, 12);
 
     if (final.length === 0) {
-      progreso.textContent = '❌ No se detectaron SKUs válidos en la imagen.';
+      progreso.textContent = '❌ No se detectaron SKUs válidos.';
       return;
     }
 
     document.getElementById('skuInput').value = final.join('\n');
     progreso.textContent = `✅ Se insertaron ${final.length} SKU(s) desde imagen.`;
 
-  } catch (err) {
-    console.error(err);
-    progreso.textContent = '❌ Hubo un error procesando la imagen.';
-  }
+    // 🧼 Limpieza de memoria
+    gray.delete(); blurred.delete(); binary.delete(); contours.delete(); hierarchy.delete(); src.delete();
+  };
 });
-
 
 
 
@@ -1260,18 +1332,69 @@ document.addEventListener('DOMContentLoaded', () => {
   const bloque = document.getElementById('bloquePlantillaFecha');
   if (!bloque) return;
 
-  // Calcula la fecha dinámica
+  // 📦 Elementos checkbox y etiquetas
+  const checkHoy = document.getElementById('checkHoy');
+  const checkManana = document.getElementById('checkManana');
+  const labelHoy = document.getElementById('labelHoy');
+  const labelManana = document.getElementById('labelManana');
+
+  
+
+  // 📅 Fechas base
   const hoy = new Date();
-  const fin = new Date();
-  fin.setDate(hoy.getDate() + 2);
+  const manana = new Date();
+  manana.setDate(hoy.getDate() + 1);
 
-  const f = d => d.toLocaleDateString('es-CL');
-  const textoFecha = `desde el ${f(hoy)} hasta el ${f(fin)}`;
+  const formatear = d =>
+    `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
-  // Reemplaza el marcador {{FECHA_RANGO}} por la fecha generada
-  bloque.innerHTML = bloque.innerHTML
-  .replace('{{FECHA_RANGO}}', textoFecha);
+  // Mostrar fechas en los labels
+  labelHoy.textContent = formatear(hoy);
+  labelManana.textContent = formatear(manana);
+
+  // 🌟 Generador de rango dinámico de 2 días
+  const obtenerRangoSeleccionado = () => {
+    let inicio = null;
+    if (checkHoy.checked) inicio = new Date(hoy);
+    else if (checkManana.checked) inicio = new Date(manana);
+    if (!inicio) return null;
+
+    const fin = new Date(inicio);
+    fin.setDate(inicio.getDate() + 2);
+
+    return `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
+  };
+
+  // 🔁 Actualiza el HTML dinámico con la fecha seleccionada
+  const actualizarContenido = () => {
+    const textoFecha = obtenerRangoSeleccionado();
+    if (!textoFecha) return;
+    bloque.innerHTML = bloque.innerHTML.replace(/{{FECHA_RANGO}}/g, textoFecha);
+  };
+
+// ✅ Comportamiento exclusivo tipo "radio" con checkboxes (si haces clic de nuevo, no se desmarca)
+let ultimaSeleccion = 'hoy'; // opción marcada por defecto
+checkHoy.addEventListener('change', () => {
+  if (checkHoy.checked) {
+    ultimaSeleccion = 'hoy';
+    actualizarContenido();
+  }
 });
+
+checkManana.addEventListener('change', () => {
+  if (checkManana.checked) {
+    ultimaSeleccion = 'manana';
+    actualizarContenido();
+  }
+});
+
+checkHoy.checked = true;
+checkManana.checked = false;
+ultimaSeleccion = 'hoy';
+actualizarContenido();
+
+});
+
 
 
 
