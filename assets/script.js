@@ -539,35 +539,32 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
 
-// 🔹 Generar rango de fecha dinámico en formato DD/MM/YYYY
-function obtenerRangoSeleccionado() {
-  const hoy = new Date();
-  const manana = new Date();
-  manana.setDate(hoy.getDate() + 1);
+// ✅ Función que genera el rango de 2 días desde el input
+function obtenerRangoDesdeFechaInput() {
 
-  const formatear = d => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
-  let inicio = null;
 
-  if (document.getElementById('checkHoy')?.checked) {
-    inicio = hoy;
-  } else if (document.getElementById('checkManana')?.checked) {
-    inicio = manana;
-  }
+  const inputFecha = document.getElementById('fechaInicio');
+  if (!inputFecha || !inputFecha.value) return null;
 
-  if (!inicio) return null;
+  
+
+  // Captura la fecha como string YYYY-MM-DD y separa los componentes
+  const [year, month, day] = inputFecha.value.split('-');
+  const inicio = new Date(year, month - 1, day); // Mes base 0
 
   const fin = new Date(inicio);
-  fin.setDate(inicio.getDate() + 2); // ✅ Rango de 2 días
+  fin.setDate(inicio.getDate() + 2); // +2 días
+
+  const formatear = d =>
+    `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
   return `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
 }
-
-
 // ✅ Obtener rango desde selección del usuario
-const rango = obtenerRangoSeleccionado();
+const rango = obtenerRangoDesdeFechaInput();
 if (!rango) {
-  mostrarToast('⚠️ Debes seleccionar Hoy o Mañana para generar el rango', 'warning');
+  mostrarToast('⚠️ Debes seleccionar la  fecha de Inicio', 'warning');
   return;
 }
 
@@ -1329,71 +1326,51 @@ function limpiarCamposUrl() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const bloque = document.getElementById('bloquePlantillaFecha');
-  if (!bloque) return;
-
-  // 📦 Elementos checkbox y etiquetas
-  const checkHoy = document.getElementById('checkHoy');
-  const checkManana = document.getElementById('checkManana');
-  const labelHoy = document.getElementById('labelHoy');
-  const labelManana = document.getElementById('labelManana');
-
-  
-
-  // 📅 Fechas base
-  const hoy = new Date();
-  const manana = new Date();
-  manana.setDate(hoy.getDate() + 1);
+  const inputFecha = document.getElementById('fechaInicio');
+  const vistaRango = document.getElementById('vistaRango');
 
   const formatear = d =>
     `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 
-  // Mostrar fechas en los labels
-  labelHoy.textContent = formatear(hoy);
-  labelManana.textContent = formatear(manana);
+  const actualizarRango = () => {
+    const valor = inputFecha.value;
+    if (!valor || !/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) { 
+      // Solo permitir si el formato es dd/mm/yyyy
+      vistaRango.innerHTML = '';
+      return;
+    }
 
-  // 🌟 Generador de rango dinámico de 2 días
-  const obtenerRangoSeleccionado = () => {
-    let inicio = null;
-    if (checkHoy.checked) inicio = new Date(hoy);
-    else if (checkManana.checked) inicio = new Date(manana);
-    if (!inicio) return null;
-
+    const [dd, mm, yyyy] = valor.split('/');
+    const inicio = new Date(yyyy, mm - 1, dd);
     const fin = new Date(inicio);
     fin.setDate(inicio.getDate() + 2);
 
-    return `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
+    const textoRango = `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
+    vistaRango.innerHTML = `📅 Rango generado: <strong>${textoRango}</strong>`;
+
+    const bloque = document.getElementById('bloquePlantillaFecha');
+    if (bloque && bloque.innerHTML.includes('{{FECHA_RANGO}}')) {
+      bloque.innerHTML = bloque.innerHTML.replace(/{{FECHA_RANGO}}/g, textoRango);
+    }
   };
 
-  // 🔁 Actualiza el HTML dinámico con la fecha seleccionada
-  const actualizarContenido = () => {
-    const textoFecha = obtenerRangoSeleccionado();
-    if (!textoFecha) return;
-    bloque.innerHTML = bloque.innerHTML.replace(/{{FECHA_RANGO}}/g, textoFecha);
-  };
-
-// ✅ Comportamiento exclusivo tipo "radio" con checkboxes (si haces clic de nuevo, no se desmarca)
-let ultimaSeleccion = 'hoy'; // opción marcada por defecto
-checkHoy.addEventListener('change', () => {
-  if (checkHoy.checked) {
-    ultimaSeleccion = 'hoy';
-    actualizarContenido();
+  // ✅ Establecer fecha hoy en dd/mm/yyyy al cargar
+  if (inputFecha) {
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    inputFecha.value = `${yyyy}-${mm}-${dd}`;
+    actualizarRango(); // Mostrar rango inicial
   }
+
+  inputFecha.addEventListener('input', actualizarRango);
 });
 
-checkManana.addEventListener('change', () => {
-  if (checkManana.checked) {
-    ultimaSeleccion = 'manana';
-    actualizarContenido();
-  }
-});
 
-checkHoy.checked = true;
-checkManana.checked = false;
-ultimaSeleccion = 'hoy';
-actualizarContenido();
 
-});
+
+
 
 
 
