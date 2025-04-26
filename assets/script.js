@@ -561,17 +561,24 @@ function obtenerRangoDesdeFechaInput() {
 
   return `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
 }
-// ✅ Obtener rango desde selección del usuario
-const rango = obtenerRangoDesdeFechaInput();
-if (!rango) {
-  mostrarToast('⚠️ Debes seleccionar la  fecha de Inicio', 'warning');
-  return;
+
+
+
+let finalHTML = template.innerHTML;
+
+// ✅ Primero verificar si existe marcador {{FECHA_RANGO}}
+if (finalHTML.includes('{{FECHA_RANGO}}')) {
+  const rango = obtenerRangoDesdeFechaInput();
+
+  if (!rango) {
+    mostrarToast('⚠️ Debes seleccionar la fecha de Inicio', 'warning');
+    return; // ⛔ Detener si falta fecha
+  }
+
+  // ✅ Solo si existe rango, reemplazar
+  finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, rango);
 }
 
-  let finalHTML = template.innerHTML;
-
-// ✅ Reemplazar marcador {{FECHA_RANGO}} por el valor generado
-finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, rango);
 
   // ✅ Restaurar AMPscript y reemplazos
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
@@ -1349,8 +1356,14 @@ document.addEventListener('DOMContentLoaded', () => {
     vistaRango.innerHTML = `📅 Rango generado: <strong>${textoRango}</strong>`;
 
     const bloque = document.getElementById('bloquePlantillaFecha');
+    const rango = obtenerRangoDesdeFechaInput();
+
+    // ✅ Validar SOLO si el bloque existe y contiene {{FECHA_RANGO}}
     if (bloque && bloque.innerHTML.includes('{{FECHA_RANGO}}')) {
-      bloque.innerHTML = bloque.innerHTML.replace(/{{FECHA_RANGO}}/g, textoRango);
+      if (!rango) {
+        mostrarToast('⚠️ Debes seleccionar la fecha de Inicio', 'warning');
+        return; // ⛔ No seguir si falta la fecha
+      }
     }
   };
 
