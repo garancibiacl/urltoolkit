@@ -1,4 +1,47 @@
 // script.js
+
+
+
+// Luego DOMContentLoaded para inicializar todo
+document.addEventListener('DOMContentLoaded', () => {
+  asignarFechaHoyInputDate(); // ✅ Asignar fecha hoy
+  actualizarRangoEnTemplate(); // ✅ Reemplazar {{FECHA_RANGO}} al cargar
+
+  const inputFecha = document.getElementById('fechaInicio');
+  if (!inputFecha) return; // ⚡ Si no hay input, no seguimos
+
+  inputFecha.addEventListener('change', () => {
+    const templateActual = template?.innerHTML;
+    if (!templateActual) return;
+
+    if (templateActual.includes('{{FECHA_RANGO}}')) {
+      let rango = obtenerRangoDesdeFechaInput();
+
+      if (!rango) {
+        asignarFechaHoyInputDate(); 
+        rango = obtenerRangoDesdeFechaInput();
+      }
+
+      if (rango) {
+        const nuevoHTML = templateActual.replace(/{{FECHA_RANGO}}/g, rango);
+        template.innerHTML = nuevoHTML; // ✅ Refrescamos el contenido
+
+        // ✅ Usar tu función mostrarToast al cambiar rango
+        mostrarToast(`✅ Nuevo rango aplicado: ${rango}`, 'success');
+        console.log('✅ Toast mostrado con rango:', rango); // ✅ Log en consola para confirmar
+      }
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
 const template = document.createElement('template');
 template.innerHTML = '';
 document.body.appendChild(template);
@@ -539,22 +582,32 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   eliminarEtiquetasTbody();
   limpiarClasesVacias();
 
-// ✅ Función que genera el rango de 2 días desde el input
-function obtenerRangoDesdeFechaInput() {
-
-
-
+// ✅ Función independiente para calcular el rango desde fecha input
+function asignarFechaHoyInputDate() {
   const inputFecha = document.getElementById('fechaInicio');
-  if (!inputFecha || !inputFecha.value) return null;
+  if (!inputFecha) return;
 
-  
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+  const dd = String(hoy.getDate()).padStart(2, '0');
 
-  // Captura la fecha como string YYYY-MM-DD y separa los componentes
+  inputFecha.value = `${yyyy}-${mm}-${dd}`;
+}
+
+
+// ✅ Función Obetener rango desde fecha input
+function obtenerRangoDesdeFechaInput() {
+  const inputFecha = document.getElementById('fechaInicio');
+  if (!inputFecha || !inputFecha.value) {
+    return null; // No mostrar Toast aquí todavía
+  }
+
   const [year, month, day] = inputFecha.value.split('-');
-  const inicio = new Date(year, month - 1, day); // Mes base 0
+  const inicio = new Date(year, month - 1, day);
 
   const fin = new Date(inicio);
-  fin.setDate(inicio.getDate() + 2); // +2 días
+  fin.setDate(inicio.getDate() + 2);
 
   const formatear = d =>
     `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
@@ -564,21 +617,31 @@ function obtenerRangoDesdeFechaInput() {
 
 
 
+
+
+
+
+
 let finalHTML = template.innerHTML;
 
-// ✅ Primero verificar si existe marcador {{FECHA_RANGO}}
+
+// ✅ Detectar si hay marcador de fecha
 if (finalHTML.includes('{{FECHA_RANGO}}')) {
-  const rango = obtenerRangoDesdeFechaInput();
+  let rango = obtenerRangoDesdeFechaInput();
 
   if (!rango) {
-    mostrarToast('⚠️ Debes seleccionar la fecha de Inicio', 'warning');
-    return; // ⛔ Detener si falta fecha
+    // ✅ Si no hay fecha seleccionada, asignar hoy automáticamente
+    asignarFechaHoyInputDate(); 
+
+    // ⚡ Recalcular el rango después de asignar hoy
+    rango = obtenerRangoDesdeFechaInput();
   }
 
-  // ✅ Solo si existe rango, reemplazar
-  finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, rango);
-}
+  if (rango) {
+    finalHTML = finalHTML.replace(/{{FECHA_RANGO}}/g, rango);
 
+  }
+}
 
   // ✅ Restaurar AMPscript y reemplazos
   finalHTML = restaurarAmpScript(finalHTML).replace(/&amp;/g, '&');
@@ -706,7 +769,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const copiarAmpBtn = document.getElementById('copiarAmpBtn');
   const toastElement = document.getElementById('toastCopiado');
   const toastCopiado = new bootstrap.Toast(toastElement);
-
 
 
   
@@ -1332,60 +1394,20 @@ function limpiarCamposUrl() {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+
+
+
+function asignarFechaHoyInputDate() {
   const inputFecha = document.getElementById('fechaInicio');
-  const vistaRango = document.getElementById('vistaRango');
+  if (!inputFecha) return;
 
-  const formatear = d =>
-    `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+  const dd = String(hoy.getDate()).padStart(2, '0');
 
-  const actualizarRango = () => {
-    const valor = inputFecha.value;
-    if (!valor || !/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) { 
-      // Solo permitir si el formato es dd/mm/yyyy
-      vistaRango.innerHTML = '';
-      return;
-    }
-
-    const [dd, mm, yyyy] = valor.split('/');
-    const inicio = new Date(yyyy, mm - 1, dd);
-    const fin = new Date(inicio);
-    fin.setDate(inicio.getDate() + 2);
-
-    const textoRango = `desde el ${formatear(inicio)} hasta el ${formatear(fin)}`;
-    vistaRango.innerHTML = `📅 Rango generado: <strong>${textoRango}</strong>`;
-
-    const bloque = document.getElementById('bloquePlantillaFecha');
-    const rango = obtenerRangoDesdeFechaInput();
-
-    // ✅ Validar SOLO si el bloque existe y contiene {{FECHA_RANGO}}
-    if (bloque && bloque.innerHTML.includes('{{FECHA_RANGO}}')) {
-      if (!rango) {
-        mostrarToast('⚠️ Debes seleccionar la fecha de Inicio', 'warning');
-        return; // ⛔ No seguir si falta la fecha
-      }
-    }
-  };
-
-  // ✅ Establecer fecha hoy en dd/mm/yyyy al cargar
-  if (inputFecha) {
-    const hoy = new Date();
-    const yyyy = hoy.getFullYear();
-    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dd = String(hoy.getDate()).padStart(2, '0');
-    inputFecha.value = `${yyyy}-${mm}-${dd}`;
-    actualizarRango(); // Mostrar rango inicial
-  }
-
-  inputFecha.addEventListener('input', actualizarRango);
-});
-
-
-
-
-
-
-
+  inputFecha.value = `${yyyy}-${mm}-${dd}`;
+}
 
 
 
