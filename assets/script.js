@@ -106,15 +106,19 @@ let ultimaHrefEditado = '';
 function mostrarHrefActual() {
   const inputImg = document.getElementById('imgSrcInput');
   const inputHref = document.getElementById('hrefInput');
-
+  const clearHrefBtn = document.getElementById('clearHrefBtn'); // aún lo tomamos si lo estás usando
   const enlaceActual = enlacesConPatron[indiceActual];
   const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
 
-  // 🔗 Obtener href limpio y mostrar en input
+  // 🔗 Obtener href limpio y mostrar como placeholder
   const hrefRaw = enlaceActual.getAttribute('href') || '';
   const hrefExtraido = extraerUrl(hrefRaw);
-  inputHref.value = hrefExtraido;
+  inputHref.value = ''; // dejar el campo vacío
+  inputHref.placeholder = hrefExtraido;
   ultimaHrefEditado = hrefExtraido;
+
+  // 🔁 Ocultar botón ❌ porque el campo queda vacío
+  if (clearHrefBtn) clearHrefBtn.style.display = 'none';
 
   // 🏷️ Mostrar descripción/posición actual
   document.getElementById('estadoEnlace').textContent =
@@ -130,7 +134,7 @@ function mostrarHrefActual() {
   const src = img?.getAttribute('src') || '';
 
   inputImg.value = src;
-  ultimaImagenEditada = src; // 💾 Guardar estado original para comparar cambios
+  ultimaImagenEditada = src;
 
   // 🔍 Mostrar vista previa visual
   const preview = document.getElementById('previewImagenInline');
@@ -144,6 +148,7 @@ function mostrarHrefActual() {
 
   actualizarVistaPrevia();
 }
+
 
 
 
@@ -230,9 +235,21 @@ function actualizarVistaPrevia() {
   const iframe = document.getElementById('vistaPrevia');
   iframe.srcdoc = template.innerHTML;
 }
+
+
 function obtenerCarpetaSeleccionada() {
-  const mes = document.getElementById('carpetaSelector').value;
-  return `/static/envioweb/2025/${mes}/`;
+  const selector = document.getElementById('carpetaSelector');
+  const mesSeleccionado = selector?.value?.trim();
+
+  // Validación: formato esperado "MM-nombre" (ej: "04-abril")
+  const esValido = /^[0-1][0-9]-[a-záéíóúñ]+$/i.test(mesSeleccionado);
+
+  if (!esValido) {
+    console.warn('⚠️ Formato de mes no válido:', mesSeleccionado);
+    return ''; // o puedes lanzar una excepción o mostrar un toast
+  }
+
+  return `/static/envioweb/2025/${mesSeleccionado}/`;
 }
 
 
@@ -494,6 +511,8 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   const inputImg = document.getElementById('imgSrcInput');
   const nuevaSrc = inputImg?.value.trim();
   const hrefInput = document.getElementById('hrefInput')?.value.trim();
+
+  
 
   const enlaceActual = enlacesConPatron[indiceActual];
   if (enlaceActual) {

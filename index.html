@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/{toggle name}.min.css">
   
-<body class="bg-light">
+<body >
 
   
   <!-- Navbar superior -->
@@ -62,28 +62,23 @@
 
 
   <!-- Vista 1: Editor de URLs -->
-  <div class="container-fluid py-4 mt-4">
+  <div class="container-fluid py-4">
   
     <div class="row justify-content-center  ">
-      <div class="col-md-9  py-4 ">
+      <div class="col-md-9  py-4  ">
 
     <div id="vistaEditor">
-      <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-body bg-body text-body p-4 shadow-sm rounded-4 ">
-      <div class="row g-4 d-flex justify-content-center">
-        <div class="col-md-6">
+        <div class="card-body text-body p-4 shadow-sm rounded-4 ">
+      <div class="d-flex gap-3 row justify-content-around">
+        <div class="col-md-3 bg-body p-4 rounded-4">
           <div class="mb-3">
             <label for="fechaInicio" class="form-label fw-semibold text-body-secondary">  📅 Selecciona la fecha de inicio:</label>
             <input type="date" id="fechaInicio" class="form-control" />
           </div>
           
 
-
-
-
-
 <!-- 🎯 Selector de templates con dropdown y búsqueda -->
-<div class="mb-4">
+<div class="mb-4 ">
   <label for="selectorTemplate" class="form-label fw-semibold text-body-secondary">📂 Selecciona un template prediseñado:</label>
   <select id="selectorTemplate" class="form-select w-100" onchange="seleccionarTemplate()">
     <option selected disabled>-- Elige un template --</option>
@@ -91,6 +86,8 @@
     <optgroup label="🏠 Hogar">
       <option value="Hogar-PP-4F.html">Hogar PP 4F</option>
       <option value="Hogar-PPM-3F.html">Hogar PPM 3F</option>
+      <option value="Hogar-PPM-CAT-3F.html">Hogar PPM CAT 3F</option>
+      <option value="Hogar-PPM-CAT-1F.html">Hogar PPM CAT GRID 1F</option>
       <option value="Plantilla-informativo-SHC.html">Hogar Informativo</option>
     </optgroup>
 
@@ -112,7 +109,7 @@
           <button id="cargarBtn" class="btn btn-primary mt-3 w-100">Procesar HTML</button>
         </div>
     
-        <div class="col-md-4 d-none">
+        <div class="col-md-4 bg-body p-4 rounded-4">
           <label class="form-label fw-semibold text-body-secondary">🔍 Vista previa de tabla (iframe):</label>
           <div class="position-relative border rounded shadow-sm overflow-auto bg-body-secondary" style="padding: 0.5rem; height: 400px;">
             <iframe
@@ -131,21 +128,22 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 bg-body p-4 rounded-4">
           <label class="form-label fw-semibold text-body-secondary">🔍 Vista previa Imagen de la Url:</label>
           <div id="zonaPreviewInline" class="mt-3 d-flex justify-content-center">
             <img id="previewImagenInline" src="" alt="Vista previa del enlace" style="max-height: 350px; display: none; object-fit: contain; width: 95%; border-radius: 8px; background-color: #f8fafc;" />
           </div>
         </div>
     
-                  <div class="col-md-12">
+                  <div class="col-md-12 rounded-4">
                     <div id="editorHref" class="d-none">
                       <div class="row g-1">
                         <div class="col-md-12">
                        <div class="row align-items-start">
   <!-- Columna izquierda: Label + input group -->
-  <div class="col-md-6">
+  <div class="col-md-6 ">
     <label for="hrefInput" class="form-label">Editar URL del enlace actual:</label>
+    
   </div>
 
   
@@ -162,17 +160,21 @@
   <div class="col-md-12 ">
     <div class="input-group mb-3">
       <span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
-      <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/sodimac-cl/content/categoria-1">
+    
+      <!-- El input estará vacío, y el placeholder mostrará la URL -->
+      <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/...">
+    
       <button id="anteriorBtn" class="btn btn-outline-secondary" type="button">⏮ Anterior</button>
       <button id="siguienteBtn" class="btn btn-outline-secondary" type="button">⏭ Siguiente</button>
     </div>
-  </div>
+    
+    
 
   <div class=" col-md-12 ">
 
     <div class="row align-items-center">
       <!-- Columna izquierda: input -->
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6 ">
         <div class="input-group">
         <span id="estadoEnlaceImagen" class="input-group-text">Url Imagen</span>
           <input type="text" id="imgSrcInput" class="form-control" placeholder="Url FTP Imagen">
@@ -181,7 +183,7 @@
 <!-- Columna derecha: botones -->
     
       <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
-        <div class="input-group mb-3">
+        <div class="input-group">
           <input type="text" id="inputRutaFtpReemplazo" class="form-control"
           placeholder=" Reemplazar ruta basada en carpeta (sin alterar número final)">
 
@@ -199,7 +201,7 @@
             <div class="row align-items-center">
               <!-- Columna izquierda: input -->
               <div class="col-md-6">
-                <button onclick="limpiarCamposUrl()" class="btn btn-outline-danger mt-3 me-2">
+                <button onclick="limpiarCamposUrl()" class="btn btn-outline-primary mt-3 me-2">
                   🧹 Limpiar Campos
                 </button>
 
@@ -236,7 +238,9 @@
                     </div>
                   </div>
             </div>
-          </div>
+    
+
+
           </div>
           </div>
 
@@ -312,7 +316,6 @@
 <div class="row justify-content-center">
   <div class="col-md-8 col-lg-6">
 <div id="vistaConversor" class="bg-body text-body" >
-  <div class="card shadow-lg border-0 rounded-4 ">
     <div class="card-body  p-4">
       <h4 class="mb-4 text-center text-primary">🔁 Conversor de URL FTP a HTTPS</h4>
 
@@ -335,7 +338,7 @@
 
       <button class="btn btn-primary w-100" onclick="copiarListaResultado('urlListaResultado')">📋 Copiar URLs</button>
     </div>
-  </div>
+ 
     
   </div>
 </div>
