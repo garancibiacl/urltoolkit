@@ -56,7 +56,30 @@
 
     </div>
   </nav>
-
+  <div class="modal fade" id="modalBannersDetectados" tabindex="-1" aria-labelledby="modalBannersDetectadosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+      <div class="modal-content bg-dark text-light rounded-4 shadow-lg border-0">
+        
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="modalBannersDetectadosLabel">🧩 Banners detectados en el HTML</h5>
+          <button type="button"
+          class="btn-close btn-close-white custom-tooltip"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+          data-bs-toggle="tooltip"
+          data-bs-placement="left"
+          title="Cerrar vista de banners">
+  </button>
+  
+        </div>
+  
+        <div class="modal-body">
+          <div id="contenedorBannersDetectados" class="d-flex flex-column gap-4"></div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
   <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"></div>
 
 
@@ -205,7 +228,7 @@
                 <button onclick="limpiarCamposUrl()" class="btn btn-outline-light mt-3 me-2">
                   🧹 Limpiar Campos
                 </button>
-
+                <button class="btn btn-primary my-3" onclick="detectarBanners()">🔍 Ver banners detectados</button>
                 </div>
                       <!-- Columna derecha: Botón copiar HTML -->
                       <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 gap-3">

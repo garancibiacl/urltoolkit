@@ -138,4 +138,18 @@ iframe {
 }
 
 
-  
+.banner-card { background: #1e293b; color: white; border-radius: 10px; padding: 1.5rem; }
+.suggestion-box { background: white; color: black; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; position: absolute; z-index: 1000; width: 100%; }
+.suggestion-item { padding: 5px 10px; cursor: pointer; }
+.suggestion-item:hover { background-color: #f1f1f1; }
+
+.custom-tooltip + .tooltip > .tooltip-inner {
+  background-color: #0dcaf0; /* celeste moderno */
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+  text-align: center;
+}

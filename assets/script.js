@@ -1,5 +1,9 @@
 // script.js
 
+document.addEventListener('DOMContentLoaded', function () {
+  const tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltips.forEach(el => new bootstrap.Tooltip(el))
+})
 
 
 // Luego DOMContentLoaded para inicializar todo
@@ -1432,3 +1436,128 @@ function asignarFechaHoyInputDate() {
 
 
 
+async function cargarBannersJson() {
+  const response = await fetch('assets/banners.json');
+  return await response.json();
+}
+
+
+function detectarBanners() {
+  const html = document.getElementById("htmlInput").value;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const banners = [...doc.querySelectorAll("tr[id]")];
+  const contenedor = document.getElementById("contenedorBannersDetectados");
+  contenedor.innerHTML = '';
+
+  banners.forEach((banner, index) => {
+    const id = banner.getAttribute("id");
+    const img = banner.querySelector("img");
+    const a = banner.querySelector("a");
+    const imgSrc = img?.getAttribute("src") || '';
+    const href = a?.getAttribute("href") || '';
+
+    contenedor.innerHTML += `
+      <div class="banner-card position-relative">
+        <strong>ID:</strong> ${id}
+        <img id="preview-${index}" src="${imgSrc}" class="img-fluid my-3 rounded" style="max-height:150px;">
+        <div class="mb-2">
+          <label>Href:</label>
+          <input type="text" id="href-${index}" class="form-control" value="${href}">
+        </div>
+        <div class="mb-2">
+          <label>Imagen Src:</label>
+          <input type="text" id="src-${index}" class="form-control" value="${imgSrc}">
+        </div>
+        <input type="text" class="form-control mt-2 mb-2" id="jsonInput-${index}" placeholder="Buscar por nombre..." oninput="sugerenciasBanner(this.value, ${index}, '${id}')">
+        <div id="sugerencias-${index}" class="suggestion-box d-none"></div>
+        <button class="btn btn-warning mt-2" onclick="reemplazarTdDesdeJson('${id}', 'jsonInput-${index}', ${index})">🔁 Reemplazar desde JSON</button>
+        <button class="btn btn-success me-2" onclick="editarBannerDesdeInputs('${id}', ${index})">✏️ Editar desde Inputs</button>
+
+      </div>`;
+  });
+
+  new bootstrap.Modal(document.getElementById("modalBannersDetectados")).show();
+}
+
+function sugerenciasBanner(valor, index, id) {
+  const box = document.getElementById(`sugerencias-${index}`);
+  if (!valor) return box.classList.add("d-none");
+
+  cargarBannersJson().then(banners => {
+    const filtrados = banners.filter(b => b.nombre.toLowerCase().includes(valor.toLowerCase()));
+    if (!filtrados.length) return box.classList.add("d-none");
+
+    box.innerHTML = '';
+    box.classList.remove("d-none");
+
+    filtrados.forEach(b => {
+      const item = document.createElement("div");
+      item.className = "suggestion-item";
+      item.textContent = b.nombre;
+      item.onclick = () => {
+        document.getElementById(`jsonInput-${index}`).value = b.nombre;
+        aplicarBannerDesdeJson(b, index, id);
+        reemplazarTdDesdeJson(id, `jsonInput-${index}`, index);
+      };
+            box.appendChild(item);
+    });
+  });
+}
+
+function aplicarBannerDesdeJson(banner, index, id) {
+  document.getElementById(`src-${index}`).value = banner.img_src;
+  document.getElementById(`href-${index}`).value = banner.href;
+  document.getElementById(`preview-${index}`).src = banner.img_src;
+  document.getElementById(`sugerencias-${index}`).classList.add("d-none");
+}
+
+async function reemplazarTdDesdeJson(id, inputId, index) {
+  const nombre = document.getElementById(inputId).value.trim();
+  if (!nombre) return alert("⚠️ Escribe el nombre del banner.");
+
+  const banners = await cargarBannersJson();
+  const banner = banners.find(b => b.nombre.toLowerCase().trim() === nombre.toLowerCase().trim());
+  if (!banner) return alert("❌ No encontrado en JSON");
+
+  const html = document.getElementById("htmlInput").value;
+
+  const tdHtml = `<td colspan="2" align="center">
+  <a href="${banner.href}" target="_blank">
+    <img src="${banner.img_src}" alt="${banner.alt || ''}" style="display:block;" border="0">
+  </a>
+</td>`;
+
+  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
+  const nuevoBloque = `<tr>\n  ${tdHtml}\n</tr>`;
+  const actualizado = html.replace(trRegex, nuevoBloque);
+  document.getElementById("htmlInput").value = actualizado;
+
+  // 🔁 Actualizar también la vista previa en modal
+  document.getElementById(`src-${index}`).value = banner.img_src;
+  document.getElementById(`href-${index}`).value = banner.href;
+  document.getElementById(`preview-${index}`).src = banner.img_src;
+
+  mostrarToast('✅ Banner reemplazado y actualizado en la vista.', 'dark');
+}
+
+function editarBannerDesdeInputs(id, index) {
+  const html = document.getElementById("htmlInput").value;
+  const href = document.getElementById(`href-${index}`).value.trim();
+  const src = document.getElementById(`src-${index}`).value.trim();
+
+  const tdHtml = `<td colspan="2" align="center">
+  <a href="${href}" target="_blank">
+    <img src="${src}" style="display:block;" border="0">
+  </a>
+</td>`;
+
+  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
+  const nuevoBloque = `<tr>\n  ${tdHtml}\n</tr>`;
+  const actualizado = html.replace(trRegex, nuevoBloque);
+  document.getElementById("htmlInput").value = actualizado;
+
+  document.getElementById(`preview-${index}`).src = src;
+
+  alert("✅ Banner actualizado manualmente desde inputs.");
+}
