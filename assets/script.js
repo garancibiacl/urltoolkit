@@ -280,7 +280,7 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
 
 function aplicarCambioHref(idInput = 'hrefInput') {
   let nuevaUrl = document.getElementById(idInput).value.trim();
-  if (!nuevaUrl) return alert('⚠️ Ingresa una URL válida.');
+
 
   const enlaceActual = enlacesConPatron[indiceActual];
   if (!enlaceActual) return;
@@ -376,7 +376,7 @@ enlaceActual.setAttribute('href', nuevoHref);
 
   } catch (e) {
     console.warn('❌ URL inválida:', e);
-    return alert('❌ La URL ingresada no es válida.');
+
   }
 
   // Avanzar al siguiente
@@ -743,6 +743,8 @@ toggleBtn.addEventListener('click', () => {
   const nuevo = actual === 'light' ? 'dark' : 'light';
   aplicarTema(nuevo);
 });
+
+
 
 
 // FIN TOGGLE DARK Y LIGTH

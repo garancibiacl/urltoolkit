@@ -7,6 +7,7 @@ body[data-bs-theme="dark"] {
   --bs-border-color: #334155;
   --bs-form-control-bg: #121212;
   --bs-form-control-color: #f1f5f9;
+  --bs-color-blue: #0045f0;
   --bs-card-bg: #1e293b;
   --bs-body-card-light: #f4f4f5;
 
@@ -34,7 +35,11 @@ body {
 }
 
 .bg-body{
-  background-color: var(--bs-body-card-contrast) !important;
+  background-color: #121212 !important;
+}
+
+.card-body{
+  background-color: #292929 !important;
 }
 
 .navbar {
@@ -82,7 +87,7 @@ iframe {
 }
 .nav-link.active {
   font-weight: 600;
-  border-bottom: 2px solid #3b82f6;
+  border-bottom: 2px solid var(--bs-color-blue);
 }
 .btn-close-white {
   filter: invert(1);
@@ -131,3 +136,6 @@ iframe {
   transform: scale(1.2) rotate(180deg);
   opacity: 1;
 }
+
+
+  
