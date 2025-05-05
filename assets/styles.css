@@ -1,7 +1,7 @@
 body[data-bs-theme="dark"] {
   --bs-body-bg: #121212;
   /* --bs-body-bg-dark: linear-gradient(to right, #0f2027, #203a43, #2c5364); */
-  --bs-body-bg-dark: #121212;
+  --bs-body-bg-dark: #0f172a;
   --bs-body-color: #f4f4f5;
   --bs-body-card-contrast: #2a2a2a;
   --bs-border-color: #334155;
@@ -35,16 +35,16 @@ body {
 }
 
 .bg-body{
-  background-color: #121212 !important;
+  background-color: #334255 !important;
 }
 
 .card-body{
-  background-color: #292929 !important;
+  background-color: #1e293c !important;
+}
+.bg-dark{
+  background-color: var(--bs-body-bg-dark) !important;
 }
 
-.navbar {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-}
 .card {
   background-color: var(--bs-body-bg);
   border: none;
