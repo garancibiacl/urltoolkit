@@ -325,9 +325,57 @@
     },
     {
       "nombre": "Banner Temporada de Casa - 10% PISOS",
-      "href": "%%=RedirectTo(concat(' https://www.sodimac.cl/sodimac-cl/content/temporada-de-ahorro?',@prefix))=%%",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/temporada-de-ahorro?',@prefix))=%%",
       "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-10-pisos-tda-1.gif",
       "alt": "Ir Temporada de Ahorro"
+    },
+    {
+      "nombre": "Landing TEXTIL OTIN",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/decolovers?',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/Banner-textil-otin-v3.png",
+      "alt": "Ir Textil OTin"
+    },
+    {
+      "nombre": "Catálogo OTIN",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/catalogo-otono-invierno-2025?',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/Banner-catalogo-otin-v3.png",
+      "alt": "Ir Catalogo otono Invierno-2025"
+    },
+    {
+      "nombre": "Landing OTIN",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/catalogo-otono-invierno-2025?',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/29-banner-landing-otim.png",
+      "alt": "Ir Catalogo otono Invierno-2025"
+    },
+    {
+      "nombre": "VOA 2025",
+      "href": "https://qr-sodimac-cl.pages.dev/?local=643db32a2c286c6480270348&name=Asesor%C3%ADa_por_videollamada",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/02-05-BANNER-VOA-2025.jpg",
+      "alt": "Ir a VOA 2025"
+    },
+    {
+      "nombre": "Landing PPI - PRO",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/preparese-para-el-invierno-pro?',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/Banner-Landing-PPI-PRO-v3.png",
+      "alt": "Ir a Landing PPI - PRO"
+    },
+
+    {
+      "nombre": "RULETA TIENDA",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/tucasasiempregana?',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-ruleta-v3.png",
+      "alt": "Ir a RULETTA SIEMRE GANA"
+    },
+    {
+      "nombre": "6 CSI EN KIT DE PORTÓN VELOTI",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=kit+porton&facetSelected=true&f.product.brandName=veloti&',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-kit-porton-v1.png",
+      "alt": "Ir a kit porton veloti"
     }
+
+
+
     
   ]
+
+
