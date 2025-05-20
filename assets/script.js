@@ -641,9 +641,8 @@ function obtenerRangoDesdeFechaInput() {
 
 
 
-
-
-
+  // Sincronizar cambios del usuario en DOM real
+template.innerHTML = document.getElementById('htmlInput').value;
 
 let finalHTML = template.innerHTML;
 
