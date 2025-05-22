@@ -29,6 +29,10 @@
           <li class="nav-item">
             <a class="nav-link active" href="#" id="navEditor">Editor de Plantillas</a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="navBanner">Crear Banner</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="#" id="navSku">Generador de SKUs</a>
           </li>
@@ -108,10 +112,9 @@
     <option selected disabled>-- Elige un template --</option>
 
     <optgroup label="🏠 Hogar">
-      <option value="Hogar-PP-4F.html">Hogar PP 4F</option>
+      <option value="Hogar-PPA-4F.html">Hogar PPA 4F</option>
       <option value="Hogar-PPM-3F.html">Hogar PPM 3F</option>
       <option value="Hogar-PPM-CAT-3F.html">Hogar PPM CAT 3F</option>
-      <option value="Hogar-PPM-CAT-1F.html">Hogar PPM CAT GRID 1F</option>
       <option value="Plantilla-informativo-SHC.html">Hogar Informativo</option>
     </optgroup>
 
@@ -339,10 +342,10 @@
 <!-- Vista: Conversor FTP -->
 
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-<div id="vistaConversor" class="bg-body text-body" >
-    <div class="card-body  p-4">
-      <h4 class="mb-4 text-center text-primary">🔁 Conversor de URL FTP a HTTPS</h4>
+        <div class="col-md-8 col-lg-6">
+      <div id="vistaConversor" class="bg-body text-body" >
+          <div class="card-body  p-4">
+            <h4 class="mb-4 text-center text-primary">🔁 Conversor de URL FTP a HTTPS</h4>
 
       <div class="mb-3">
         <label for="ftpInputMultiple" class="form-label fw-bold">Pega aquí las URLs FTP:</label>
@@ -413,10 +416,38 @@
             </div>
 
 
+ <!-- Vista Crear banner-->
+
+            <div id="vistaCrearBanner">
+             <!-- HTML -->
+             <div class="container py-5">
+              <h1 class="mb-4">🧠 Buscar y Generar HTML con Sugerencias</h1>
+
+    <div class="position-relative mb-3">
+      <input type="text" id="buscarBanner" class="form-control"
+             placeholder="Buscar banner..." oninput="sugerenciasBannerSimple(this.value)">
+
+             
+      <div id="sugerencias-banner" class="suggestion-banner d-none"></div>
+    </div>
+
+    <div class="card bg-light text-dark">
+      <div class="card-body">
+        <h5 class="card-title">🖼️ Vista previa</h5>
+        <div id="previewHTML" class="border p-3 bg-white mb-3"></div>
+        <label>Código HTML AMPscript:</label>
+        <textarea id="codigoGenerado" class="form-control" rows="6" readonly></textarea>
+        <button onclick="copiarCodigo()" class="btn btn-dark mt-2">📋 Copiar HTML</button>
+      </div>
+    </div>
+            </div>
+
+
+
+      </div>
+
+
 </div>
-
-
-
 
 <footer class="text-body-secondary py-4 border-top mt-5">
   <div class="container">
