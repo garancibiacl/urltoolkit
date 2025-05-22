@@ -423,28 +423,26 @@
              <div class="container py-5">
               <h1 class="mb-4">🧠 Buscar y Generar HTML con Sugerencias</h1>
 
-    <div class="position-relative mb-3">
-      <input type="text" id="buscarBanner" class="form-control"
-             placeholder="Buscar banner..." oninput="sugerenciasBannerSimple(this.value)">
-
-             
-      <div id="sugerencias-banner" class="suggestion-banner d-none"></div>
-    </div>
-
-    <div class="card bg-light text-dark">
-      <div class="card-body">
-        <h5 class="card-title">🖼️ Vista previa</h5>
-        <div id="previewHTML" class="border p-3 bg-white mb-3"></div>
-        <label>Código HTML AMPscript:</label>
-        <textarea id="codigoGenerado" class="form-control" rows="6" readonly></textarea>
-        <button onclick="copiarCodigo()" class="btn btn-dark mt-2">📋 Copiar HTML</button>
-      </div>
-    </div>
+              <div class="position-relative mb-3">
+                <input type="text" id="buscarBanner" class="form-control"
+                       placeholder="Buscar banner..." oninput="sugerenciasBannerSimple(this.value)">
+                <div id="sugerencias-banner" class="suggestion-box d-none"></div>
+              </div>
+          
+              <div class="card bg-light text-dark">
+                <div class="card-body">
+                  <h5 class="card-title">🖼️ Vista previa</h5>
+                  <div id="previewHTML" class="border p-3 bg-white mb-3"></div>
+                  <label>Código HTML AMPscript:</label>
+                  <textarea id="codigoGenerado" class="form-control" rows="6" readonly></textarea>
+                  <button onclick="copiarCodigo()" class="btn btn-dark mt-2">📋 Copiar HTML</button>
+                </div>
+              </div>
             </div>
 
 
 
-      </div>
+      
 
 
 </div>

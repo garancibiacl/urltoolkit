@@ -507,6 +507,182 @@ document.getElementById('anteriorBtn').addEventListener('click', () => {
   }
 });
 
+ // START BANNER DETECTADOS
+
+ async function cargarBannersJson() {
+  const response = await fetch('assets/banners.json');
+  return await response.json();
+}
+
+
+function detectarBanners() {
+  const html = document.getElementById("htmlInput").value;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const banners = [...doc.querySelectorAll("tr[id]")];
+  const contenedor = document.getElementById("contenedorBannersDetectados");
+  contenedor.innerHTML = '';
+
+  banners.forEach((banner, index) => {
+    const id = banner.getAttribute("id");
+    const img = banner.querySelector("img");
+    const a = banner.querySelector("a");
+    const imgSrc = img?.getAttribute("src") || '';
+    const href = a?.getAttribute("href") || '';
+
+    contenedor.innerHTML += `
+      <div class="banner-card position-relative">
+        <strong>ID:</strong> ${id}
+        <img id="preview-${index}" src="${imgSrc}" class="img-fluid my-3 rounded" style="max-height:150px;">
+        <div class="mb-2">
+          <label>Href:</label>
+          <input type="text" id="href-${index}" class="form-control" value="${href}">
+        </div>
+        <div class="mb-2">
+          <label>Imagen Src:</label>
+          <input type="text" id="src-${index}" class="form-control" value="${imgSrc}">
+        </div>
+        <input type="text" class="form-control mt-2 mb-2" id="jsonInput-${index}" placeholder="Buscar por nombre..." oninput="sugerenciasBanner(this.value, ${index}, '${id}')">
+        <div id="sugerencias-${index}" class="suggestion-box d-none"></div>
+        <button class="btn btn-warning mt-2" onclick="reemplazarTdDesdeJson('${id}', 'jsonInput-${index}', ${index})">🔁 Reemplazar desde JSON</button>
+        <button class="btn btn-success me-2" onclick="editarBannerDesdeInputs('${id}', ${index})">✏️ Editar desde Inputs</button>
+
+      </div>`;
+  });
+
+  new bootstrap.Modal(document.getElementById("modalBannersDetectados")).show();
+}
+
+function sugerenciasBanner(valor, index, id) {
+  const box = document.getElementById(`sugerencias-${index}`);
+  if (!valor) return box.classList.add("d-none");
+
+  cargarBannersJson().then(banners => {
+    const filtrados = banners.filter(b => b.nombre.toLowerCase().includes(valor.toLowerCase()));
+    if (!filtrados.length) return box.classList.add("d-none");
+
+    box.innerHTML = '';
+    box.classList.remove("d-none");
+
+    filtrados.forEach(b => {
+      const item = document.createElement("div");
+      item.className = "suggestion-item";
+      item.textContent = b.nombre;
+      item.onclick = () => {
+        document.getElementById(`jsonInput-${index}`).value = b.nombre;
+        aplicarBannerDesdeJson(b, index, id);
+        reemplazarTdDesdeJson(id, `jsonInput-${index}`, index);
+      };
+            box.appendChild(item);
+    });
+  });
+}
+
+function aplicarBannerDesdeJson(banner, index, id) {
+  document.getElementById(`src-${index}`).value = banner.img_src;
+  document.getElementById(`href-${index}`).value = banner.href;
+  document.getElementById(`preview-${index}`).src = banner.img_src;
+  document.getElementById(`sugerencias-${index}`).classList.add("d-none");
+}
+
+async function reemplazarTdDesdeJson(id, inputId, index) {
+  const nombre = document.getElementById(inputId).value.trim();
+  if (!nombre) return alert("⚠️ Escribe el nombre del banner.");
+
+  const banners = await cargarBannersJson();
+  const banner = banners.find(b => b.nombre.toLowerCase().trim() === nombre.toLowerCase().trim());
+  if (!banner) return alert("❌ No encontrado en JSON");
+
+  const html = document.getElementById("htmlInput").value;
+
+  const tdHtml = `<td colspan="2" align="center">
+  <a href="${banner.href}" target="_blank">
+    <img src="${banner.img_src}" alt="${banner.alt || ''}" style="display:block;" border="0">
+  </a>
+</td>`;
+
+  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
+  const nuevoBloque = `<tr>\n  ${tdHtml}\n</tr>`;
+  const actualizado = html.replace(trRegex, nuevoBloque);
+  document.getElementById("htmlInput").value = actualizado;
+
+  // 🔁 Actualizar también la vista previa en modal
+  document.getElementById(`src-${index}`).value = banner.img_src;
+  document.getElementById(`href-${index}`).value = banner.href;
+  document.getElementById(`preview-${index}`).src = banner.img_src;
+
+  mostrarToast('✅ Banner reemplazado y actualizado en la vista.', 'dark');
+}
+
+function editarBannerDesdeInputs(id, index) {
+  let html = document.getElementById("htmlInput").value;
+  const href = document.getElementById(`href-${index}`)?.value.trim();
+  const src = document.getElementById(`src-${index}`)?.value.trim();
+
+  const nuevoTr = `<tr>
+  <td colspan="2" align="center">
+    <a href="${href}" target="_blank">
+      <img src="${src}" style="display:block;" border="0">
+    </a>
+  </td>
+</tr>`;
+
+  // Reemplazar todo el <tr id="..."> por un nuevo <tr> limpio
+  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
+  html = html.replace(trRegex, nuevoTr);
+
+  // 🔄 Actualizar el HTML en el textarea
+  document.getElementById("htmlInput").value = html;
+
+  // 🔄 Actualizar vista previa (DOM real)
+  template.innerHTML = html;
+
+  template.innerHTML = document.getElementById('htmlInput').value;
+
+  // 🔄 Actualizar mini preview imagen
+  document.getElementById(`preview-${index}`).src = src;
+
+  mostrarToast("✅ Banner actualizado y <tr> sin ID.", "success");
+
+
+
+}
+
+function guardarCambiosBannerDesdeInputs(index) {
+  const hrefInput = document.getElementById(`href-${index}`)?.value.trim();
+  const srcInput = document.getElementById(`src-${index}`)?.value.trim();
+
+  const enlace = enlacesConPatron?.[index];
+  if (!enlace) return;
+
+  const img = enlace.querySelector('img') || enlace.closest('td')?.querySelector('img');
+  const actualHref = enlace.getAttribute('href') || '';
+  const actualSrc = img?.getAttribute('src') || '';
+
+  let html = document.getElementById('htmlInput').value;
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
+  }
+
+  if (hrefInput && html.includes(actualHref)) {
+    const hrefRegex = new RegExp(`(<a[^>]*href=["'])${escapeRegExp(actualHref)}(["'])`, 'i');
+    html = html.replace(hrefRegex, `$1${hrefInput}$2`);
+  }
+
+  if (srcInput && html.includes(actualSrc)) {
+    const srcRegex = new RegExp(`(<img[^>]*src=["'])${escapeRegExp(actualSrc)}(["'])`, 'i');
+    html = html.replace(srcRegex, `$1${srcInput}$2`);
+  }
+
+  document.getElementById('htmlInput').value = html;
+  template.innerHTML = html;
+  
+}
+
+
+ // FIN BANNER DETECTADOS
+
 
 
 
@@ -641,10 +817,16 @@ function obtenerRangoDesdeFechaInput() {
 
 
 
-  // Sincronizar cambios del usuario en DOM real
-template.innerHTML = document.getElementById('htmlInput').value;
 
+
+// sirve para el mostrar los input modificados
 let finalHTML = template.innerHTML;
+
+
+// sirve para el mostrar los banner modificados
+// let finalHTML = document.getElementById('htmlInput').value;
+
+
 
 
 // ✅ Detectar si hay marcador de fecha
@@ -710,13 +892,14 @@ if (finalHTML.includes('{{FECHA_RANGO}}')) {
     console.error('❌ Error al copiar HTML:', err);
     mostrarToast('❌ Error al copiar HTML', 'error');
   });
+
+  
 });
 
-
-
-
-
 // FIN COPIAR HTML BTN
+
+
+
 
 
 
@@ -755,22 +938,26 @@ toggleBtn.addEventListener('click', () => {
 // START Función para mostrar una vista y ocultar las otras
 const vistaEditor = document.getElementById('vistaEditor');
 const vistaSku = document.getElementById('vistaSku');
+const vistaCrearBanner = document.getElementById('vistaCrearBanner')
 const vistaConversor = document.getElementById('vistaConversor');
 const vistaAmpEditor = document.getElementById('vistaAmpEditor');
 
 const navEditor = document.getElementById('navEditor');
 const navSku = document.getElementById('navSku');
+const navBanner = document.getElementById('navBanner');
 const navConversor = document.getElementById('navConversor');
 const navAmp = document.getElementById('navAmp');
 
 function mostrarVista(vista) {
   vistaEditor.style.display = vista === 'editor' ? 'block' : 'none';
+  vistaCrearBanner.style.display = vista === 'banner' ? 'block' : 'none';
   vistaSku.style.display = vista === 'sku' ? 'block' : 'none';
   vistaConversor.style.display = vista === 'conversor' ? 'block' : 'none';
   vistaAmpEditor.style.display = vista === 'amp' ? 'block' : 'none';
 
   navEditor.classList.toggle('active', vista === 'editor');
   navSku.classList.toggle('active', vista === 'sku');
+  navBanner.classList.toggle('active', vista === 'banner');
   navConversor.classList.toggle('active', vista === 'conversor');
   navAmp.classList.toggle('active', vista === 'amp');
 }
@@ -778,6 +965,7 @@ function mostrarVista(vista) {
 // Listeners
 navEditor.addEventListener('click', () => mostrarVista('editor'));
 navSku.addEventListener('click', () => mostrarVista('sku'));
+navBanner.addEventListener('click', () => mostrarVista('banner'));
 navConversor.addEventListener('click', () => mostrarVista('conversor'));
 navAmp.addEventListener('click', () => mostrarVista('amp'));
 
@@ -1435,128 +1623,82 @@ function asignarFechaHoyInputDate() {
 
 
 
-async function cargarBannersJson() {
-  const response = await fetch('assets/banners.json');
-  return await response.json();
-}
 
 
-function detectarBanners() {
-  const html = document.getElementById("htmlInput").value;
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const banners = [...doc.querySelectorAll("tr[id]")];
-  const contenedor = document.getElementById("contenedorBannersDetectados");
-  contenedor.innerHTML = '';
 
-  banners.forEach((banner, index) => {
-    const id = banner.getAttribute("id");
-    const img = banner.querySelector("img");
-    const a = banner.querySelector("a");
-    const imgSrc = img?.getAttribute("src") || '';
-    const href = a?.getAttribute("href") || '';
+ // Creador de banners múltiples
 
-    contenedor.innerHTML += `
-      <div class="banner-card position-relative">
-        <strong>ID:</strong> ${id}
-        <img id="preview-${index}" src="${imgSrc}" class="img-fluid my-3 rounded" style="max-height:150px;">
-        <div class="mb-2">
-          <label>Href:</label>
-          <input type="text" id="href-${index}" class="form-control" value="${href}">
-        </div>
-        <div class="mb-2">
-          <label>Imagen Src:</label>
-          <input type="text" id="src-${index}" class="form-control" value="${imgSrc}">
-        </div>
-        <input type="text" class="form-control mt-2 mb-2" id="jsonInput-${index}" placeholder="Buscar por nombre..." oninput="sugerenciasBanner(this.value, ${index}, '${id}')">
-        <div id="sugerencias-${index}" class="suggestion-box d-none"></div>
-        <button class="btn btn-warning mt-2" onclick="reemplazarTdDesdeJson('${id}', 'jsonInput-${index}', ${index})">🔁 Reemplazar desde JSON</button>
-        <button class="btn btn-success me-2" onclick="editarBannerDesdeInputs('${id}', ${index})">✏️ Editar desde Inputs</button>
-
-      </div>`;
-  });
-
-  new bootstrap.Modal(document.getElementById("modalBannersDetectados")).show();
-}
-
-function sugerenciasBanner(valor, index, id) {
-  const box = document.getElementById(`sugerencias-${index}`);
-  if (!valor) return box.classList.add("d-none");
-
-  cargarBannersJson().then(banners => {
-    const filtrados = banners.filter(b => b.nombre.toLowerCase().includes(valor.toLowerCase()));
-    if (!filtrados.length) return box.classList.add("d-none");
-
-    box.innerHTML = '';
-    box.classList.remove("d-none");
-
-    filtrados.forEach(b => {
-      const item = document.createElement("div");
-      item.className = "suggestion-item";
-      item.textContent = b.nombre;
-      item.onclick = () => {
-        document.getElementById(`jsonInput-${index}`).value = b.nombre;
-        aplicarBannerDesdeJson(b, index, id);
-        reemplazarTdDesdeJson(id, `jsonInput-${index}`, index);
-      };
-            box.appendChild(item);
-    });
-  });
-}
-
-function aplicarBannerDesdeJson(banner, index, id) {
-  document.getElementById(`src-${index}`).value = banner.img_src;
-  document.getElementById(`href-${index}`).value = banner.href;
-  document.getElementById(`preview-${index}`).src = banner.img_src;
-  document.getElementById(`sugerencias-${index}`).classList.add("d-none");
-}
-
-async function reemplazarTdDesdeJson(id, inputId, index) {
-  const nombre = document.getElementById(inputId).value.trim();
-  if (!nombre) return alert("⚠️ Escribe el nombre del banner.");
-
-  const banners = await cargarBannersJson();
-  const banner = banners.find(b => b.nombre.toLowerCase().trim() === nombre.toLowerCase().trim());
-  if (!banner) return alert("❌ No encontrado en JSON");
-
-  const html = document.getElementById("htmlInput").value;
-
-  const tdHtml = `<td colspan="2" align="center">
-  <a href="${banner.href}" target="_blank">
-    <img src="${banner.img_src}" alt="${banner.alt || ''}" style="display:block;" border="0">
-  </a>
-</td>`;
-
-  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
-  const nuevoBloque = `<tr>\n  ${tdHtml}\n</tr>`;
-  const actualizado = html.replace(trRegex, nuevoBloque);
-  document.getElementById("htmlInput").value = actualizado;
-
-  // 🔁 Actualizar también la vista previa en modal
-  document.getElementById(`src-${index}`).value = banner.img_src;
-  document.getElementById(`href-${index}`).value = banner.href;
-  document.getElementById(`preview-${index}`).src = banner.img_src;
-
-  mostrarToast('✅ Banner reemplazado y actualizado en la vista.', 'dark');
-}
-
-function editarBannerDesdeInputs(id, index) {
-  const html = document.getElementById("htmlInput").value;
-  const href = document.getElementById(`href-${index}`).value.trim();
-  const src = document.getElementById(`src-${index}`).value.trim();
-
-  const tdHtml = `<td colspan="2" align="center">
-  <a href="${href}" target="_blank">
-    <img src="${src}" style="display:block;" border="0">
-  </a>
-</td>`;
-
-  const trRegex = new RegExp(`<tr[^>]*id=["']?${id}["'][^>]*>[\\s\\S]*?<\\/tr>`, 'i');
-  const nuevoBloque = `<tr>\n  ${tdHtml}\n</tr>`;
-  const actualizado = html.replace(trRegex, nuevoBloque);
-  document.getElementById("htmlInput").value = actualizado;
-
-  document.getElementById(`preview-${index}`).src = src;
-
-  alert("✅ Banner actualizado manualmente desde inputs.");
-}
+ 
+ l
+ let bannersJSON = [];
+ 
+ async function cargarBannersJson() {
+   try {
+     const response = await fetch('assets/banners.json');
+     if (!response.ok) throw new Error('No se pudo cargar banners.json');
+     return await response.json();
+   } catch (err) {
+     console.error('❌ Error cargando JSON:', err);
+     alert("⚠️ No se pudo cargar el archivo banners.json. Revisa la consola.");
+     return [];
+   }
+ }
+ 
+ window.addEventListener("DOMContentLoaded", async () => {
+   bannersJSON = await cargarBannersJson();
+   console.log("✅ bannersJSON cargado:", bannersJSON);
+ });
+ 
+ function sugerenciasBannerSimple(valor) {
+   const box = document.getElementById("sugerencias-banner");
+   if (!valor) return box.classList.add("d-none");
+ 
+   const filtrados = bannersJSON.filter(b =>
+     b.nombre.toLowerCase().includes(valor.toLowerCase())
+   );
+ 
+   if (!filtrados.length) return box.classList.add("d-none");
+ 
+   box.innerHTML = '';
+   box.classList.remove("d-none");
+ 
+   filtrados.forEach(b => {
+     const item = document.createElement("div");
+     item.className = "suggestion-item";
+     item.textContent = b.nombre;
+     item.onclick = () => {
+       document.getElementById("buscarBanner").value = b.nombre;
+       generarBannerDesdeJson(b);
+       box.classList.add("d-none");
+     };
+     box.appendChild(item);
+   });
+ }
+ 
+ function generarBannerDesdeJson(banner) {
+   const tablaHTML = `
+ <table width="600" cellspacing="0" cellpadding="0" align="center">
+   <tr>
+     <td colspan="2" align="center">
+       <a href="${banner.href}" target="_blank">
+         <img src="${banner.img_src}" alt="${banner.alt}" style="display:block;" border="0">
+       </a>
+     </td>
+   </tr>
+ </table>`.trim();
+ 
+   document.getElementById("previewHTML").innerHTML = `
+     <a href="${banner.href}" target="_blank">
+       <img src="${banner.img_src}" class="img-fluid rounded shadow" id="previewImg">
+     </a>
+   `;
+   document.getElementById("codigoGenerado").value = tablaHTML;
+ }
+ 
+ function copiarCodigo() {
+   const area = document.getElementById("codigoGenerado");
+   area.select();
+   document.execCommand("copy");
+   alert("✅ HTML copiado");
+ }
+ 
