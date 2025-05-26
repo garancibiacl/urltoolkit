@@ -114,6 +114,9 @@ function mostrarHrefActual() {
   const enlaceActual = enlacesConPatron[indiceActual];
   const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
 
+
+  
+
   // 🔗 Obtener href limpio y mostrar como placeholder
   const hrefRaw = enlaceActual.getAttribute('href') || '';
   const hrefExtraido = extraerUrl(hrefRaw);
@@ -136,6 +139,8 @@ function mostrarHrefActual() {
   const tdContenedor = enlaceActual.closest('td');
   const img = tdContenedor?.querySelector('img');
   const src = img?.getAttribute('src') || '';
+
+  
 
   inputImg.value = src;
   ultimaImagenEditada = src;
@@ -255,6 +260,9 @@ function obtenerCarpetaSeleccionada() {
 
   return `/static/envioweb/2025/${mesSeleccionado}/`;
 }
+
+
+
 
 
 document.getElementById('cargarBtn').addEventListener('click', () => {
