@@ -78,7 +78,7 @@
         </div>
   
         <div class="modal-body">
-          <div id="contenedorBannersDetectados" class="d-flex flex-column gap-4"></div>
+          <!-- <div id="contenedorBannersDetectados" class="d-flex flex-column gap-4"></div> -->
         </div>
   
       </div>
@@ -114,11 +114,19 @@
     <optgroup label="🏠 Hogar">
       <option value="Hogar-PPA-4F.html">Hogar PPA 4F</option>
       <option value="Hogar-PPM-3F.html">Hogar PPM 3F</option>
+      <option value="hogar-cuber.html" data-ruta="/static/envioweb/2025/cyberday">Hogar cyber</option>
       <option value="Hogar-PPM-CAT-3F.html">Hogar PPM CAT 3F</option>
       <option value="Plantilla-informativo-SHC.html">Hogar Informativo</option>
       <option value="hogar-cuber.html">Hogar Informativo</option>
 
     </optgroup>
+
+    <optgroup label="⚡ Cyber">
+      <option value="Hogar-PPM-3F-CAT-Cyber.html">Hogar PPM CAT 3F</option>
+      <option value="Pro-PPM-3F-CAT-Cyber.html">Pro PPM CAT 3F</option>
+    </optgroup>
+
+    
 
     <optgroup label="🚧 Pro">
       <option value="Pro-PPA-4F.html">Pro PPA 4F</option>
@@ -237,6 +245,9 @@
                 <button onclick="limpiarCamposUrl()" class="btn btn-outline-primary btn-circle mt-3 me-2">
                   🧹 Limpiar Campos
                 </button>
+
+
+
                 <button class="btn btn-primary my-3" onclick="detectarBanners()">🔍 Ver banners detectados</button>
                 </div>
                       <!-- Columna derecha: Botón copiar HTML -->

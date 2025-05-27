@@ -246,20 +246,33 @@ function actualizarVistaPrevia() {
 }
 
 
-function obtenerCarpetaSeleccionada() {
-  const selector = document.getElementById('carpetaSelector');
-  const mesSeleccionado = selector?.value?.trim();
+function obtenerEnlacesFiltrados() {
+  const celdas = template.content.querySelectorAll('td[colspan="2"][align="center"]');
+  const setUnico = new Set();
+  const enlacesValidos = [];
 
-  // Validación: formato esperado "MM-nombre" (ej: "04-abril")
-  const esValido = /^[0-1][0-9]-[a-záéíóúñ]+$/i.test(mesSeleccionado);
+  celdas.forEach(td => {
+    const a = td.querySelector('a[href*="%%=RedirectTo"]');
+    const img = td.querySelector('img');
+    const src = img?.getAttribute('src') || '';
 
-  if (!esValido) {
-    console.warn('⚠️ Formato de mes no válido:', mesSeleccionado);
-    return ''; // o puedes lanzar una excepción o mostrar un toast
-  }
+    // ✅ Detecta cualquier ruta que empiece con /2025 o contenga /cyberday
+    const esRuta2025 = src.includes('/static/envioweb/2025/');
+    const esRutaCyber = src.includes('/static/envioweb/2025/cyberday');
 
-  return `/static/envioweb/2025/${mesSeleccionado}/`;
+    if (a && img && (esRuta2025 || esRutaCyber)) {
+      const href = a.getAttribute('href') || '';
+      const hash = `${href}|${src}`;
+      if (!setUnico.has(hash)) {
+        setUnico.add(hash);
+        enlacesValidos.push(a);
+      }
+    }
+  });
+
+  return enlacesValidos;
 }
+
 
 
 
@@ -1473,6 +1486,14 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
     return alert('❌ Ruta no válida para reemplazo');
   }
 
+  // ✅ Carpetas de campañas válidas (puedes extender esta lista)
+  const carpetasValidas = [
+    '/cyberday/emkt/',
+    '/05-mayo/',
+    '/navidad/emkt/',
+    '/aniversario/emkt/',
+    '/liquidades/emkt/'
+  ];
   const imgs = template.content.querySelectorAll('img');
   let contador = 0;
 
@@ -1482,20 +1503,21 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
 
   imgs.forEach(img => {
     const src = img.getAttribute('src');
-    if (!src || !src.includes('/static/envioweb/')) return;
 
-    const matchBase = src.match(/\/\d{2}-[a-z]+\/images\/\d{2}-[a-z]+-/i);
+    // ✅ Validación dinámica: asegurar que incluya "/static/envioweb/2025/[carpeta]/emkt/"
+    const esValida = src && src.includes('/static/envioweb/2025') &&
+      carpetasValidas.some(ruta => src.includes(`/static/envioweb/2025${ruta}`));
+
+    if (!esValida) return;
+
     const matchNumero = src.match(/(\d+\.(png|jpg|jpeg|gif))$/i);
-
-    if (!matchBase || !matchNumero) return;
+    if (!matchNumero) return;
 
     const numeroFinal = matchNumero[1];
     const nuevaRuta = `${dominioHTTPS}/static/envioweb/${nuevaRelativa}${numeroFinal}`;
     img.setAttribute('src', nuevaRuta);
-
     contador++;
 
-    // Si esta imagen es la del enlace actual, actualiza vista previa también
     if (img === imgActual) {
       const preview = document.getElementById('previewImagenInline');
       const input = document.getElementById('imgSrcInput');
@@ -1512,6 +1534,7 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   actualizarVistaPrevia();
   mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`, 'success');
 }
+
 // FIN FUNCION reamplAzado imagenes masivas
 
 
