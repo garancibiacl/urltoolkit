@@ -243,26 +243,24 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
 
 /*SET DE CODIGOS SKU SKUS*/
 /*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedar&iacute;a @SKU_011='0000000' ***/
+
 /*** Fila 1 ***/
+IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='116557023' ENDIF
+IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110055003' ENDIF
+IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110464344' ENDIF
+IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='0' ENDIF
 
-IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='0000000' ENDIF 
-IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='0000000' ENDIF
-IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='0000000' ENDIF
-IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='0000000' ENDIF
-
-/*** Fila 2 ***/ 
-IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='0000000' ENDIF
-IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='0000000' ENDIF
-IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='0000000' ENDIF
-IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='0000000' ENDIF 
+/*** Fila 2 ***/
+IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='110033784' ENDIF
+IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='110080384' ENDIF
+IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='110039802' ENDIF
+IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='0' ENDIF
 
 /*** Fila 3 ***/
-IF SKU_09 < 0 THEN SET @SKU_099='0'  ELSE SET @SKU_099='0000000' ENDIF
-IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='0000000' ENDIF
-IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='0000000' ENDIF
-IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='0000000' ENDIF
-
-
+IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='110355723' ENDIF
+IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='110029642' ENDIF
+IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='110029501' ENDIF
+IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='0' ENDIF
 
 /*EDITABLE*/ /*SET HARDCODE DE SKU*/
 /*** Fila 1 ***/ /* SET @SKU_011='0' */ /* SET @SKU_022='0' */ /* SET @SKU_033='0' */ /* SET @SKU_044='0' */ 
@@ -423,8 +421,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <table width="600" cellspacing="0" cellpadding="0" align="center">
     
                           <tr>
-                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110272625/Plancha-Recubrimiento-AZM150-Zinc-Acanalada-0.35-mm-85.1x366-cm-Gris/110272627?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-0.png" alt="Ir a Carro-de-carga-3-posiciones-aluminio" style="display:block;" border="0"> </a>
+                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10005/Ferreteria-y-construccion?facetSelected=true&f.derived.variant.sellerId=SODIMAC&f.product.brandName=black%2Bdecker%3A%3Adewalt%3A%3Astanley&',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/28-BD-Dewalt-Stanley/images/28-BD-Dewalt-Stanley.gif" alt="Ir a Ferreteria y construccion" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                         </table> 
@@ -432,9 +430,10 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                    
                         <!--- FIN - Vitrina--->
                     
-                    
+                  
                   
                 
+            
                         <!-- Productos Fila 1 -->
                         <!--1 2 3 4-->
 
@@ -498,7 +497,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku1)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku1)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -561,7 +560,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -630,7 +629,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku2)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku2)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -693,7 +692,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -760,7 +759,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku3)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku3)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -823,7 +822,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -853,8 +852,6 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-                       
-                        
 
                         <!--- Productos Fila 2--->
                         <!--5 6 7 8-->
@@ -918,7 +915,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku5)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku5)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -981,7 +978,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1050,7 +1047,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku6)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku6)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -1113,7 +1110,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1180,7 +1177,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku7)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku7)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -1243,7 +1240,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1270,11 +1267,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
                         <!--- Fin Productos Fila 2--->
 
-
-
-                          <!-- Categoria 3 -->
-          
-                     
+                  
 
                         <!--- Productos Fila 3--->
                         <!--9 10 11 12-->
@@ -1338,7 +1331,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku9)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku9)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -1401,7 +1394,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1470,7 +1463,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku10)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku10)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -1533,7 +1526,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1600,7 +1593,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
-                                              <td align="center" style="padding-bottom: 10px;"><a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=v(@urlImagenSku11)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
+                                              <td align="center" style="padding-bottom: 10px;"><a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="%%=v(@urlImagenSku11)=%%" alt="" width="146" style="display:block; border: 0px; width: 100%; max-width: 146px;" border="0"></a></td>
                                             </tr>
                                             <tr>
                                               <td align="center" valign="top">
@@ -1663,7 +1656,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="file:///C|/Users/josmm/OneDrive/Escritorio/EMKT-2025/%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1690,14 +1683,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 3--->
 
 
-                                                
 
-                        <!--- Fin Productos--->
-
-
-                  
-                           
-                        
+                   
   <!-- ***** FOOTER ***** -->
 <!-- HUINCHAS-->
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -1759,6 +1746,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
       <!-- INFO LEGAL PRECIOS -->
 
+
       <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
         <tr>
           <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
@@ -1779,9 +1767,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
           </td>
         </tr>
 
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
-      </tr>  
+
         </table>
       <!-- Fin INFO LEGAL PRECIOS -->
 
