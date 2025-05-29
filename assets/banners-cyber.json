@@ -1,0 +1,15 @@
+[
+    {
+      "nombre": "PAGA MENOS",
+      "href": "https://www.cmrpuntos.cl",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-pagamenos.jpg",
+      "alt": "Paga tus productos con CMR puntos y ahorra en el monto total de tu boleta"
+    },
+    {
+      "nombre": "HERRAMIENTA DE DEMOLICION",
+      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=3599752+1906879+1906852+7318642+761893X&',@prefix))=%%",
+      "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-demolicion.jpg",
+      "alt": "Herramientas de demolición, martillos, cinceles y más"
+    }
+  ]
+  

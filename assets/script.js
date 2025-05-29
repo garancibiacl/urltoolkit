@@ -42,124 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
-
-const template = document.createElement('template');
-template.innerHTML = '';
-document.body.appendChild(template);
-
-let enlacesConPatron = [];
-let indiceActual = 0;
-let originalHtml = '';
-let bloquesAmp = [];
-
-function conservarAmpScript(html) {
-  bloquesAmp = [];
-  return html.replace(/(%%\[.*?%%)/gs, (match) => {
-    const token = `<!--AMP${bloquesAmp.length}-->`;
-    bloquesAmp.push(match);
-    return token;
-  });
-}
-
-function restaurarAmpScript(html) {
-  bloquesAmp.forEach((bloque, i) => {
-    html = html.replace(`<!--AMP${i}-->`, bloque);
-  });
-  return html;
-}
-
-function eliminarEtiquetasTbody() {
-  const tbodys = template.content.querySelectorAll('tbody');
-  tbodys.forEach(tbody => {
-    const parent = tbody.parentNode;
-    while (tbody.firstChild) {
-      parent.insertBefore(tbody.firstChild, tbody);
-    }
-    parent.removeChild(tbody);
-  });
-}
-
-function limpiarClasesVacias() {
-  const elementosConClase = template.content.querySelectorAll('[class]');
-  elementosConClase.forEach(el => {
-    if (el.getAttribute('class').trim() === '') {
-      el.removeAttribute('class');
-    }
-  });
-}
-
-function inyectarEstiloResaltado() {
-  let styleTag = template.content.querySelector('style[data-resaltado]');
-  if (!styleTag) {
-    styleTag = document.createElement('style');
-    styleTag.setAttribute('data-resaltado', '');
-    styleTag.textContent = `.resaltado { outline: 3px solid #ff9800 !important; box-shadow: 0 0 8px #ff9800; }`;
-    template.content.insertBefore(styleTag, template.content.firstChild);
-  }
-}
-
-
-
-
-let ultimaImagenEditada = '';
-let ultimaHrefEditado = '';
-
-function mostrarHrefActual() {
-  const inputImg = document.getElementById('imgSrcInput');
-  const inputHref = document.getElementById('hrefInput');
-  const clearHrefBtn = document.getElementById('clearHrefBtn'); // aún lo tomamos si lo estás usando
-  const enlaceActual = enlacesConPatron[indiceActual];
-  const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
-
-
-  
-
-  // 🔗 Obtener href limpio y mostrar como placeholder
-  const hrefRaw = enlaceActual.getAttribute('href') || '';
-  const hrefExtraido = extraerUrl(hrefRaw);
-  inputHref.value = ''; // dejar el campo vacío
-  inputHref.placeholder = hrefExtraido;
-  ultimaHrefEditado = hrefExtraido;
-
-  // 🔁 Ocultar botón ❌ porque el campo queda vacío
-  if (clearHrefBtn) clearHrefBtn.style.display = 'none';
-
-  // 🏷️ Mostrar descripción/posición actual
-  document.getElementById('estadoEnlace').textContent =
-    `🔗 Url ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
-
-  // 🔲 Resaltado visual del enlace
-  enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
-  enlaceActual.classList.add('resaltado');
-
-  // 🖼️ Obtener imagen asociada y actualizar input + preview
-  const tdContenedor = enlaceActual.closest('td');
-  const img = tdContenedor?.querySelector('img');
-  const src = img?.getAttribute('src') || '';
-
-  
-
-  inputImg.value = src;
-  ultimaImagenEditada = src;
-
-  // 🔍 Mostrar vista previa visual
-  const preview = document.getElementById('previewImagenInline');
-  if (src) {
-    preview.src = src;
-    preview.style.display = 'block';
-  } else {
-    preview.src = '';
-    preview.style.display = 'none';
-  }
-
-  actualizarVistaPrevia();
-}
-
-
  // START CREADOR DE BANNERS MULTPLES
+
 
 
  let bannersJSON = [];
@@ -429,11 +313,127 @@ function mostrarHrefActual() {
    if (box) box.classList.add("d-none");
  }
  
- 
- 
 
  
+
    // FIN CREADOR DE BANNERS MULTPLES
+
+
+
+const template = document.createElement('template');
+template.innerHTML = '';
+document.body.appendChild(template);
+
+let enlacesConPatron = [];
+let indiceActual = 0;
+let originalHtml = '';
+let bloquesAmp = [];
+
+function conservarAmpScript(html) {
+  bloquesAmp = [];
+  return html.replace(/(%%\[.*?%%)/gs, (match) => {
+    const token = `<!--AMP${bloquesAmp.length}-->`;
+    bloquesAmp.push(match);
+    return token;
+  });
+}
+
+function restaurarAmpScript(html) {
+  bloquesAmp.forEach((bloque, i) => {
+    html = html.replace(`<!--AMP${i}-->`, bloque);
+  });
+  return html;
+}
+
+function eliminarEtiquetasTbody() {
+  const tbodys = template.content.querySelectorAll('tbody');
+  tbodys.forEach(tbody => {
+    const parent = tbody.parentNode;
+    while (tbody.firstChild) {
+      parent.insertBefore(tbody.firstChild, tbody);
+    }
+    parent.removeChild(tbody);
+  });
+}
+
+function limpiarClasesVacias() {
+  const elementosConClase = template.content.querySelectorAll('[class]');
+  elementosConClase.forEach(el => {
+    if (el.getAttribute('class').trim() === '') {
+      el.removeAttribute('class');
+    }
+  });
+}
+
+function inyectarEstiloResaltado() {
+  let styleTag = template.content.querySelector('style[data-resaltado]');
+  if (!styleTag) {
+    styleTag = document.createElement('style');
+    styleTag.setAttribute('data-resaltado', '');
+    styleTag.textContent = `.resaltado { outline: 3px solid #ff9800 !important; box-shadow: 0 0 8px #ff9800; }`;
+    template.content.insertBefore(styleTag, template.content.firstChild);
+  }
+}
+
+
+
+
+let ultimaImagenEditada = '';
+let ultimaHrefEditado = '';
+
+function mostrarHrefActual() {
+  const inputImg = document.getElementById('imgSrcInput');
+  const inputHref = document.getElementById('hrefInput');
+  const clearHrefBtn = document.getElementById('clearHrefBtn'); // aún lo tomamos si lo estás usando
+  const enlaceActual = enlacesConPatron[indiceActual];
+  const descripcion = descripcionesEnlaces[indiceActual] || 'Sin descripción';
+
+
+  
+
+  // 🔗 Obtener href limpio y mostrar como placeholder
+  const hrefRaw = enlaceActual.getAttribute('href') || '';
+  const hrefExtraido = extraerUrl(hrefRaw);
+  inputHref.value = ''; // dejar el campo vacío
+  inputHref.placeholder = hrefExtraido;
+  ultimaHrefEditado = hrefExtraido;
+
+  // 🔁 Ocultar botón ❌ porque el campo queda vacío
+  if (clearHrefBtn) clearHrefBtn.style.display = 'none';
+
+  // 🏷️ Mostrar descripción/posición actual
+  document.getElementById('estadoEnlace').textContent =
+    `🔗 Url ${indiceActual + 1} de ${enlacesConPatron.length} (${descripcion})`;
+
+  // 🔲 Resaltado visual del enlace
+  enlacesConPatron.forEach(el => el.classList.remove('resaltado'));
+  enlaceActual.classList.add('resaltado');
+
+  // 🖼️ Obtener imagen asociada y actualizar input + preview
+  const tdContenedor = enlaceActual.closest('td');
+  const img = tdContenedor?.querySelector('img');
+  const src = img?.getAttribute('src') || '';
+
+  
+
+  inputImg.value = src;
+  ultimaImagenEditada = src;
+
+  // 🔍 Mostrar vista previa visual
+  const preview = document.getElementById('previewImagenInline');
+  if (src) {
+    preview.src = src;
+    preview.style.display = 'block';
+  } else {
+    preview.src = '';
+    preview.style.display = 'none';
+  }
+
+  actualizarVistaPrevia();
+}
+
+
+
 
 
 function obtenerEnlacesFiltrados() {
@@ -804,10 +804,10 @@ document.getElementById('anteriorBtn').addEventListener('click', () => {
 
  // START BANNER DETECTADOS
 
- async function cargarBannersJson() {
+ /*async function cargarBannersJson() {
   const response = await fetch('assets/banners.json');
   return await response.json();
-}
+}*/
 
 
 function detectarBanners() {
