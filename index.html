@@ -11,6 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.boxicons.com/fonts/basic/boxicons.min.css" rel="stylesheet">
   <link href="https://cdn.boxicons.com/fonts/transformations.min.css" rel="stylesheet">
+  <link href="https://cdn.boxicons.com/fonts/transformations.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/{toggle name}.min.css">
   
@@ -93,7 +94,7 @@
 
 
   <!-- Vista 1: Editor de URLs -->
-  <div class="container-fluid py-4">
+  <div class="container-fluid">
   
     <div class="row justify-content-center  ">
       <div class="col-md-9  py-4 p-5 ">
@@ -147,9 +148,8 @@
 </div>
 
           <textarea id="htmlInput" rows="5" class="form-control text-success " placeholder="Pega aquí el código HTML..."></textarea>
-          <button id="cargarBtn" class="btn btn-light mt-3 w-100">Procesar HTML</button>
-        </div>
-    
+          <button id="cargarBtn" class="btn btn-light mt-3 w-100 d-flex justify-content-center gap-1 align-items-xl-center"><i class="bx bx-plus bx-xs"></i> Agregar HTML</button>
+        </div> 
         <div class="col-md-4 bg-body p-4 rounded-4">
           <label class="form-label fw-semibold text-body-secondary">🔍 Vista previa de tabla (iframe):</label>
           <div class="position-relative border rounded shadow-sm overflow-auto bg-body-secondary" style="padding: 0.5rem; height: 400px;">
@@ -209,11 +209,9 @@
       <!-- El input estará vacío, y el placeholder mostrará la URL -->
       <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/...">
     
-      <button id="anteriorBtn" class="btn btn-outline-secondary" type="button">⏮ Anterior</button>
-      <button id="siguienteBtn" class="btn btn-outline-secondary" type="button">⏭ Siguiente</button>
+      <button id="anteriorBtn" class="btn btn-outline-secondary d-flex" type="button"><i class="bx bx-arrow-left-stroke bx-sm"></i> Anterior</button>
+      <button id="siguienteBtn" class="btn btn-outline-secondary d-flex" type="button">Siguiente<i class="bx bx-arrow-right-stroke bx-sm"></i> </button>
     </div>
-    
-    
 
   <div class=" col-md-12 ">
 
@@ -246,21 +244,19 @@
             <div class="row align-items-center">
               <!-- Columna izquierda: input -->
               <div class="col-md-6">
-                <button onclick="limpiarCamposUrl()" class="btn btn-outline-primary btn-circle mt-3 me-2">
-                  🧹 Limpiar Campos
+                <button onclick="limpiarCamposUrl()" class="btn btn-outline-light mt-3 mb-3 ms-2 d-flex gap-2">
+                  <i class="bx bx-brush bx-sm"></i> Limpiar todo
                 </button>
 
 
 
-                <button class="btn btn-primary my-3" onclick="detectarBanners()">🔍 Ver banners detectados</button>
                 </div>
                       <!-- Columna derecha: Botón copiar HTML -->
                       <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 gap-3">
-                        <button id="copiarHtmlBtn" class="btn btn-warning d-none">📋 Copiar HTML limpio</button>
-                      <button class="btn btn-primary" onclick="aplicarCambioHref('hrefInput')">Guardar Cambios</button>
-
+                        <button id="copiarHtmlBtn" class="btn btn-light d-flex align-items-md-center gap-1 d-none"><i class="bx bx-paste bx-sm"></i> Copiar HTML</button>
+                      <button class="btn btn-primary d-flex gap-1" onclick="aplicarCambioHref('hrefInput')"><i class="bx bx-save bx-sm"></i> Guardar Cambios</button>
+                    
                       </div>
-
                          </div>
             
             </div>
@@ -441,77 +437,79 @@
  <!-- Vista Crear banner-->
 
         <div id="vistaCrearBanner">
-             <!-- HTML -->
-             <div class="container">
-              <div class="row">
-          <div class="col-10">
-              <h1 class="mb-4">🔍 Buscar Banner y Generar HTML </h1>
+          <div class="container">
+            <div class="row glass-card">
+        <div class="col-10">
+            <h2 class="mb-4">🔍 Buscar Banner y Generar HTML </h2>
+          </div>
+            <div class="col-2">
+            <button onclick="limpiarCamposBanner()" class="btn btn-outline-light mt-3 mb-3 ms-2 d-flex gap-2">
+              <i class="bx bx-brush bx-sm"></i> Limpiar todo
+            </button> 
             </div>
-              <div class="col-2">
-              <button onclick="limpiarCamposBanner()" class="btn btn-outline-light mt-3 mb-3 ms-2 d-flex gap-2">
-                <i class="bx bx-brush bx-sm"></i> Limpiar todo
-              </button> 
-              </div>
+          </div>
+          <br>
+            <div class="row glass-card p-4">
+        
+        
+          <div class="col-12">
+            <div class="position-relative mb-4">
+                     <div class="input-group flex-nowrap">
+                      <span class="input-group-text d-flex gap-1" id="addon-wrapping">
+                        <i class="bx bx-search-big bx-xs"></i>Buscar Banner</span>
+        
+                   
+                      <input type="text" class="form-control" id="buscarBanner" placeholder="Escribe nombre de banner Ej. Banner Cyber..." aria-label="Username" aria-describedby="addon-wrapping" oninput="sugerenciasBannerSimple(this.value); activarBotonLimpiar()"
+                      onclick="activarBotonLimpiar()">
+                    </div>
+            
+              <button id="btnClearInput"
+                      class="btn btn-sm  position-absolute top-50 end-0  translate-middle-y me-2 d-none"
+                      onclick="limpiarInputBuscar()" type="button">❌</button>
+            
+              <div id="sugerencias-banner" class="suggestion-box d-none"></div>
             </div>
-            <br>
-              <div class="row bg-secondary p-4 rounded">
-                <div class="col-4">
+            
+            <div class="col-4">
               <div class="mb-3">
           
-                <div class="input-group mb-3 d-none">
-                  <label class="input-group-text" for="inputGroupSelect01">Selecciona Cantidad:</label>
-                  <select class="form-select" onchange="actualizarCantidad(this)">
-                    <option selected>banners...</option>
-                    <option value="1">1 Banner</option>
-                    <option value="2">2 Banners</option>
-                    <option value="3">3 Banners</option>
-                  </select>
-                </div>
-                <p id="contadorBanners" class="mt-2 d-none">0 de 1 banners agregados</p>
-              </div>
-            </div>
           
-            <div class="col-12">
-              <div class="position-relative mb-4">
-                       <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">
-                          <i class="bx bx-search-big bx-sm"></i>Buscar Banner</span>
-          
-                     
-                        <input type="text" class="form-control" id="buscarBanner" placeholder="Escribe nombre de banner..." aria-label="Username" aria-describedby="addon-wrapping" oninput="sugerenciasBannerSimple(this.value); activarBotonLimpiar()"
-                        onclick="activarBotonLimpiar()">
-                      </div>
-              
-                <button id="btnClearInput"
-                        class="btn btn-sm  position-absolute top-50 end-0  translate-middle-y me-2 d-none"
-                        onclick="limpiarInputBuscar()" type="button">❌</button>
-              
-                <div id="sugerencias-banner" class="suggestion-box d-none"></div>
-              </div>
-              
-          
-          
-            </div>
              
-              <div class="col-8">
-              <div class="card card-dark">
-                <div class="card-body">
-                  <h5 class="card-title d-flex gap-2"><i class="bx bx-picture-in-picture-close bx-sm"></i> Vista previa</h5>
-                  <div id="previewHTML" class="border p-3 bg-dark-subtle mb-3 pt-3 rounded"></div>
-                </div>
+                
+                <span id="contadorBanners" class="glass-badge px-3 py-2 rounded-pill">
+                  0 banners agregados 🎯
+                </span>
               </div>
             </div>
+        
+          </div>
+        
           
-            <div class="col-4 card card-dark">
-          
-              <h5 class="card-title mt-3 d-flex gap-2"><i class="bx bx-clipboard-code bx-sm"></i>Código HTML AMPscript:</h5>
-              <textarea id="codigoGenerado" class="form-control" rows="8" readonly></textarea>
-              <button onclick="copiarCodigo()" class="btn btn-primary mt-3 mb-3 d-flex justify-content-center gap-2"><i class="bx bx-copy bx-sm"></i>Copiar HTML</button>
-          
+           
+            <div class="col-8">
+            <div class="card card-dark">
+              <div class="card-body">
+                <h5 class="card-title d-flex gap-2"><i class="bx bx-picture-in-picture-close bx-sm"></i> Vista previa</h5>
+                <div id="previewHTML" class="preview-scroll bg-dark text-white rounded-4 p-4 d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
+                  <i class="bx bx-image-alt" style="font-size: 4rem; opacity: 0.3;"></i>
+                  <p class="mt-2 mb-0 text-white-50">Esperando selección...</p>
+                </div>
+                
+                
+              </div>
             </div>
-          
-            </div>
-            </div>
+          </div>
+        
+          <div class="col-4 card card-dark">
+        
+            <h5 class="card-title mt-3 d-flex gap-2"><i class="bx bx-clipboard-code bx-sm"></i>Código HTML AMPscript:</h5>
+            <textarea id="codigoGenerado" class="form-control" rows="8" readonly></textarea>
+            <button onclick="copiarCodigo()" class="btn btn-light mt-3 mb-3 d-flex justify-content-center gap-2"><i class="bx bx-copy bx-sm"></i>Copiar HTML</button>
+        
+          </div>
+        
+          </div>
+          </div>
         </div>
 
 
