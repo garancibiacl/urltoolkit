@@ -169,6 +169,11 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
           Variable.SetValue("@rating" + bloqueSku, product['rating'] || '');
           Variable.SetValue("@oportunidadUnica" + bloqueSku, product['prices'] ? product['prices'][0]['opportunidadUnica'] : '');
           Variable.SetValue("@oportunidadCyber" + bloqueSku, product['badges'] ? product['badges'][0]['label'] : '');
+var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
+          if (oportunidadCyber === "Cyber Day") {
+            oportunidadCyber = "Cyber Day";
+          }
+          Variable.SetValue("@oportunidadCyber" + bloqueSku, oportunidadCyber);
 
           var precioNormal = '', precioOferta = '', precioAhorro = '', p_ahorro = 0;
 
@@ -247,21 +252,21 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
 /*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedaría @SKU_011='0000000' ***/
 
 /*** Fila 1 ***/
-IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110055221' ENDIF
-IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110150283' ENDIF
-IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110133061' ENDIF
+IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110132535' ENDIF
+IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110132731' ENDIF
+IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110178605' ENDIF
 IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='0' ENDIF
 
 /*** Fila 2 ***/
-IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='110415578' ENDIF
-IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='110320092' ENDIF
-IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='110272627' ENDIF
-IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='0' ENDIF
+IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='139259672' ENDIF
+IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='143082797' ENDIF
+IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='143104616' ENDIF
+IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='143104615' ENDIF
 
 /*** Fila 3 ***/
-IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='110189964' ENDIF
-IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='110413431' ENDIF
-IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='110003082' ENDIF
+IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='113220732' ENDIF
+IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='129684300' ENDIF
+IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='137117935' ENDIF
 IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='0' ENDIF
 
 
@@ -425,19 +430,17 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <table width="600" cellspacing="0" cellpadding="0" align="center">
       
                           <tr>
-                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110043722/Generador-Electrico-a-Gasolina-Partida-Electrica-6000-W-25-l/110043727?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/26-emkt-lluvias/images/26-emkt-lluvias-0.png" alt="Ir a Generador-Electrico-a-Gasolina-Partida-Electrica-6000-W-25-l" style="display:block;" border="0"> </a>
+                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110220924/Pasta-para-muro-de-interior-25-kg/110220928?exp=so_com?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-0.jpg" alt="Ir a Pasta-para-muro-de-interior-25-kg" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
 
-                       
-
+                    
                         </table> 
                       <!--- FIN - Vitrina--->
                     
-                      
-                  
-               
+                 
+                 
               
                         <!-- Productos Fila 1 -->
                         <!--1 2 3 4-->
@@ -855,6 +858,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!-- FIN - Productos Fila 1 -->
 
 
+                
         
 
                         <!--- Productos Fila 2--->
@@ -1273,7 +1277,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-            
+                 
+                
                       
 
                         <!--- Productos Fila 3--->
@@ -1692,104 +1697,118 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-             
-
-                   
-
-                       
+                  
      <!--- END COMPLEMENTARIAS--->
 
-           <!-- ***** FOOTER ***** -->
-              <!--- SCOM --->
-              <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
-                <tr>
-                  <td style="font-size: 0px; line-height: 0px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/sod-ban.png?v01" alt="ir a sodimac.com" width="600" height="70" style="display:block; " border="0"></a></td>
-                </tr>
-              </table>
-              <!---FIN - SCOM --->
-              <!--- Venta Telefónica y whatssap --->
-              <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
-                <tr>
-                  <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/telf-link2.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
-                  <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56940627836" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/wsp-link2.png" alt="Whatssap" width="300" height="21" style="display:block; " border="0"></a></td>
-                </tr>
-              </table>
-              <!--- FIN - Venta Telefónica y whatssap --->
 
 
+    
+<!-- ***** FOOTER ***** -->
+<!-- HUINCHAS-->
+<table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/satisfaccion-garantizada?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/satisfaccion-ban2.png" alt="Satisfacción garantizada" width="204" height="185" style="display:block;" border="0"> </a></td>
+      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/carbono-neutral?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/carbono-ban2.png" alt="Carbono neutral" width="193" height="185" style="display:block;" border="0"> </a></td>
+      <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/descarga-ban2.png" alt="Descarga nuestra app" width="203" height="185" style="display:block;" border="0"> </a></td>
+    </tr>
+  </table>
+  
+  <!-- FIN - HUINCHAS --> 
+  <!--- SCOM --->
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td style="font-size: 0px; line-height: 0px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/sod-ban.png?v01" alt="ir a sodimac.com" width="600" height="70" style="display:block; " border="0"></a></td>
+    </tr>
+  </table>
+  <!---FIN - SCOM --->
+  <!--- Venta Telefónica y whatssap --->              
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/telf-link2.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56940627836" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/wsp-link2.png" alt="Whatssap" width="300" height="21" style="display:block; " border="0"></a></td>
+    </tr>
+  </table>
+  <!--- FIN - Venta Telefónica y whatssap --->  
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
+    </tr>
+  </table>
+  <!--- RRSS --->
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2" class="">
+    <tr>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank2.png" alt="blank rrss 2" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.instagram.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/instagram-icon.png" alt="instagram constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank3.png" alt="blank rrss 3" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://twitter.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/x-icon.png" alt="Twitter sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank4.png" alt="blank rrss 4" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.pinterest.es/homecentercl/_created/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/pinterest-icon.png" alt="Pinterest sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5.png" alt="blank rrss 5" width="29" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.tiktok.com/@sodimac.cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/tiktok-icon.png" alt="Tik Tok" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5-18.png" alt="blank rrss 6" width="30" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.youtube.com/user/lacasadechile" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/yt-icon.png" alt="Youtube constructor" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank6.png" alt="blank rrss 7" width="111" height="42" style="display:block" border="0"></td>
+    </tr>
+  </table>
+  <!--- FIN - RRSS --->
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+    <tr>
+      <td align="center"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/cierreblank.png" alt="blank cierre" width="600" height="26" style="display:block;" border="0"></td>
+    </tr>
+  </table>
+  
+  <!--- ---> 
+  <!-- ***** FIN - FOOTER ***** --> 
+  <!--- ---> 
 
+        <!-- INFO LEGAL PRECIOS -->
 
-
-              <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
-                <tr>
-                  <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
-                </tr>
-              </table>
-
-
-
-              <!--- RRSS --->
-              <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2" class="">
-                <tr>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a>
-                  </td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank2.png" alt="blank rrss 2" width="28" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://www.instagram.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/instagram-icon.png" alt="instagram constructor" width="40" height="42" style="display:block" border="0"> </a></td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank3.png" alt="blank rrss 3" width="28" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://twitter.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/x-icon.png" alt="Twitter sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank4.png" alt="blank rrss 4" width="28" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://www.pinterest.es/homecentercl/_created/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/pinterest-icon.png" alt="Pinterest sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5.png" alt="blank rrss 5" width="29" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://www.tiktok.com/@sodimac.cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/tiktok-icon.png" alt="Tik Tok" width="38" height="42" style="display:block" border="0"> </a></td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5-18.png" alt="blank rrss 6" width="30" height="42" style="display:block" border="0"></td>
-                  <td><a href="https://www.youtube.com/user/lacasadechile" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/yt-icon.png" alt="Youtube constructor" width="38" height="42" style="display:block" border="0"> </a></td>
-                  <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank6.png" alt="blank rrss 7" width="111" height="42" style="display:block" border="0"></td>
-                </tr>
-              </table>
-              <!--- FIN - RRSS --->
-              <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
-                <tr>
-                  <td align="center"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/cierreblank.png" alt="blank cierre" width="600" height="26" style="display:block;" border="0"></td>
-                </tr>
-              </table>
-
-
-              <!-- ***** FIN - FOOTER ***** -->
-
-                     <!-- INFO LEGAL PRECIOS -->
-
-                     <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
-                        <tr>
-                          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
-                            *Precio referencial Regi&oacute;n Metropolitana. Este correo
-                            muestra precios de nuestras tiendas en la Regi&oacute;n
-                            Metropolitana, nuestros precios son siempre bajos. Su
-                            vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
-                            condiciones
-                            de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
-                            de retiro. Productos y promociones v&aacute;lidas
-                            seg&uacute;n disponibilidad, para clientes y consumidores
-                            finales; aplica exclusivamente para consumo familiar,
-                            excluyendo expl&iacute;citamente ventas mayoristas o ventas
-                            a precio distinto respecto del precio normal de tienda.
-                            Bases y condiciones protocolizadas ante notario,
-                            inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
-                          
-                          </td>
-                        </tr>
-              
-                        <tr>
-                          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
-                      </tr>  
-                        </table>
-          <!-- Fin INFO LEGAL PRECIOS -->
-
-
+   
+        <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
+          <tr>
+            <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
+              *Precio referencial Regi&oacute;n Metropolitana. Este correo
+              muestra precios de nuestras tiendas en la Regi&oacute;n
+              Metropolitana, nuestros precios son siempre bajos. Su
+              vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
+              condiciones
+              de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
+              de retiro. Productos y promociones v&aacute;lidas
+              seg&uacute;n disponibilidad, para clientes y consumidores
+              finales; aplica exclusivamente para consumo familiar,
+              excluyendo expl&iacute;citamente ventas mayoristas o ventas
+              a precio distinto respecto del precio normal de tienda.
+              Bases y condiciones protocolizadas ante notario,
+              inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
+            
             </td>
           </tr>
-        </table>
-      </custom>
-    </td>
-  </tr>
-</table>
+
+          <tr>
+            <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
+        </tr>  
+          </table>
+        <!-- Fin INFO LEGAL PRECIOS -->
+
+
+                %%[ IF NOT EMPTY(TOTAL_PUNTOS_CMR) and TOTAL_PUNTOS_CMR > 0 and NOT
+                EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
+                <table cellpadding="0" cellspacing="0" align="center" width="600">
+                  <tr>
+                    <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
+                      <b>T&eacute;rminos y condiciones CMR Puntos.</b> Stock y
+                      Categor&iacute;a de CMR Puntos informada en correo
+                      electr&oacute;nico.
+                    </td>
+                  </tr>
+                </table>
+                %%[ ENDIF ]%%
+              </td>
+            </tr>
+          </table>
+        </custom>
+      </td>
+    </tr>
+  </table>

@@ -167,6 +167,11 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
           Variable.SetValue("@rating" + bloqueSku, product['rating'] || '');
           Variable.SetValue("@oportunidadUnica" + bloqueSku, product['prices'] ? product['prices'][0]['opportunidadUnica'] : '');
           Variable.SetValue("@oportunidadCyber" + bloqueSku, product['badges'] ? product['badges'][0]['label'] : '');
+var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
+          if (oportunidadCyber === "Cyber Day") {
+            oportunidadCyber = "Cyber Day";
+          }
+          Variable.SetValue("@oportunidadCyber" + bloqueSku, oportunidadCyber);
 
           var precioNormal = '', precioOferta = '', precioAhorro = '', p_ahorro = 0;
 
@@ -428,7 +433,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110272625/Plancha-Recubrimiento-AZM150-Zinc-Acanalada-0.35-mm-85.1x366-cm-Gris/110272627?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-0.png" alt="Ir a Carro-de-carga-3-posiciones-aluminio" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-0.jpg" alt="Ir a Carro-de-carga-3-posiciones-aluminio" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                         </table> 
@@ -441,7 +446,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                 
                         <tr>
                           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10945/Planchas-de-zinc?',@prefix))=%%" target="_blank"> 
-                            <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-1.png" alt="Ir a Planchas de zinc" style="display:block;" border="0"> </a>
+                            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-1.png" alt="Ir a Planchas de zinc" style="display:block;" border="0"> </a>
                           </td>
                         </tr>
                         
@@ -872,7 +877,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                   
                             <tr>
                                 <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10921/Volcanita---Yeso-Carton?',@prefix))=%%" target="_blank"> 
-                                  <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-2.png" alt="Ir a Volcanita Yeso Carton" style="display:block;" border="0"> </a>
+                                  <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-2.png" alt="Ir a Volcanita Yeso Carton" style="display:block;" border="0"> </a>
                                 </td>
                               </tr>
           
@@ -1301,7 +1306,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                   
                             <tr>
                                 <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10920/Plancha-de-Internit-y-Fibrocemento?',@prefix))=%%" target="_blank"> 
-                                  <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-3.png" alt="Ir a Plancha de Internit y Fibrocemento" style="display:block;" border="0"> </a>
+                                  <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-3.png" alt="Ir a Plancha de Internit y Fibrocemento" style="display:block;" border="0"> </a>
                                 </td>
                               </tr>
   
@@ -1729,7 +1734,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                   
         <tr>
             <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10941/Canaleta-de-Agua-y-Accesorios?',@prefix))=%%" target="_blank"> 
-              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-4.png" alt="Ir a Canaleta de Agua y Accesorios" style="display:block;" border="0"> </a>
+              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-4.png" alt="Ir a Canaleta de Agua y Accesorios" style="display:block;" border="0"> </a>
             </td>
           </tr>
 
@@ -2153,7 +2158,6 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 4--->
                         <!--- Fin Productos--->
 
-
                   
                                       <!--- Complementarias--->
 
@@ -2162,15 +2166,15 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                   
                           <tr>
                             <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10944/Teja-Asfaltica?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-5.png" alt="Ir a Teja Asfaltica" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-5.jpg" alt="Ir a Teja Asfaltica" style="display:block;" border="0"> </a>
                             </td>
 
                             <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10951/Polietileno-y-Poliestireno?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-6.png" alt="Ir a Polietileno y Poliestireno" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-6.jpg" alt="Ir a Polietileno y Poliestireno" style="display:block;" border="0"> </a>
                             </td>
 
                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10949/Lana-Poliester?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/19-fierro/images/19-fierro-7.png" alt="Ir a Lana Poliester" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-7.jpg" alt="Ir a Lana Poliester" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                           

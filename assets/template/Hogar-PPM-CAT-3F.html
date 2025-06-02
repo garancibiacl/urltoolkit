@@ -3,9 +3,9 @@
 
 /*********************************** Seccion Variables Adobe ************************************/
 
-set @negocio = 'CO' /*CO HC*/
+set @negocio = 'HC' /*CO HC*/
 set @canal = 'EMAIL' /*CANAL PUSH WA SMS EMAIL GEOPUSH*/
-set @tipo = 'PPM' /*PPA PPM CAT INFO PDP XLP PAGE GF BEACON*/
+set @tipo = 'PPA' /*PPA PPM CAT INFO PDP XLP PAGE GF BEACON*/
 
 set @prefix  = concat('eid=666_NEGOCIO=',@negocio,'_CANAL=',@canal,'_TIPO=',@tipo,'_PROCESO_ID=',proceso_id)                     
 
@@ -32,7 +32,7 @@ concat('
       <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/ic_cmrpuntos.png"
         alt="Cliente sin puntos cmr" width="30" height="17" border="0"> Si a&uacute;n no participa del Programa
       CMR Puntos, inscr&iacute;base aqu&iacute; <a
-        href="https://www.falabella.com/falabella-cl/page/cmr-puntos-ayuda?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/cmr-puntos-ayuda?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/arrow-right.png"
           alt="Ir a programa cmr puntos" style="position: absolute; padding-top: 3px;"> </a>
     </td>
@@ -60,7 +60,7 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 16px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-elite.png"
           alt="CMR Puntos" width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
   </tr>
@@ -86,7 +86,7 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 15px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left" width="7%"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img
           src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-premium.png" alt="CMR Puntos"
           width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
@@ -113,14 +113,16 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 16px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left" width="10%"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-fan.png"
           alt="CMR Puntos" width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
   </tr>
 </table>
 ')
 
+
 ENDIF
+
 
 /*********************************** Fin Seccion Huincha CMR ************************************/
 
@@ -155,7 +157,7 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
           var bloqueSku = i + 1;
           var sku = skus[i];
           var product = skuMap[sku] || {};
-        
+         
           Variable.SetValue("@success" + bloqueSku, json.success);
           Variable.SetValue("@published" + bloqueSku, product.published || '');
           Variable.SetValue("@id" + bloqueSku, product['id'] || '');
@@ -247,25 +249,27 @@ var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
 /**********************************************************************************************************************/
 
 /*SET DE CODIGOS SKU SKUS*/
-/*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedar&iacute;a @SKU_011='0000000' ***/
+/*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedaría @SKU_011='0000000' ***/
 
 /*** Fila 1 ***/
-IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110240832' ENDIF
-IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110244827' ENDIF
-IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110232808' ENDIF
-IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='110245354' ENDIF
+IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110132535' ENDIF
+IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110132731' ENDIF
+IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110178605' ENDIF
+IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='0' ENDIF
 
 /*** Fila 2 ***/
-IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='138869473' ENDIF
-IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='140087471' ENDIF
-IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='140088143' ENDIF
-IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='138869516' ENDIF
+IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='139259672' ENDIF
+IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='143082797' ENDIF
+IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='143104616' ENDIF
+IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='143104615' ENDIF
 
 /*** Fila 3 ***/
-IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='140324995' ENDIF
-IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='115579780' ENDIF
-IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='110259633' ENDIF
+IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='113220732' ENDIF
+IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='129684300' ENDIF
+IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='137117935' ENDIF
 IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='0' ENDIF
+
+
 
 
 /*EDITABLE*/ /*SET HARDCODE DE SKU*/
@@ -274,7 +278,7 @@ IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='0' ENDIF
 /*** Fila 3 ***/ /* SET @SKU_099='0' */ /* SET @SKU_0110='0' */ /* SET @SKU_0111='0' */ /* SET @SKU_0112='0' */
 /*** Fila 4 ***/ /* SET @SKU_0113='0' */ /* SET @SKU_0114='0' */ /* SET @SKU_0115='0' */ /* SET @SKU_0116='0' */ /*NO EDITAR*/ /*SET REQUEST API FALABELLA*/ 
   
-SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/cl?ids='
+   SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/cl?ids='
   ,@SKU_011,','
   ,@SKU_022,','
   ,@SKU_033,','
@@ -293,14 +297,14 @@ SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/c
   ,@SKU_0116
   ,'&site=so_com')
 
-
+ 
   /**********************************************************************************************************************/
   /******************************************* FIN SECCION PARA DEFINIR LOS SKU
   *****************************************/
   /**********************************************************************************************************************/
 
   ]%%
-<script runat="server" language="javascript">
+  <script runat="server" language="javascript">
     Platform.Load("Core", "1");
   
     function getHttpProducto(v_request) {
@@ -335,25 +339,25 @@ SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/c
   
   </script>
 
-          <!--HUINCHAS CMR DINAMICAS-->
-          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sbgMail">
-            <tr>
-              <td align="center" class="cuerpoMail" style="padding-top: 8px;"><!--FIN HUINCHAS DINAMICAS-->
+  <!--HUINCHAS CMR DINAMICAS-->
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sbgMail">
+    <tr>
+      <td align="center" class="cuerpoMail" style="padding-top: 8px;"><!--FIN HUINCHAS DINAMICAS-->
 
-                <custom name="opencounter" type="tracking">
-                  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-                  <meta name="viewport" content="width=device-width">
-                  <title>Sodimac</title>
+        <custom name="opencounter" type="tracking">
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+          <meta name="viewport" content="width=device-width">
+          <title>Sodimac</title>
 
-                  <!-- Custom Logo -->
+          <!-- Custom Logo -->
 
-                  <div itemscope="" itemtype="http://schema.org/Organization">
-                    <meta itemprop="name" content="Sodimac">
-                    <meta itemprop="logo" content="https://www.sodimac.cl/static/envioweb/2019/shared/logo-sodimac-avatar.png">
-                    <meta name="color-scheme" content="light dark">
-                    <meta name="supported-color-schemes" content="light dark">
-                  </div>
-              
+          <div itemscope="" itemtype="http://schema.org/Organization">
+            <meta itemprop="name" content="Sodimac">
+            <meta itemprop="logo" content="https://www.sodimac.cl/static/envioweb/2019/shared/logo-sodimac-avatar.png">
+            <meta name="color-scheme" content="light dark">
+            <meta name="supported-color-schemes" content="light dark">
+          </div>
+          
 
                   <!--FIN HUINCHAS DINAMICAS-->
 
@@ -407,38 +411,49 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 %%=v(@content_loyalty_cmr)=%%
 %%[ ENDIF ]%%
                   <!-- HEADER-->
-                  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#f8f8f8" style="font-family: sans-serif;">
-                    <tr>
-                      <td style="font-family:Helvetica, sans-serif;font-size:14px;" valign="top" align="center">
-                        <table width="600" cellspacing="0" cellpadding="0" align="center" style="  display:block; background-color:#000000; " bgcolor="#000000">
-                          <tr>
-                            <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?',@prefix))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/logo-pro-header.png" alt="Ir a Todo Constructor" width="257" height="68" style="display:block; margin:auto;" title="Sodimac"> </a></td>
-                            <td align="center"><a href="https://api.whatsapp.com/send?phone=56935328223" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wsp-pro-header.png" alt="Compra telefónica" width="169" height="68" class="width100" style="display:block; margin:auto; border:none; " title="venta telefónica a través del 600 600 1230"> </a></td>
-                            <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/app-pro-header.png" alt="Descargue nuestra app Sodimac desde Google Play" width="174" height="68" style="display:block; margin:auto; border:none; " title="Sodimac"> </a></td>
-                          </tr>
-                        </table>
+                  <table cellpaddixng="0" style="border:solid #CCC 0px; font-family: sans-serif;" cellspacing="0" align="center" bgcolor="#f8f8f8">
+                  <tr>
+                    <td style="font-family:Helvetica, sans-serif;font-size:14px;" width="600" valign="top" align="center">
+                      <table style=" display:block;" width="600" cellspacing="0" cellpadding="0" align="center">
+                        <tr>
+                            <td><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/logo-header.png" alt="sodimac.com" width="258" height="70" style="display:block;  " border="0"> </a></td>
+                            <td><a href="https://api.whatsapp.com/send?phone=56935328223" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/wsp-header.png" alt="Descarga nuestra app en AppStore y Google Play" width="169" height="70" style="display:block; width: 100%; " border="0"> </a></td>
+                            <td><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/descarga-header.png" alt="Descarga nuestra app en AppStore y Google Play" width="173" height="70" style="display:block; width: 100%; " border="0"> </a></td>
+                        </tr>
+                      </table>
 
-                        <!-- Fin HEADER-->
+              <!-- Fin HEADER-->
 
-                        <!---Start Body--->
-                        
-                
-                        <!---Start Vitrina--->
+                        <!---START Vitrina--->
+
+
                         <table width="600" cellspacing="0" cellpadding="0" align="center">
-    
+      
                           <tr>
-                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110272625/Plancha-Recubrimiento-AZM150-Zinc-Acanalada-0.35-mm-85.1x366-cm-Gris/110272627?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-0.jpg" alt="Ir a Carro-de-carga-3-posiciones-aluminio" style="display:block;" border="0"> </a>
+                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110220924/Pasta-para-muro-de-interior-25-kg/110220928?exp=so_com?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-0.jpg" alt="Ir a Pasta-para-muro-de-interior-25-kg" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
-                        </table> 
 
-                   
-                        <!--- FIN - Vitrina--->
                     
-                   
+                        </table> 
+                      <!--- FIN - Vitrina--->
+                    
+                 
+                     <!-- Categoria 1 -->
+
+                     <table width="600" cellspacing="0" cellpadding="0" align="center">
                   
-                
+                      <tr>
+                        <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10841/Pintura-para-interior?',@prefix))=%%" target="_blank"> 
+                          <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-1.png" alt="Ir a Pintura-para-interior" style="display:block;" border="0"> </a>
+                        </td>
+                      </tr>
+              
+                    </table> 
+              
+               
+              
                         <!-- Productos Fila 1 -->
                         <!--1 2 3 4-->
 
@@ -526,7 +541,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -565,7 +580,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -658,7 +673,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -697,7 +712,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -788,7 +803,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -827,7 +842,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -855,9 +870,19 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!-- FIN - Productos Fila 1 -->
 
 
+                 <!-- Categoria 2 -->
+            
+                 <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                  <tr>
+                      <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10842/Pinturas-especiales-y-por-material?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
+                        <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-2.png" alt="Ir a Pinturas-especiales-y-por-material" style="display:block;" border="0"> </a>
+                      </td>
+                    </tr>
 
+              </table> 
 
-                      
+        
 
                         <!--- Productos Fila 2--->
                         <!--5 6 7 8-->
@@ -945,7 +970,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -984,7 +1009,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1077,7 +1102,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1116,7 +1141,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1207,7 +1232,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1246,7 +1271,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1275,7 +1300,19 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-                     
+                         <!-- Categoria 3 -->
+
+                         <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                          <tr>
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10836/Herramientas-y-Complementos-Pintor?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-3.png" alt="Ir a Herramientas-y-Complementos-Pintor" style="display:block;" border="0"> </a>
+                              </td>
+                            </tr>
+
+                      </table> 
+                
+                      
 
                         <!--- Productos Fila 3--->
                         <!--9 10 11 12-->
@@ -1363,7 +1400,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1402,7 +1439,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1495,7 +1532,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1534,7 +1571,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1625,7 +1662,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Envío Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1664,7 +1701,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/shc-btn.png" alt="llévalo" style="display:block;" border="0"> </a>
                                                     </td>
                                                   </tr>
 
@@ -1682,6 +1719,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   %%[ ENDIF ]%%
 
                                 </tr>
+
                               </table>
                             </td>
                           </tr>
@@ -1691,61 +1729,88 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 3--->
 
 
-                  
+
+                
+
+                          <!--- START COMPLEMENTARIAS--->
+
+                          
                       
-                   
-  <!-- ***** FOOTER ***** -->
+                          <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                            <tr>
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10837/Diluyentes--Solventes-y-Limpiadores?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-5.jpg" alt="Ir a Diluyentes--Solventes-y-Limpiadores" style="display:block;" border="0"> </a>
+                              </td>
+  
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10839/Pintura-en-Spray?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-6.jpg" alt="Ir a Pintura-en-Spray" style="display:block;" border="0"> </a>
+                              </td>
+  
+                               <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10838/Protectores-de-madera?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-7.jpg" alt="Ir a Protectores-de-madera" style="display:block;" border="0"> </a>
+                              </td>
+                            </tr>
+                           
+                          </table>          
+     <!--- END COMPLEMENTARIAS--->
+
+
+
+    
+<!-- ***** FOOTER ***** -->
 <!-- HUINCHAS-->
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
-      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/satisfaccion-garantizada?', @prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/satispro-ban.png" alt="Satisfacción garantizada" width="204" height="185" style="display:block;" border="0"> </a></td>
-      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/precios-mas-pro?', @prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/precios-ban.png" alt="Precios + Pro" width="193" height="185" style="display:block;" border="0"> </a></td>
-      <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/descargapro-ban.png" alt="Descarga nuestra app" width="203" height="185" style="display:block;" border="0"> </a></td>
+      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/satisfaccion-garantizada?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/satisfaccion-ban2.png" alt="Satisfacción garantizada" width="204" height="185" style="display:block;" border="0"> </a></td>
+      <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/carbono-neutral?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/carbono-ban2.png" alt="Carbono neutral" width="193" height="185" style="display:block;" border="0"> </a></td>
+      <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/descarga-ban2.png" alt="Descarga nuestra app" width="203" height="185" style="display:block;" border="0"> </a></td>
     </tr>
   </table>
+  
   <!-- FIN - HUINCHAS --> 
   <!--- SCOM --->
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
-      <td style="font-size: 0px; line-height: 0px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/sodcompro2-ban.png" alt="ir a sodimac.com" width="600" height="62" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?', @prefix))=%%" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/sod-ban.png?v01" alt="ir a sodimac.com" width="600" height="70" style="display:block; " border="0"></a></td>
     </tr>
   </table>
   <!---FIN - SCOM --->
   <!--- Venta Telefónica y whatssap --->              
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
-      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/telfpro-link.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
-      <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56999129057" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wspces-link.png" alt="Whatssap CES" width="300" height="21" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/telf-link2.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56940627836" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/wsp-link2.png" alt="Whatssap" width="300" height="21" style="display:block; " border="0"></a></td>
     </tr>
   </table>
   <!--- FIN - Venta Telefónica y whatssap --->  
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
-      <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
+      <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
     </tr>
   </table>
   <!--- RRSS --->
-  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2" class="">
     <tr>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
-      <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank2.png" alt="blank rrss 2" width="28" height="42" style="display:block" border="0"></td>
-      <td><a href="https://www.instagram.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/instagram-icon.png" alt="instagram constructor" width="40" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank3.png" alt="blank rrss 3" width="28" height="42" style="display:block" border="0"></td>
-      <td><a href="https://twitter.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/x-icon.png" alt="Twitter sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank4.png" alt="blank rrss 4" width="28" height="42" style="display:block" border="0"></td>
-      <td><a href="https://www.pinterest.es/homecentercl/_created/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/pinterest-icon.png" alt="Pinterest sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank5.png" alt="blank rrss 5" width="29" height="42" style="display:block" border="0"></td>
-      <td><a href="https://www.tiktok.com/@sodimac.cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/tiktok-icon.png" alt="Tik Tok" width="38" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank5-18.png" alt="blank rrss 6" width="30" height="42" style="display:block" border="0"></td>
-      <td><a href="https://www.youtube.com/user/lacasadechile" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/youtube-icon.png" alt="Youtube constructor" width="38" height="42" style="display:block" border="0"> </a></td>
-      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/rblank6.png" alt="blank rrss 7" width="111" height="42" style="display:block" border="0"></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank2.png" alt="blank rrss 2" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.instagram.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/instagram-icon.png" alt="instagram constructor" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank3.png" alt="blank rrss 3" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://twitter.com/homecenter_cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/x-icon.png" alt="Twitter sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank4.png" alt="blank rrss 4" width="28" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.pinterest.es/homecentercl/_created/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/pinterest-icon.png" alt="Pinterest sodimac" width="40" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5.png" alt="blank rrss 5" width="29" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.tiktok.com/@sodimac.cl/" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/tiktok-icon.png" alt="Tik Tok" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank5-18.png" alt="blank rrss 6" width="30" height="42" style="display:block" border="0"></td>
+      <td><a href="https://www.youtube.com/user/lacasadechile" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/yt-icon.png" alt="Youtube constructor" width="38" height="42" style="display:block" border="0"> </a></td>
+      <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank6.png" alt="blank rrss 7" width="111" height="42" style="display:block" border="0"></td>
     </tr>
   </table>
   <!--- FIN - RRSS --->
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
-      <td align="center"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/cierreblank.png" alt="blank cierre" width="600" height="26" style="display:block;" border="0"></td>
+      <td align="center"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/cierreblank.png" alt="blank cierre" width="600" height="26" style="display:block;" border="0"></td>
     </tr>
   </table>
   
@@ -1753,54 +1818,52 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
   <!-- ***** FIN - FOOTER ***** --> 
   <!--- ---> 
 
-      <!-- INFO LEGAL PRECIOS -->
+        <!-- INFO LEGAL PRECIOS -->
 
-      <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
-            *Precio referencial Regi&oacute;n Metropolitana. Este correo
-            muestra precios de nuestras tiendas en la Regi&oacute;n
-            Metropolitana, nuestros precios son siempre bajos. Su
-            vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
-            condiciones
-            de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
-            de retiro. Productos y promociones v&aacute;lidas
-            seg&uacute;n disponibilidad, para clientes y consumidores
-            finales; aplica exclusivamente para consumo familiar,
-            excluyendo expl&iacute;citamente ventas mayoristas o ventas
-            a precio distinto respecto del precio normal de tienda.
-            Bases y condiciones protocolizadas ante notario,
-            inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
-          
-          </td>
-        </tr>
+   
+        <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
+          <tr>
+            <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
+              *Precio referencial Regi&oacute;n Metropolitana. Este correo
+              muestra precios de nuestras tiendas en la Regi&oacute;n
+              Metropolitana, nuestros precios son siempre bajos. Su
+              vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
+              condiciones
+              de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
+              de retiro. Productos y promociones v&aacute;lidas
+              seg&uacute;n disponibilidad, para clientes y consumidores
+              finales; aplica exclusivamente para consumo familiar,
+              excluyendo expl&iacute;citamente ventas mayoristas o ventas
+              a precio distinto respecto del precio normal de tienda.
+              Bases y condiciones protocolizadas ante notario,
+              inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
+            
+            </td>
+          </tr>
 
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
-      </tr>  
-        </table>
-      <!-- Fin INFO LEGAL PRECIOS -->
-
-
-      %%[ IF NOT EMPTY(TOTAL_PUNTOS_CMR) and TOTAL_PUNTOS_CMR > 0 and NOT
-      EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
-      <table cellpadding="0" cellspacing="0" align="center" width="600">
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
-            <b>Términos y condiciones CMR Puntos.</b> Stock y
-            Categoría de CMR Puntos informada en correo
-            electrónico.
-          </td>
-        </tr>
-      </table>
-      %%[ ENDIF ]%%
-
-    </td>
-  </tr>
-</table>
-</custom>
-</td>
-</tr>
-</table>
+          <tr>
+            <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
+        </tr>  
+          </table>
+        <!-- Fin INFO LEGAL PRECIOS -->
 
 
+                %%[ IF NOT EMPTY(TOTAL_PUNTOS_CMR) and TOTAL_PUNTOS_CMR > 0 and NOT
+                EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
+                <table cellpadding="0" cellspacing="0" align="center" width="600">
+                  <tr>
+                    <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
+                      <b>T&eacute;rminos y condiciones CMR Puntos.</b> Stock y
+                      Categor&iacute;a de CMR Puntos informada en correo
+                      electr&oacute;nico.
+                    </td>
+                  </tr>
+                </table>
+                %%[ ENDIF ]%%
+              </td>
+            </tr>
+          </table>
+        </custom>
+      </td>
+    </tr>
+  </table>
