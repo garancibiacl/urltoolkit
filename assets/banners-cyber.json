@@ -1,15 +1,74 @@
 [
-    {
-      "nombre": "PAGA MENOS",
-      "href": "https://www.cmrpuntos.cl",
-      "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-pagamenos.jpg",
-      "alt": "Paga tus productos con CMR puntos y ahorra en el monto total de tu boleta"
-    },
-    {
-      "nombre": "HERRAMIENTA DE DEMOLICION",
-      "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=3599752+1906879+1906852+7318642+761893X&',@prefix))=%%",
-      "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-demolicion.jpg",
-      "alt": "Herramientas de demolición, martillos, cinceles y más"
-    }
-  ]
-  
+  {
+    "nombre": "PAGA MENOS",
+    "href": "https://www.cmrpuntos.cl",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-pagamenos.jpg",
+    "alt": "Paga tus productos con CMR puntos y ahorra en el monto total de tu boleta"
+  },
+  {
+    "nombre": "HERRAMIENTA DE DEMOLICION - PRO",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=3599752+1906879+1906852+7318642+761893X&',@prefix))=%%",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-demolicion.jpg",
+    "alt": "Herramientas de demolición, martillos, cinceles y más"
+  },
+  {
+    "nombre": "HERRAMIENTA DE DEMOLICION - HOGAR",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=3599752+1906879+1906852+7318642+761893X&',@prefix))=%%",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-demolicion-hc.jpg",
+    "alt": "Herramientas de demolición, martillos, cinceles y más"
+  },
+  {
+    "nombre": "SERVICIO VISITA TÉCNICA",
+    "href": "https://www.sodimac.cl/sodimac-cl/buscar?Ntt=1446819+2862689+3691578+1620835+144722X+1620827+1620800+1447238+3692779+1620819+1447211+3802876+1447122+1447114+3323587+7583648+7583621+1018884+1446967+1447009+1446983+1446991",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-arma-proyecto.jpg",
+    "alt": "Ir a Cyber Arma tu proyecto"
+  },
+  {
+    "nombre": "SERVICIO ARMADO DE CASETA",
+    "href": "https://www.sodimac.cl/sodimac-cl/articulo/113680470/Armado-de-Caseta-hasta-4-m2/113680471",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-armado-caseta.jpg",
+    "alt": "Ir a Armado Casetas"
+  },
+  {
+    "nombre": "SERVICIO REBAJE DE TINA",
+    "href": "https://www.sodimac.cl/sodimac-cl/articulo/140150241/Servicio-rebaje-de-tina-Incluye-Pieza-+-Instalacion/140150242?exp=so_com",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-rebaje-tina.jpg",
+    "alt": "Ir a Servicio Rebaje de Tina"
+  },
+  {
+    "nombre": "SERVICIO ASESORÍA DISEÑO REMODELACIÓN BAÑO - COCINA",
+    "href": "https://www.sodimac.cl/sodimac-cl/articulo/113680464/Asesoria-diseno-remodelacion-de-Bano-%E2%80%93-Cocina/113680465?exp=so_com",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-remodelacion-bano.jpg",
+    "alt": "Ir a Asesoria Diseño Remodelacion de Baño"
+  },
+  {
+    "nombre": "HUINCHA FECHA HOGAR",
+    "href": "",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/huinchas/Huicha-fechas-hogar.jpg",
+    "alt": "Ir a 2,3,4 de Junio"
+  },
+  {
+    "nombre": "HUINCHA FECHA PRO",
+    "href": "",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/huinchas/Huicha-fechas-pro.jpg",
+    "alt": "Ir a 2,3,4 de Junio"
+  },
+  {
+    "nombre": "GC PRE CYBER / HOGAR",
+    "href": "https://www.sodimac.cl/static/bases/cyber-junio/concurso-gc-carrito.pdf?utm_source=&utm_medium=&utm_term=&utm_content=&utm_campaign=",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-precyber-giftcard.png",
+    "alt": "Ir a Asesoria Diseño Remodelacion de Baño"
+  },
+  {
+    "nombre": "GC PRE CYBER / PRO",
+    "href": "https://www.sodimac.cl/static/bases/cyber-junio/concurso-gc-carrito.pdf?utm_source=&utm_medium=&utm_term=&utm_content=&utm_campaign=",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-precyber-giftcard-pro.png",
+    "alt": "Ir a Asesoria Diseño Remodelacion de Baño"
+  },
+  {
+    "nombre": "MINI MOTO SIERRA - JARDIN",
+    "href": "",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/bnn-ccso-jardin-02-1.jpg",
+    "alt": "Ir a Asesoria Diseño Remodelacion de Baño"
+  }
+]
