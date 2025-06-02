@@ -40,9 +40,7 @@ body {
   background-color: #334255 !important;
 }
 
-.card-body{
-  background-color: #1e293c !important;
-}
+
 .bg-dark{
   background-color: var(--bs-body-bg-dark) !important;
 }
