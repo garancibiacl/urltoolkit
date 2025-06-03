@@ -19,7 +19,7 @@
   },
   {
     "nombre": "SERVICIO VISITA TÉCNICA",
-    "href": "https://www.sodimac.cl/sodimac-cl/buscar?Ntt=1446819+2862689+3691578+1620835+144722X+1620827+1620800+1447238+3692779+1620819+1447211+3802876+1447122+1447114+3323587+7583648+7583621+1018884+1446967+1447009+1446983+1446991",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/buscar?Ntt=1446819+2862689+3691578+1620835+144722X+1620827+1620800+1447238+3692779+1620819+1447211+3802876+1447122+1447114+3323587+7583648+7583621+1018884+1446967+1447009+1446983+1446991&',@prefix))=%%",
     "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-arma-proyecto.jpg",
     "alt": "Ir a Cyber Arma tu proyecto"
   },
@@ -31,13 +31,13 @@
   },
   {
     "nombre": "SERVICIO REBAJE DE TINA",
-    "href": "https://www.sodimac.cl/sodimac-cl/articulo/140150241/Servicio-rebaje-de-tina-Incluye-Pieza-+-Instalacion/140150242?exp=so_com",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/140150241/Servicio-rebaje-de-tina-Incluye-Pieza-+-Instalacion/140150242?exp=so_com?',@prefix))=%%",
     "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-rebaje-tina.jpg",
     "alt": "Ir a Servicio Rebaje de Tina"
   },
   {
     "nombre": "SERVICIO ASESORÍA DISEÑO REMODELACIÓN BAÑO - COCINA",
-    "href": "https://www.sodimac.cl/sodimac-cl/articulo/113680464/Asesoria-diseno-remodelacion-de-Bano-%E2%80%93-Cocina/113680465?exp=so_com",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/113680464/Asesoria-diseno-remodelacion-de-Bano-%E2%80%93-Cocina/113680465?exp=so_com?',@prefix))=%%",
     "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-remodelacion-bano.jpg",
     "alt": "Ir a Asesoria Diseño Remodelacion de Baño"
   },
