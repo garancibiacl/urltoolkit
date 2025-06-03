@@ -25,7 +25,7 @@
   },
   {
     "nombre": "SERVICIO ARMADO DE CASETA",
-    "href": "https://www.sodimac.cl/sodimac-cl/articulo/113680470/Armado-de-Caseta-hasta-4-m2/113680471",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/113680470/Armado-de-Caseta-hasta-4-m2/113680471?',@prefix))=%%",
     "img_src": "https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-servicio-armado-caseta.jpg",
     "alt": "Ir a Armado Casetas"
   },
