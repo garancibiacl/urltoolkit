@@ -2,17 +2,26 @@
 
 
 /*********************************** Seccion Variables Adobe ************************************/
-
+ 
 set @negocio = 'CO' /*CO HC*/
 set @canal = 'EMAIL' /*CANAL PUSH WA SMS EMAIL GEOPUSH*/
 set @tipo = 'PPM' /*PPA PPM CAT INFO PDP XLP PAGE GF BEACON*/
-
+ 
 set @prefix  = concat('eid=666_NEGOCIO=',@negocio,'_CANAL=',@canal,'_TIPO=',@tipo,'_PROCESO_ID=',proceso_id)                     
-
+ 
 /*********************************** Fin Seccion Variables Adobe *******************************/
 
 
 ]%%
+
+<table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
+  
+  <tr>
+  <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px; padding: 5px 0px;"><font color="#444444">Si usted no visualiza bien este correo, por favor <a rel="noopener noreferrer" href="%%view_email_url%%" title="esse link" style="COLOR: #0000ff; TEXT-DECORATION: underline">ingrese aquí</a>.</font>
+  </td>
+  </tr>
+  
+  </table> 
 
 
 %%[
@@ -127,24 +136,24 @@ ENDIF
 ]%%
 <script runat="server" language="javascript">
   Platform.Load("Core", "1");
-
-function removeSuffix(url, suffix) { // Check if the URL ends with the specified suffix 
+  
+  function removeSuffix(url, suffix) { // Check if the URL ends with the specified suffix 
     var suffixPosition = url.indexOf(suffix);
     if (suffixPosition > -1 && suffixPosition === url.length - suffix.length) {
         // Remove the suffix from the URL
         return url.substring(0, suffixPosition);
     }
     return url; }
-  
+
   function processResponse(response, skus) {
-    // Descripción: procesa la respuesta para todos los productos y maneja SKUs faltantes
+    // Descripci�n: procesa la respuesta para todos los productos y maneja SKUs faltantes
     if (response != '') {
       var json = Platform.Function.ParseJSON(response);
       if (json.success) {
         var productos = json.products;
         var skuMap = {};
 
-        // Crear un mapa de SKU para facilitar la búsqueda
+        // Crear un mapa de SKU para facilitar la b�squeda
         for (var i = 0; i < productos.length; i++) {
           var product = productos[i]['product'];
           skuMap[product['id']] = product;
@@ -155,7 +164,7 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
           var bloqueSku = i + 1;
           var sku = skus[i];
           var product = skuMap[sku] || {};
-        
+          
           Variable.SetValue("@success" + bloqueSku, json.success);
           Variable.SetValue("@published" + bloqueSku, product.published || '');
           Variable.SetValue("@id" + bloqueSku, product['id'] || '');
@@ -173,39 +182,98 @@ var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
           }
           Variable.SetValue("@oportunidadCyber" + bloqueSku, oportunidadCyber);
 
-          var precioNormal = '', precioOferta = '', precioAhorro = '', p_ahorro = 0;
+        var precioNormal, precioNormalInt, precioOferta, precioAhorro, p_ahorro = 0;
+        var precioUnidad, precioUnidadOferta = 0;
+        var unidadP, unidadPOferta = "";
+        var unidadPU, unidadPUOferta = "";
 
-          if (product['prices'] && product['prices'].length > 0) {
-            var precio1Type = product['prices'][0].type;
-            var precio1OU = product['prices'][0].opportunidadUnica;
-            var precio1 = product['prices'][0].originalPrice;
-            var precio2 = product['prices'][1] ? product['prices'][1].originalPrice : undefined;
-            var precio3 = product['prices'][2] ? product['prices'][2].originalPrice : undefined;
+        var precio1Type = product['prices'][0].type;
+        var precio1OU = product['prices'][0].opportunidadUnica;
+        var precio1 = product['prices'][0].originalPrice;
+        var precio2 = product['prices'][1].originalPrice;
+        var precio3 = product['prices'][2].originalPrice;
+        
+        var precioUnidad1 = product['prices'][0].unitPrice['price'][0];
+        var precioUnidad2 = product['prices'][1].unitPrice['price'][0];
+        var precioUnidad3 = product['prices'][2].unitPrice['price'][0];
+        
+        var unidadP1 = product['prices'][0].unitPrice.unitForSale;
+        var unidadP2 = product['prices'][1].unitPrice.unitForSale;
+        var unidadP3 = product['prices'][2].unitPrice.unitForSale;
+        
+        var unidadPU1 = product['prices'][0].unitPrice.unit;
+        var unidadPU2 = product['prices'][1].unitPrice.unit;
+        var unidadPU3 = product['prices'][2].unitPrice.unit;
 
-            if (precio1Type == 1 && precio1OU == true && precio2 != undefined) {
-              precioOferta = precio1;
-              precioNormal = precio3 != undefined ? precio3 : precio2;
-              precioAhorro = quitarPuntos(precioNormal) - quitarPuntos(precioOferta);
-              precioAhorro = formatoMonto(Format(precioAhorro, "C0", "CLP"));
-            } else if (precio1Type == 3 && precio1OU == false && precio2 != undefined) {
-              precioOferta = precio1;
-              precioNormal = precio3 != undefined ? precio3 : precio2;
-              precioAhorro = quitarPuntos(precioNormal) - quitarPuntos(precioOferta);
-              precioAhorro = formatoMonto(Format(precioAhorro, "C0", "CLP"));
-            } else {
-              precioNormal = precio1;
-            }
 
-            if (precioAhorro > 0) {
-              p_ahorro = (1 - (quitarPuntos(precioOferta) / quitarPuntos(precioNormal))) * 100
-            }
+        // Si el tipo del Prices 0 es igual a 1 y oportunidadUnica es True y precio del Prices 1 existe,
+        // Precio oferta === precio 1 (Proces 0)
+
+        if (precio1Type == 1 && precio1OU == true && precio2 != undefined) {
+          precioOferta = precio1;
+          precioUnidadOferta = precioUnidad1;
+          unidadPOferta = unidadP1;
+          unidadPUOferta = unidadPU1;
+
+          if (precio3 != undefined) {
+            precioNormal = precio3;
+            precioUnidad = precioUnidad3;
+            unidadP = unidadP3;
+            unidadPU = unidadPU3;
+          } else {
+            precioNormal = precio2;
+            precioUnidad = precioUnidad2;
+            unidadP = unidadP2;
+            unidadPU = unidadPU2;
           }
 
-          Variable.SetValue("@precioNormal" + bloqueSku, precioNormal);
-          Variable.SetValue("@precioNormalInt" + bloqueSku, quitarPuntos(precioNormal));
-          Variable.SetValue("@precioOferta" + bloqueSku, precioOferta);
-          Variable.SetValue("@precioAhorro" + bloqueSku, precioAhorro);
-          Variable.SetValue("@p_ahorro" + bloqueSku, Math.round(p_ahorro));
+          precioAhorro = quitarPuntos(precioNormal) - quitarPuntos(precioOferta);
+          precioAhorro = formatoMonto(Format(precioAhorro, "C0", "CLP"));
+
+        } else if (precio1Type == 3 && precio1OU == false && precio2 != undefined) {
+          precioOferta = precio1;
+          precioUnidadOferta = precioUnidad1;
+          unidadPOferta = unidadP1;
+          unidadPUOferta = unidadPU1;
+          
+          if (precio3 != undefined) {
+            precioNormal = precio3;
+            precioUnidad = precioUnidad3;
+            unidadP = unidadP3;
+            unidadPU = unidadPU3;
+          } else {
+            precioNormal = precio2;
+            precioUnidad = precioUnidad2;
+            unidadP = unidadP2;
+            unidadPU = unidadPU2;
+          }
+
+          precioAhorro = quitarPuntos(precioNormal) - quitarPuntos(precioOferta);
+          precioAhorro = formatoMonto(Format(precioAhorro, "C0", "CLP"));
+
+        } else {
+          precioNormal = precio1;
+          precioUnidad = precioUnidad1;
+          unidadP = unidadP1;
+          unidadPU = unidadPU1;
+        }
+
+        if (precioAhorro > 0) {
+          p_ahorro = (1 - (quitarPuntos(precioOferta) / quitarPuntos(precioNormal))) * 100
+        }
+
+        Variable.SetValue("@precioNormal" + bloqueSku, precioNormal);
+        Variable.SetValue("@precioNormalInt" + bloqueSku, quitarPuntos(precioNormal));
+        Variable.SetValue("@precioOferta" + bloqueSku, precioOferta);
+        Variable.SetValue("@precioAhorro" + bloqueSku, precioAhorro);
+        Variable.SetValue("@p_ahorro" + bloqueSku, Math.round(p_ahorro));
+
+        Variable.SetValue("@precioUnidad" + bloqueSku, precioUnidad);
+        Variable.SetValue("@unidadP" + bloqueSku, unidadP);
+        Variable.SetValue("@unidadPU" + bloqueSku, unidadPU);
+        Variable.SetValue("@precioUnidadOferta" + bloqueSku, precioUnidadOferta);
+        Variable.SetValue("@unidadPOferta" + bloqueSku, unidadPOferta);
+        Variable.SetValue("@unidadPUOferta" + bloqueSku, unidadPUOferta);
         }
       }
     }
@@ -249,32 +317,36 @@ var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
 /*SET DE CODIGOS SKU SKUS*/
 /*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedar&iacute;a @SKU_011='0000000' ***/
 /*** Fila 1 ***/
-IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110308273' ENDIF
-IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110287857' ENDIF
-IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='110295136' ENDIF
-IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='110302079' ENDIF
+
+/*** Fila 1 ***/
+IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='121481429' ENDIF
+IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='121481417' ENDIF
+IF SKU_03 < 0 THEN SET @SKU_033='0' ELSE SET @SKU_033='121481431' ENDIF
+IF SKU_04 < 0 THEN SET @SKU_044='0' ELSE SET @SKU_044='121482533' ENDIF
 
 /*** Fila 2 ***/
-IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='110287814' ENDIF
-IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='110328467' ENDIF
-IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='116276447' ENDIF
-IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='124225265' ENDIF
+IF SKU_05 < 0 THEN SET @SKU_055='0' ELSE SET @SKU_055='110167011' ENDIF
+IF SKU_06 < 0 THEN SET @SKU_066='0' ELSE SET @SKU_066='122361424' ENDIF
+IF SKU_07 < 0 THEN SET @SKU_077='0' ELSE SET @SKU_077='113951764' ENDIF
+IF SKU_08 < 0 THEN SET @SKU_088='0' ELSE SET @SKU_088='110167011' ENDIF
 
 /*** Fila 3 ***/
-IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='110368131' ENDIF
-IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='110299121' ENDIF
-IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='110300576' ENDIF
-IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='110303489' ENDIF
-
+IF SKU_09 < 0 THEN SET @SKU_099='0' ELSE SET @SKU_099='122121445' ENDIF
+IF SKU_10 < 0 THEN SET @SKU_0110='0' ELSE SET @SKU_0110='110152829' ENDIF
+IF SKU_11 < 0 THEN SET @SKU_0111='0' ELSE SET @SKU_0111='112743436' ENDIF
+IF SKU_12 < 0 THEN SET @SKU_0112='0' ELSE SET @SKU_0112='130586488' ENDIF
 
 
 /*EDITABLE*/ /*SET HARDCODE DE SKU*/
 /*** Fila 1 ***/ /* SET @SKU_011='0' */ /* SET @SKU_022='0' */ /* SET @SKU_033='0' */ /* SET @SKU_044='0' */ 
 /*** Fila 2 ***/ /* SET @SKU_055='0' */ /* SET @SKU_066='0' */ /* SET @SKU_077='0' */ /* SET @SKU_088='0' */ 
 /*** Fila 3 ***/ /* SET @SKU_099='0' */ /* SET @SKU_0110='0' */ /* SET @SKU_0111='0' */ /* SET @SKU_0112='0' */
-/*** Fila 4 ***/ /* SET @SKU_0113='0' */ /* SET @SKU_0114='0' */ /* SET @SKU_0115='0' */ /* SET @SKU_0116='0' */ /*NO EDITAR*/ /*SET REQUEST API FALABELLA*/ 
+/*** Fila 4 ***/ /* SET @SKU_0113='121403269'   SET @SKU_0114='0121403269'   SET @SKU_0115='121403269'   SET @SKU_0116='121403269' */
+
+
+/*NO EDITAR*/ /*SET REQUEST API FALABELLA*/ 
   
-SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/cl?ids='
+ SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/cl?ids='
   ,@SKU_011,','
   ,@SKU_022,','
   ,@SKU_033,','
@@ -335,7 +407,7 @@ SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/c
   
   </script>
 
-          <!--HUINCHAS CMR DINAMICAS-->
+  <!--HUINCHAS CMR DINAMICAS-->
           <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sbgMail">
             <tr>
               <td align="center" class="cuerpoMail" style="padding-top: 8px;"><!--FIN HUINCHAS DINAMICAS-->
@@ -353,7 +425,7 @@ SET @request1 = concat('https://www.falabella.com/s/browse/v2/fetchItemDetails/c
                     <meta name="color-scheme" content="light dark">
                     <meta name="supported-color-schemes" content="light dark">
                   </div>
-              
+               
 
                   <!--FIN HUINCHAS DINAMICAS-->
 
@@ -413,42 +485,44 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <table width="600" cellspacing="0" cellpadding="0" align="center" style="  display:block; background-color:#000000; " bgcolor="#000000">
                           <tr>
                             <td align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl?',@prefix))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/logo-pro-header.png" alt="Ir a Todo Constructor" width="257" height="68" style="display:block; margin:auto;" title="Sodimac"> </a></td>
-                            <td align="center"><a href="https://api.whatsapp.com/send?phone=56935328223" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wsp-pro-header.png" alt="Compra telefónica" width="169" height="68" class="width100" style="display:block; margin:auto; border:none; " title="venta telefónica a través del 600 600 1230"> </a></td>
+                            <td align="center"><a href="https://wa.me//56999129057" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wsp-pro-header.png" alt="Compra telef�nica" width="169" height="68" class="width100" style="display:block; margin:auto; border:none; " title="venta telef�nica a trav�s del 600 600 1230"> </a></td>
                             <td align="center"><a href="https://socl.onelink.me/umPF/btqdyt3s" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/app-pro-header.png" alt="Descargue nuestra app Sodimac desde Google Play" width="174" height="68" style="display:block; margin:auto; border:none; " title="Sodimac"> </a></td>
                           </tr>
                         </table>
 
                         <!-- Fin HEADER-->
 
-                        <!---Start Body--->
-                        
-                
-                        <!---Start Vitrina--->
-                        <table width="600" cellspacing="0" cellpadding="0" align="center">
-    
-                          <tr>
-                            <td colspan="2" align="center" ><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10844/Puertas-de-Interior?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-0.jpg" alt="Ir a Puertas de Interior" style="display:block;" border="0"> </a>
-                            </td>
-                          </tr>
-                        </table> 
-
-                   
-                        <!--- FIN - Vitrina--->
+                        <!---START Vitrina--->
 
                     
-                      <!-- Categoria 1 -->
-                      <table width="600" cellspacing="0" cellpadding="0" align="center">
-                
-                        <tr>
-                          <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10744/Ventanas?',@prefix))=%%" target="_blank"> 
-                            <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-1.png" alt="Ir a Ventanas" style="display:block;" border="0"> </a>
-                          </td>
-                        </tr>
+                 
+                        <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                          <tr>
+                            <td colspan="2" align="center" ><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10827/Ceramicas?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-0.jpg" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
+                            </td>
+                          </tr>
+                    
+                        </table> 
+                        <!--- FIN - Vitrina--->
                         
-                      </table> 
-                  
+   
+
+
+
+
+                          <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                          <tr>
+                            <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10830/Pisos-Vinilicos?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-1.png" alt="Ir a Pisos Vinilicos" style="display:block;" border="0"> </a>
+                            </td>
+                          </tr>
+                    
+                        </table> 
                 
+
                         <!-- Productos Fila 1 -->
                         <!--1 2 3 4-->
 
@@ -474,6 +548,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         SET @precioOferta1 = @precioOferta4
                         SET @precioNormal1 = @precioNormal4
                         SET @flag_bkp_1 = 1
+                        
+                        SET @precioUnidad1 = @precioUnidad4
+                        SET @unidadP1 = @unidadP4
+                        SET @unidadPU1 = @unidadPU4
+                        SET @precioUnidadOferta1 = @precioUnidadOferta4
+                        SET @unidadPOferta1 = @unidadPOferta4
+                        SET @unidadPUOferta1 = @unidadPUOferta4
 
                         ELSE
                         SET @flag_display1 = 0
@@ -507,8 +588,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro1)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -536,7 +616,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -549,8 +629,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand1)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id1)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand1)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id1)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -559,7 +638,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta1) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta1)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta1)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta1)=%%</span><br> $%%=v(@precioOferta1)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta1)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -569,14 +649,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal1)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad1)=%%<span style="font-size: 12px;"> %%=v(@unidadPU1)=%%</span><br>
+                                                      $%%=v(@precioNormal1)=%%<span style="font-size: 12px;"> %%=v(@unidadP1)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct1, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -615,6 +695,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal2 = @precioNormal4
                                   SET @flag_bkp_1 = 1
 
+                                  SET @precioUnidad2 = @precioUnidad4
+                                  SET @unidadP2 = @unidadP4
+                                  SET @unidadPU2 = @unidadPU4
+                                  SET @precioUnidadOferta2 = @precioUnidadOferta4
+                                  SET @unidadPOferta2 = @unidadPOferta4
+                                  SET @unidadPUOferta2 = @unidadPUOferta4
+
                                   ELSE
                                   SET @flag_display2 = 0
 
@@ -639,8 +726,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro2)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -668,7 +754,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -681,8 +767,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand2)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id2)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand2)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id2)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -691,7 +776,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta2) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta2)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta2)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta2)=%%</span><br> $%%=v(@precioOferta2)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta2)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -701,14 +787,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal2)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad2)=%%<span style="font-size: 12px;"> %%=v(@unidadPU2)=%%</span><br>
+                                                      $%%=v(@precioNormal2)=%%<span style="font-size: 12px;"> %%=v(@unidadP2)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct2, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -747,6 +833,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal3 = @precioNormal4
                                   SET @flag_bkp_1 = 1
 
+                                  SET @precioUnidad3 = @precioUnidad4
+                                  SET @unidadP3 = @unidadP4
+                                  SET @unidadPU3 = @unidadPU4
+                                  SET @precioUnidadOferta3 = @precioUnidadOferta4
+                                  SET @unidadPOferta3 = @unidadPOferta4
+                                  SET @unidadPUOferta3 = @unidadPUOferta4
+
                                   ELSE
                                   SET @flag_display3 = 0
 
@@ -769,8 +862,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro3)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -798,7 +890,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -811,8 +903,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand3)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id3)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand3)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id3)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -821,7 +912,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta3) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta3)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta3)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta3)=%%</span><br> $%%=v(@precioOferta3)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta3)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -831,14 +923,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal3)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad3)=%%<span style="font-size: 12px;"> %%=v(@unidadPU3)=%%</span><br>
+                                                      $%%=v(@precioNormal3)=%%<span style="font-size: 12px;"> %%=v(@unidadP3)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct3, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -865,20 +957,29 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!-- FIN - Productos Fila 1 -->
 
 
+                        <!--- Categoria 2 --->
 
 
-                          <!-- Categoria 2 -->
-            
-                          <table width="600" cellspacing="0" cellpadding="0" align="center">
-                  
-                            <tr>
-                                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10845/Puertas-de-Exterior?',@prefix))=%%" target="_blank"> 
-                                  <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-2.png" alt="Ir a Puertas de Exterior" style="display:block;" border="0"> </a>
-                                </td>
-                              </tr>
-          
+                        
+                        
+                        
+                        
+                        
+                        
+                        <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                          <tr>
+                            <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10828/Porcelanatos?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-2.png" alt="Ir a Porcelanatos" style="display:block;" border="0"> </a>
+                            </td>
+                          </tr>
+                    
                         </table> 
                         
+                        
+                        
+                        
+
 
                         <!--- Productos Fila 2--->
                         <!--5 6 7 8-->
@@ -905,6 +1006,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         SET @precioOferta5 = @precioOferta8
                         SET @precioNormal5 = @precioNormal8
                         SET @flag_bkp_2 = 1
+
+                        SET @precioUnidad5 = @precioUnidad8
+                        SET @unidadP5 = @unidadP8
+                        SET @unidadPU5 = @unidadPU8
+                        SET @precioUnidadOferta5 = @precioUnidadOferta8
+                        SET @unidadPOferta5 = @unidadPOferta8
+                        SET @unidadPUOferta5 = @unidadPUOferta8
 
                         ELSE
                         SET @flag_display5 = 0
@@ -937,8 +1045,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro5)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -966,7 +1073,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -979,8 +1086,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand5)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id5)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand5)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id5)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -989,7 +1095,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta5) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta5)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta5)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta5)=%%</span><br> $%%=v(@precioOferta5)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta5)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -999,14 +1106,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal5)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad5)=%%<span style="font-size: 12px;"> %%=v(@unidadPU5)=%%</span><br>
+                                                      $%%=v(@precioNormal5)=%%<span style="font-size: 12px;"> %%=v(@unidadP5)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct5, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1045,6 +1152,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal6 = @precioNormal8
                                   SET @flag_bkp_2 = 1
 
+                                  SET @precioUnidad6 = @precioUnidad8
+                                  SET @unidadP6 = @unidadP8
+                                  SET @unidadPU6 = @unidadPU8
+                                  SET @precioUnidadOferta6 = @precioUnidadOferta8
+                                  SET @unidadPOferta6 = @unidadPOferta8
+                                  SET @unidadPUOferta6 = @unidadPUOferta8
+
                                   ELSE
                                   SET @flag_display6 = 0
 
@@ -1069,8 +1183,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro6)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -1098,7 +1211,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1111,8 +1224,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand6)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id6)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand6)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id6)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -1121,7 +1233,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta6) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta6)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta6)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta6)=%%</span><br> $%%=v(@precioOferta6)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta6)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1131,14 +1244,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal6)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad6)=%%<span style="font-size: 12px;"> %%=v(@unidadPU6)=%%</span><br>
+                                                      $%%=v(@precioNormal6)=%%<span style="font-size: 12px;"> %%=v(@unidadP6)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct6, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1177,6 +1290,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal7 = @precioNormal8
                                   SET @flag_bkp_2 = 1
 
+                                  SET @precioUnidad7 = @precioUnidad8
+                                  SET @unidadP7 = @unidadP8
+                                  SET @unidadPU7 = @unidadPU8
+                                  SET @precioUnidadOferta7 = @precioUnidadOferta8
+                                  SET @unidadPOferta7 = @unidadPOferta8
+                                  SET @unidadPUOferta7 = @unidadPUOferta8
+
                                   ELSE
                                   SET @flag_display7 = 0
 
@@ -1199,8 +1319,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro7)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -1228,7 +1347,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1241,8 +1360,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand7)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id7)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand7)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id7)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -1251,7 +1369,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta7) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta7)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta7)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta7)=%%</span><br> $%%=v(@precioOferta7)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta7)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1261,14 +1380,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal7)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad7)=%%<span style="font-size: 12px;"> %%=v(@unidadPU7)=%%</span><br>
+                                                      $%%=v(@precioNormal7)=%%<span style="font-size: 12px;"> %%=v(@unidadP7)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct7, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1295,20 +1414,27 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 2--->
 
 
+                        <!--- Categoria 3 --->
 
-                          <!-- Categoria 3 -->
-          
-                          <table width="600" cellspacing="0" cellpadding="0" align="center">
-                  
-                            <tr>
-                                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10933/Bloques-Vidrio-y-Complementos?',@prefix))=%%" target="_blank"> 
-                                  <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-3.png" alt="Ir a Bloques Vidrio y Complementos" style="display:block;" border="0"> </a>
-                                </td>
-                              </tr>
-  
+                        
+                        
+                        
+                        
+                        
+                        
+                        <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                          <tr>
+                            <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10827/Ceramicas?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-3.png" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
+                            </td>
+                          </tr>
+                    
                         </table> 
-                  
-
+                        
+                        
+                        
+                        
                         <!--- Productos Fila 3--->
                         <!--9 10 11 12-->
 
@@ -1334,6 +1460,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         SET @precioOferta9 = @precioOferta12
                         SET @precioNormal9 = @precioNormal12
                         SET @flag_bkp_3 = 1
+
+                        SET @precioUnidad9 = @precioUnidad12
+                        SET @unidadP9 = @unidadP12
+                        SET @unidadPU9 = @unidadPU12
+                        SET @precioUnidadOferta9 = @precioUnidadOferta12
+                        SET @unidadPOferta9 = @unidadPOferta12
+                        SET @unidadPUOferta9 = @unidadPUOferta12
 
                         ELSE
                         SET @flag_display9 = 0
@@ -1366,8 +1499,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro9)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -1395,7 +1527,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1408,8 +1540,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand9)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id9)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand9)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id9)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -1418,7 +1549,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta9) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta9)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta9)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta9)=%%</span><br> $%%=v(@precioOferta9)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta9)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1428,14 +1560,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal9)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad9)=%%<span style="font-size: 12px;"> %%=v(@unidadPU9)=%%</span><br>
+                                                      $%%=v(@precioNormal9)=%%<span style="font-size: 12px;"> %%=v(@unidadP9)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct9, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1474,6 +1606,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal10 = @precioNormal12
                                   SET @flag_bkp_3 = 1
 
+                                  SET @precioUnidad10 = @precioUnidad12
+                                  SET @unidadP10 = @unidadP12
+                                  SET @unidadPU10 = @unidadPU12
+                                  SET @precioUnidadOferta10 = @precioUnidadOferta12
+                                  SET @unidadPOferta10 = @unidadPOferta12
+                                  SET @unidadPUOferta10 = @unidadPUOferta12
+
                                   ELSE
                                   SET @flag_display10 = 0
 
@@ -1498,8 +1637,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro10)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -1527,7 +1665,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1540,8 +1678,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand10)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id10)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand10)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id10)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -1550,7 +1687,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta10) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta10)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta10)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta10)=%%</span><br> $%%=v(@precioOferta10)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta10)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1560,14 +1698,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal10)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad10)=%%<span style="font-size: 12px;"> %%=v(@unidadPU10)=%%</span><br>
+                                                      $%%=v(@precioNormal10)=%%<span style="font-size: 12px;"> %%=v(@unidadP10)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct10, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1606,6 +1744,13 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   SET @precioNormal11 = @precioNormal12
                                   SET @flag_bkp_3 = 1
 
+                                  SET @precioUnidad11 = @precioUnidad12
+                                  SET @unidadP11 = @unidadP12
+                                  SET @unidadPU11 = @unidadPU12
+                                  SET @precioUnidadOferta11 = @precioUnidadOferta12
+                                  SET @unidadPOferta11 = @unidadPOferta12
+                                  SET @unidadPUOferta11 = @unidadPUOferta12
+
                                   ELSE
                                   SET @flag_display11 = 0
 
@@ -1628,8 +1773,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                             <tr>
                                               <td valign="middle" style="font-size: 11px; line-height:18px; font-family: Helvetica, Arial, sans-serif;">
                                                 <span style="background-color: #EB0029; color: #FFFFFF; padding: 3px 8px">-%%=v(@p_ahorro11)=%%
-                                                  %</span>
-                                              </td>
+                                                  %</span></td>
                                             </tr>
                                             %%[ ENDIF ]%%
                                             <tr>
@@ -1657,7 +1801,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   ]%%
                                                   <tr>
 
-                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env?o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
+                                                    <td align="center" class="cmrunicaIcon" style="padding-bottom: 8px; padding-top: 8px;"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/envio-gratis3.png" alt="Env�o Gratis" width="99" height="38" style="display: block;border: 0px;" border="0">
                                                     </td>
                                                   </tr>
                                                   %%[ ENDIF ]%%
@@ -1670,8 +1814,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand11)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id11)=%%</span>
-                                                    </td>
+                                                      <span class="marcaProducto">%%=v(@brand11)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id11)=%%</span></td>
                                                   </tr>
 
                                                   <tr>
@@ -1680,7 +1823,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ IF (length(@precioOferta11) > 0) THEN ]%%
                                                   <tr>
-                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 22px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">$%%=v(@precioOferta11)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioOferta" bgcolor="#f62f2f" style="font-size: 18px; color: #FFFFFF; font-weight: bold; border-radius:2px; padding-top:2px;">
+                                                      $%%=v(@precioUnidadOferta11)=%%<span style="font-size: 12px;"> %%=v(@unidadPUOferta11)=%%</span><br> $%%=v(@precioOferta11)=%%<span style="font-size: 14px;"> %%=v(@unidadPOferta11)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1690,14 +1834,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   </tr>
                                                   %%[ ENDIF ]%%
                                                   <tr>
-                                                    <td align="center" class="precioNormal" style="font-size: 22px; color: #333333;">
-                                                      $%%=v(@precioNormal11)=%%<span style="font-size: 14px;">c/u</span>
+                                                    <td align="center" class="precioNormal" style="font-size: 18px; color: #333333;">
+                                                      $%%=v(@precioUnidad11)=%%<span style="font-size: 12px;"> %%=v(@unidadPU11)=%%</span><br>
+                                                      $%%=v(@precioNormal11)=%%<span style="font-size: 12px;"> %%=v(@unidadP11)=%%</span>
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <td align="center" class="productoBoton" style="padding-top: 10px;">
-                                                      <a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll?valo" style="display:block;" border="0"> </a>
-                                                    </td>
+                                                      <a href="%%=RedirectTo(concat(@urlProduct11, @PREFIX))=%%" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/2022/plantillas_emkt/images/sco-btn-v1.png" alt="ll�valo" style="display:block;" border="0"> </a></td>
                                                   </tr>
 
                                                 </table>
@@ -1714,6 +1858,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                   %%[ ENDIF ]%%
 
                                 </tr>
+
                               </table>
                             </td>
                           </tr>
@@ -1723,48 +1868,89 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 3--->
 
 
-                                                
 
-                        <!--- Fin Productos--->
+                        %%[
 
+                        SET @flag_display13 = 1
+                        SET @flag_bkp_4 = 0
 
-                  
-                                      <!--- Complementarias--->
+                        IF (@published13 != 'True') THEN
 
-                              
-                        <table width="600" cellspacing="0" cellpadding="0" align="center">
-                  
-                          <tr>
-                            <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10751/Escaleras?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-4.jpg" alt="Ir a Escaleras" style="display:block;" border="0"> </a>
-                            </td>
+                        IF (@published16 == 'True') AND (@flag_bkp_4 == 0) THEN
 
-                            <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10753/Materiales-de-Obra-Gruesa?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/130/images/130-imagen-5.jpg" alt="Ir a Materiales de Obra Gruesa" style="display:block;" border="0"> </a>
-                            </td>
+                        SET @p_ahorro13 = @p_ahorro16
+                        SET @urlProduct13 = @urlProduct16
+                        SET @urlImagenSku13 = @urlImagenSku16
+                        SET @oportunidadCyber13 = @oportunidadCyber16
+                        SET @FS_SKU_13 = @FS_SKU_16
+                        SET @precioNormalInt13 = @precioNormalInt16
+                        SET @oportunidadUnica13 = @oportunidadUnica16
+                        SET @brand13 = @brand16
+                        SET @id13 = @id16
+                        SET @displayName13 = @displayName16
+                        SET @precioOferta13 = @precioOferta16
+                        SET @precioNormal13 = @precioNormal16
+                        SET @flag_bkp_4 = 1
 
-                          </tr>
-                          
-                        </table> 
+                        SET @precioUnidad13 = @precioUnidad16
+                        SET @unidadP13 = @unidadP16
+                        SET @unidadPU13 = @unidadPU16
+                        SET @precioUnidadOferta13 = @precioUnidadOferta16
+                        SET @unidadPOferta13 = @unidadPOferta16
+                        SET @unidadPUOferta13 = @unidadPUOferta16
 
+                        ELSE
+                        SET @flag_display13 = 0
 
+                        ENDIF
 
-                        <table width="600" cellspacing="0" cellpadding="0" align="center">
-  
-                          <tr>
-                            <td colspan="2" align="center">
-                              <a href="https://www.cmrpuntos.cl" target="_blank">
-                                 <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-pagamenos.jpg" alt="Paga tus productos con CMR puntos y ahorra en el monto total de tu boleta" style="display:block;" border="0">
-                               </a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="2" align="center">
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/huinchas/Huicha-fechas-pro.jpg" alt="Ir a 2,3,4 de Junio" style="display:block;" border="0">
-                            </td>
-                          </tr>
-                        </table>
+                        ENDIF
+                        ]%%
+
                         
+                        
+                        
+                        
+                 
+
+
+
+                     
+
+                                       <table width="600" cellspacing="0" cellpadding="0" align="center">
+                    
+                                        <tr>
+                                          <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10768/Wallpanel?',@prefix))=%%" target="_blank"> 
+                                            <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-4.jpg" alt="Ir a Wallpanel" style="display:block;" border="0"> </a>
+                                          </td>
+              
+                                          <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10826/Pisos-Flotantes?',@prefix))=%%" target="_blank"> 
+                                            <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/emkt/126/images/126-imagen-5.jpg" alt="Ir a Pisos-Flotantes" style="display:block;" border="0"> </a>
+                                          </td>
+              
+                                    
+                                        </tr>
+              
+                                     
+                                      </table> 
+                 
+                   <table width="600" cellspacing="0" cellpadding="0" align="center">
+  
+    <tr>
+      <td colspan="2" align="center">
+        <a href="https://www.cmrpuntos.cl" target="_blank">
+           <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/banner/banner-pagamenos.jpg" alt="Paga tus productos con CMR puntos y ahorra en el monto total de tu boleta" style="display:block;" border="0">
+         </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <img src="https://www.sodimac.cl/static/envioweb/2025/cyberday/huinchas/Huicha-fechas-pro.jpg" alt="Ir a 2,3,4 de Junio" style="display:block;" border="0">
+      </td>
+    </tr>
+  </table>
+
+
   <!-- ***** FOOTER ***** -->
 
   <!--- SCOM --->
@@ -1774,14 +1960,14 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
     </tr>
   </table>
   <!---FIN - SCOM --->
-  <!--- Venta Telefónica y whatssap --->              
+  <!--- Venta Telef�nica y whatssap --->              
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
-      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/telfpro-link.png" alt="Venta telefónica" width="300" height="21" style="display:block; " border="0"></a></td>
+      <td style="font-size: 0px; line-height: 0px;"><a href="tel:6006001230" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/telfpro-link.png" alt="Venta telef�nica" width="300" height="21" style="display:block; " border="0"></a></td>
       <td style="font-size: 0px; line-height: 0px;"><a href="https://wa.me//56999129057" target="_blank "><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/wspces-link.png" alt="Whatssap CES" width="300" height="21" style="display:block; " border="0"></a></td>
     </tr>
   </table>
-  <!--- FIN - Venta Telefónica y whatssap --->  
+  <!--- FIN - Venta Telef�nica y whatssap --->  
   <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
       <td align="center" style="font-size: 0px; line-height: 0px;"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/pro/blank1.png" alt="blank" width="600" height="16" style="display:block;" border="0"></td>
@@ -1817,7 +2003,6 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
   <!--- ---> 
 
       <!-- INFO LEGAL PRECIOS -->
-
 
       <table cellpadding="0" cellspacing="0" align="center" width="600">
         <tr>
@@ -1858,6 +2043,28 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
       </table>
       %%[ ENDIF ]%%
 
+            <!-- Cancelar Suscripcion -->
+            <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
+              
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Este correo electrónico ha sido enviado a <b><a href="mailto:%%emailaddr%%">%%emailaddr%%</a></b></font>
+              <br><br>
+              </td>
+              </tr>
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Si no quiere seguir recibiendo nuestros emails, ingrese a este <a rel="noopener noreferrer" href="%%profile_center_url%%"><b>link</b></a>.</font><br><br>
+              </td>
+              </tr>
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px">
+              <font color="#444444">Dirección: Av. Presidente Riesco 5685, Piso 14, Las Condes, Santiago, Chile<br><strong>2023 Derechos Reservados</strong>
+              </font>
+              </td>
+              </tr> 
+              
+              </table>
+ <!-- FIN - Cancelar Suscripcion -->
+
     </td>
   </tr>
 </table>
@@ -1865,5 +2072,3 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 </td>
 </tr>
 </table>
-
-
