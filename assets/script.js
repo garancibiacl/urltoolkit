@@ -1915,7 +1915,7 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   // ✅ Carpetas de campañas válidas (puedes extender esta lista)
   const carpetasValidas = [
     '/cyberday/emkt/',
-    '/05-mayo/',
+    '/06-junio/',
     '/navidad/emkt/',
     '/aniversario/emkt/',
     '/liquidades/emkt/'
@@ -1969,18 +1969,25 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
 function inputRutaFtpReemplazo(ruta) {
   if (!ruta.includes('/static/envioweb/')) return ruta;
 
-  // Extrae número final si existe
-  const match = ruta.match(/(-\d+\.(png|jpg|jpeg|gif))$/i);
-  const numeroFinal = match ? match[1] : '';
+  // Quitar todo lo anterior a /static/envioweb/
+  const partes = ruta.split('/static/envioweb/');
+  if (partes.length < 2) return ruta; // Si no hay división válida
 
-  // Elimina todo lo anterior a partir de "static/envioweb"
-  const base = ruta.split('/static/envioweb/')[1];
-  if (!base) return ruta;
+  const pathRelativo = partes[1];
 
-  // Generar nueva ruta limpia
-  const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
+  // Si termina con algo como -0.png, conservarlo
+  const match = pathRelativo.match(/(.*?)(-\d+\.(png|jpg|jpeg|gif))$/i);
+  let nuevoPath = '';
+
+  if (match) {
+    nuevoPath = `https://www.sodimac.cl/static/envioweb/${match[1]}${match[2]}`;
+  } else {
+    nuevoPath = `https://www.sodimac.cl/static/envioweb/${pathRelativo}`;
+  }
+
   return nuevoPath;
 }
+
 
 
 function seleccionarTemplate() {
