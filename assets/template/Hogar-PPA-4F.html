@@ -168,7 +168,7 @@ function removeSuffix(url, suffix) { // Check if the URL ends with the specified
           Variable.SetValue("@urlProduct" + bloqueSku, removeSuffix(product['url'] || '', "?exp=so_com") + "?");
           Variable.SetValue("@rating" + bloqueSku, product['rating'] || '');
           Variable.SetValue("@oportunidadUnica" + bloqueSku, product['prices'] ? product['prices'][0]['opportunidadUnica'] : '');
-          <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px; padding-top:3px;">
+          Variable.SetValue("@oportunidadCyber" + bloqueSku, product['badges'] ? product['badges'][0]['label'] : '');
 var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
           if (oportunidadCyber === "Cyber Day") {
             oportunidadCyber = "Cyber Day";
@@ -434,12 +434,12 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <table width="600" cellspacing="0" cellpadding="0" align="center">
       
                           <tr>
-                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110220924/Pasta-para-muro-de-interior-25-kg/110220928?exp=so_com?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-0.png" alt="Ir a Pasta-para-muro-de-interior-25-kg" style="display:block;" border="0"> </a>
+                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/116557021/Taladro-Inalambrico-Percutor-13-mm-20-V-2-Baterias-100-Accesorios/116557023?',@prefix))=%%" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-0.png" alt="Ir a Taladro Inalambrico Percutor 13 mm 20 V 2 Baterias 100 Accesorios" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
 
-                    
+                      
                         </table> 
                       <!--- FIN - Vitrina--->
                     
@@ -449,8 +449,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                      <table width="600" cellspacing="0" cellpadding="0" align="center">
                   
                       <tr>
-                        <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10841/Pintura-para-interior?',@prefix))=%%" target="_blank"> 
-                          <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-1.png" alt="Ir a Pintura-para-interior" style="display:block;" border="0"> </a>
+                        <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320016/Maquinarias-y-complementos?',@prefix))=%%" target="_blank"> 
+                          <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-1.png" alt="Ir a Maquinarias y complementos" style="display:block;" border="0"> </a>
                         </td>
                       </tr>
               
@@ -879,8 +879,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                  <table width="600" cellspacing="0" cellpadding="0" align="center">
                     
                   <tr>
-                      <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10842/Pinturas-especiales-y-por-material?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
-                        <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-2.png" alt="Ir a Pinturas-especiales-y-por-material" style="display:block;" border="0"> </a>
+                      <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320014/Herramientas-electricas-e-inalambricas?',@prefix))=%%" target="_blank"> 
+                        <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-2.png" alt="Ir a Herramientas electricas e inalambricas" style="display:block;" border="0"> </a>
                       </td>
                     </tr>
 
@@ -1309,8 +1309,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                          <table width="600" cellspacing="0" cellpadding="0" align="center">
                     
                           <tr>
-                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10836/Herramientas-y-Complementos-Pintor?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-3.png" alt="Ir a Herramientas-y-Complementos-Pintor" style="display:block;" border="0"> </a>
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10746/Cajas-de-herramientas-y-organizadores?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-3.png" alt="Ir a Cajas de herramientas y organizadores" style="display:block;" border="0"> </a>
                               </td>
                             </tr>
 
@@ -1740,8 +1740,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                           <table width="600" cellspacing="0" cellpadding="0" align="center">
                     
                             <tr>
-                                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10843/Preparacion-y-reparacion-superficies?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
-                                  <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-4.png" alt="Ir a Preparacion-y-reparacion-superficies" style="display:block;" border="0"> </a>
+                                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320017/Herramientas-de-medicion-y-trazado?',@prefix))=%%" target="_blank"> 
+                                  <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-4.png" alt="Ir a Herramientas de medicion y trazado" style="display:block;" border="0"> </a>
                                 </td>
                               </tr>
   
@@ -2176,23 +2176,42 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                           <table width="600" cellspacing="0" cellpadding="0" align="center">
                     
                             <tr>
-                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10837/Diluyentes--Solventes-y-Limpiadores?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-5.png" alt="Ir a Diluyentes--Solventes-y-Limpiadores" style="display:block;" border="0"> </a>
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10775/Betoneras?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-5-v2.png" alt="Ir a Betoneras" style="display:block;" border="0"> </a>
                               </td>
   
-                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10839/Pintura-en-Spray?domain=sodimac&exp=so_com?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-6.png" alt="Ir a Pintura-en-Spray" style="display:block;" border="0"> </a>
+                              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat20791939/Herramientas-manuales?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-6-v2.png" alt="Ir a Herramientas manuales" style="display:block;" border="0"> </a>
                               </td>
   
-                               <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10838/Protectores-de-madera?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-7.png" alt="Ir a Protectores-de-madera" style="display:block;" border="0"> </a>
+                               <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10778/Carretillas-y-Ruedas?',@prefix))=%%" target="_blank"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-7-v2.png" alt="Ir a Carretillas-y-Ruedas" style="display:block;" border="0"> </a>
                               </td>
                             </tr>
                            
-                          </table>      
-                          
-                  
+                          </table>          
      <!--- END COMPLEMENTARIAS--->
+                      
+                      <table width="600" cellspacing="0" cellpadding="0" align="center">
+  
+    <tr>
+      <td colspan="2" align="center">
+        <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/decolovers?',@prefix))=%%" target="_blank">
+           <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/Banner-textil-otin-v3.png" alt="Ir Textil OTin" style="display:block;" border="0">
+         </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+        <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/preparate-para-el-invierno?',@prefix))=%%" target="_blank">
+           <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/29-banner-landing-otim.png" alt="Ir Preparate para el invierno" style="display:block;" border="0">
+         </a>
+      </td>
+    </tr>
+  </table>
+
+
+
     
 <!-- ***** FOOTER ***** -->
 <!-- HUINCHAS-->
@@ -2226,7 +2245,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
     </tr>
   </table>
   <!--- RRSS --->
-  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2" class="">
+  <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0070c2">
     <tr>
       <td><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/rblank1.png" alt="blank rrss 1" width="110" height="42" style="display:block" border="0"></td>
       <td><a href="https://www.facebook.com/homecenter/" target="_blank"><img src="https://www.sodimac.cl/static/envioweb/plantillas-emails/2024/hg/facebook-icon.png" alt="Facebook Sodimac constructor" width="40" height="42" style="display:block" border="0"> </a></td>
@@ -2288,9 +2307,9 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                 <table cellpadding="0" cellspacing="0" align="center" width="600">
                   <tr>
                     <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
-                      <b>T&eacute;rminos y condiciones CMR Puntos.</b> Stock y
-                      Categor&iacute;a de CMR Puntos informada en correo
-                      electr&oacute;nico.
+                      <b>Términos y condiciones CMR Puntos.</b> Stock y
+                      Categoría de CMR Puntos informada en correo
+                      electrónico.
                     </td>
                   </tr>
                 </table>
