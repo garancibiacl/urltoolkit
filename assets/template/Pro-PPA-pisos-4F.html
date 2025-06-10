@@ -17,7 +17,7 @@ set @prefix  = concat('eid=666_NEGOCIO=',@negocio,'_CANAL=',@canal,'_TIPO=',@tip
 <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
   
   <tr>
-  <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px; padding: 5px 0px;"><font color="#444444">Si usted no visualiza bien este correo, por favor <a rel="noopener noreferrer" href="%%view_email_url%%" title="esse link" style="COLOR: #0000ff; TEXT-DECORATION: underline">ingrese aquí</a>.</font>
+  <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px; padding: 5px 0px;"><font color="#444444">Si usted no visualiza bien este correo, por favor <a rel="noopener noreferrer" href="%%view_email_url%%" title="esse link" style="COLOR: #0000ff; TEXT-DECORATION: underline">ingrese aqu�</a>.</font>
   </td>
   </tr>
   
@@ -175,7 +175,6 @@ ENDIF
           Variable.SetValue("@urlProduct" + bloqueSku, removeSuffix(product['url'] || '', "?exp=so_com") + "?");
           Variable.SetValue("@rating" + bloqueSku, product['rating'] || '');
           Variable.SetValue("@oportunidadUnica" + bloqueSku, product['prices'] ? product['prices'][0]['opportunidadUnica'] : '');
-          Variable.SetValue("@oportunidadCyber" + bloqueSku, product['badges'] ? product['badges'][0]['label'] : '');
 var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
           if (oportunidadCyber === "Cyber Day") {
             oportunidadCyber = "Cyber Day";
@@ -505,7 +504,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110162993/Porcelanato-60x60-cm-Sal-Soluble-Beige-1.44-m2/110162996?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-0.jpg" alt="Ir a Porcelanato-60x60-Beige-Brillante-1,44-m2" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-0.png" alt="Ir a Porcelanato-60x60-Beige-Brillante-1,44-m2" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                     
@@ -519,7 +518,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10826/Pisos-Flotantes?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-1.png" alt="Ir a Pisos Flotantes" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-1.png" alt="Ir a Pisos Flotantes" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                     
@@ -973,7 +972,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10827/Ceramicas?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-2.png" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-2.png" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                     
@@ -1429,7 +1428,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10828/Porcelanatos?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-3.png" alt="Ir a Porcelanatos" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-3.png" alt="Ir a Porcelanatos" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                     
@@ -1919,7 +1918,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center" style="padding-bottom: 40px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG35016/Molduras?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-4.png" alt="Ir a Molduras" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-4.png" alt="Ir a Molduras" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                     
@@ -2365,15 +2364,15 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                                         <tr>
                                           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10831/Piedras-y-Enchapes?',@prefix))=%%" target="_blank"> 
-                                            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-5.jpg" alt="Ir a Piedras y Enchapes" style="display:block;" border="0"> </a>
+                                            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-5.png" alt="Ir a Piedras y Enchapes" style="display:block;" border="0"> </a>
                                           </td>
               
                                           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10773/Aislantes-Termicos-y-acusticos?',@prefix))=%%" target="_blank"> 
-                                            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-6.jpg" alt="Ir a Aislantes Termicos y acusticos" style="display:block;" border="0"> </a>
+                                            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-6.png" alt="Ir a Aislantes Termicos y acusticos" style="display:block;" border="0"> </a>
                                           </td>
               
                                            <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10830/Pisos-Vinilicos?',@prefix))=%%" target="_blank"> 
-                                            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/pro-test/images/14-pintura-7.jpg" alt="Ir a Pisos Vinilicos" style="display:block;" border="0"> </a>
+                                            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/14-pisos-pro/images/14-pisos-pro-7.png" alt="Ir a Pisos Vinilicos" style="display:block;" border="0"> </a>
                                           </td>
                                         </tr>
               
@@ -2382,6 +2381,22 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
                  
                         <!-- ***** FOOTER ***** -->
+
+                        <!-- banner -->
+
+                        <table width="600" cellspacing="0" cellpadding="0" align="center">
+                          <tr>
+                            <td colspan="2" align="center" >
+                              <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/especialista-constructor?sid=SO_HO_HOM_HUIN_379941?',@prefix))=%%" target="_blank"> 
+                            <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-especial.png" alt="Ir especialista-constructor" style="display:block; " border="0"> </a></td>
+                        </tr> 
+                        <tr>
+                          <td colspan="2" align="center" ><a href="https://www.youtube.com/user/SodimacConstructor" target="_blank"> 
+                              <img src="https://www.sodimac.cl/static/envioweb/2024/banner/images/banner-canal-yt-v3.png" alt="Ir a Suscribase a nuestro canal youtube" style="display:block; " border="0"> </a></td>
+                      </tr> 
+                          </table> 
+  
+  
 
 
   <!-- ***** FOOTER ***** -->
@@ -2445,6 +2460,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
       <!-- INFO LEGAL PRECIOS -->
 
+
       <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
         <tr>
           <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
@@ -2469,6 +2485,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
           <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
       </tr>  
         </table>
+      </table>
       <!-- Fin INFO LEGAL PRECIOS -->
 
 
