@@ -2,27 +2,26 @@
 
 
 /*********************************** Seccion Variables Adobe ************************************/
-
+ 
 set @negocio = 'HC' /*CO HC*/
 set @canal = 'EMAIL' /*CANAL PUSH WA SMS EMAIL GEOPUSH*/
 set @tipo = 'PPA' /*PPA PPM CAT INFO PDP XLP PAGE GF BEACON*/
-
+ 
 set @prefix  = concat('eid=666_NEGOCIO=',@negocio,'_CANAL=',@canal,'_TIPO=',@tipo,'_PROCESO_ID=',proceso_id)                     
-
+ 
 /*********************************** Fin Seccion Variables Adobe *******************************/
 
 
 ]%%
 
 <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
-    
-    <tr>
-    <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px; padding: 5px 0px;"><font color="#444444">Si usted no visualiza bien este correo, por favor <a rel="noopener noreferrer" href="%%view_email_url%%" title="esse link" style="COLOR: #0000ff; TEXT-DECORATION: underline">ingrese aquí</a>.</font>
-    </td>
-    </tr>
-    
-    </table> 
   
+  <tr>
+  <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px; padding: 5px 0px;"><font color="#444444">Si usted no visualiza bien este correo, por favor <a rel="noopener noreferrer" href="%%view_email_url%%" title="esse link" style="COLOR: #0000ff; TEXT-DECORATION: underline">ingrese aqu�</a>.</font>
+  </td>
+  </tr>
+  
+  </table> 
 
 
 %%[
@@ -42,7 +41,7 @@ concat('
       <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/ic_cmrpuntos.png"
         alt="Cliente sin puntos cmr" width="30" height="17" border="0"> Si a&uacute;n no participa del Programa
       CMR Puntos, inscr&iacute;base aqu&iacute; <a
-        href="https://www.falabella.com/falabella-cl/page/cmr-puntos-ayuda?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/cmr-puntos-ayuda?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/arrow-right.png"
           alt="Ir a programa cmr puntos" style="position: absolute; padding-top: 3px;"> </a>
     </td>
@@ -70,7 +69,7 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 16px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-elite.png"
           alt="CMR Puntos" width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
   </tr>
@@ -96,7 +95,7 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 15px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left" width="7%"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img
           src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-premium.png" alt="CMR Puntos"
           width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
@@ -123,22 +122,18 @@ concat('
       style="font-family: Helvetica, arial, sans-serif; font-size:16px; line-height: 16px; color:#ffffff; text-aling:right; vertical-align: middle;">
       Tiene acumulados ', FormatNumber(TOTAL_PUNTOS_CMR, "N0", "es-CL"), '</td>
     <td align="left" width="10%"><a
-        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&eid=666_NEGOCIO=HC_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
+        href="https://www.falabella.com/falabella-cl/page/Puntos-CMR?exp=sodimac&?eid=666_NEGOCIO=CO_JOBID=',@JOBID,'_TIPO=EMKT_EMAIL=',@emailName_,'_PROCESOID=',@PROCESO_ID,'"
         target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2020/template_shc/images/cmrpuntos-fan.png"
           alt="CMR Puntos" width="90" height="35" style="max-width: 90px; vertical-align: middle;"> </a></td>
   </tr>
 </table>
 ')
 
-
 ENDIF
-
 
 /*********************************** Fin Seccion Huincha CMR ************************************/
 
 ]%%
-
-
 <script runat="server" language="javascript">
   Platform.Load("Core", "1");
   
@@ -180,7 +175,6 @@ ENDIF
           Variable.SetValue("@urlProduct" + bloqueSku, removeSuffix(product['url'] || '', "?exp=so_com") + "?");
           Variable.SetValue("@rating" + bloqueSku, product['rating'] || '');
           Variable.SetValue("@oportunidadUnica" + bloqueSku, product['prices'] ? product['prices'][0]['opportunidadUnica'] : '');
-          Variable.SetValue("@oportunidadCyber" + bloqueSku, product['badges'] ? product['badges'][0]['label'] : '');
 var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
           if (oportunidadCyber === "Cyber Day") {
             oportunidadCyber = "Cyber Day";
@@ -351,7 +345,7 @@ IF SKU_16 < 0 THEN SET @SKU_0116='0' ELSE SET @SKU_0116=SKU_16 ENDIF
 /*** Fila 1 ***/ /* SET @SKU_011='0' */ /* SET @SKU_022='0' */ /* SET @SKU_033='0' */ /* SET @SKU_044='0' */ 
 /*** Fila 2 ***/ /* SET @SKU_055='0' */ /* SET @SKU_066='0' */ /* SET @SKU_077='0' */ /* SET @SKU_088='0' */ 
 /*** Fila 3 ***/ /* SET @SKU_099='0' */ /* SET @SKU_0110='0' */ /* SET @SKU_0111='0' */ /* SET @SKU_0112='0' */
-/*** Fila 4 ***/ /* SET @SKU_0113='0'   SET @SKU_0114='0'   SET @SKU_0115='0'   SET @SKU_0116='0' */
+/*** Fila 4 ***/ /* SET @SKU_0113='121403269'   SET @SKU_0114='0121403269'   SET @SKU_0115='121403269'   SET @SKU_0116='121403269' */
 
 
 /*NO EDITAR*/ /*SET REQUEST API FALABELLA*/ 
@@ -515,10 +509,11 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
         <tr>
           <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/110147715/Piso-Flotante-8-mm-New-Ardennes-Cafe-2.131-m2/110147717?',@prefix))=%%" target="_blank"> 
-            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-0.jpg" alt="Ir a SPC-Piso-Vinilico-3.Porcelanato-60x60-cm-Sal-Soluble-Beige-1.44-m2" style="display:block;" border="0"> </a>
+            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-0.gif" alt="Ir a SPC-Piso-Vinilico-3.Porcelanato-60x60-cm-Sal-Soluble-Beige-1.44-m2" style="display:block;" border="0"> </a>
           </td>
         </tr>
 
+        
       </table> 
   
   
@@ -527,7 +522,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
         <tr>
           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10827/Ceramicas?',@prefix))=%%" target="_blank"> 
-            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-1.png" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
+            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-1.png" alt="Ir a Ceramicas" style="display:block;" border="0"> </a>
           </td>
         </tr>
 
@@ -984,7 +979,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                           <tr>
                             <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10828/Porcelanatos?',@prefix))=%%" target="_blank"> 
-                              <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-2.png" alt="Ir a Porcelanatos" style="display:block;" border="0"> </a>
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-2.png" alt="Ir a Porcelanatos" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
                   
@@ -1435,7 +1430,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                             <tr>
                               <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG35016/Molduras?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-3.png" alt="Ir a Molduras" style="display:block;" border="0"> </a>
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-3.png" alt="Ir a Molduras" style="display:block;" border="0"> </a>
                               </td>
                             </tr>
                     
@@ -1922,7 +1917,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
                             <tr>
                               <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10831/Piedras-y-Enchapes?',@prefix))=%%" target="_blank"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-4.png" alt="Ir a Piedras y Enchapes" style="display:block;" border="0"> </a>
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-4.png" alt="Ir a Piedras y Enchapes" style="display:block;" border="0"> </a>
                               </td>
                             </tr>
                     
@@ -2371,15 +2366,15 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                     
         <tr>
           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG35049/Espuma-Niveladora?',@prefix))=%%" target="_blank"> 
-            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-5.jpg" alt="Ir a Espuma Niveladora" style="display:block;" border="0"> </a>
+            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-5.png" alt="Ir a Espuma Niveladora" style="display:block;" border="0"> </a>
           </td>
 
           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10830/Pisos-Vinilicos?',@prefix))=%%" target="_blank"> 
-            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-6.jpg" alt="Ir a Pisos Vinilicos" style="display:block;" border="0"> </a>
+            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-6.png" alt="Ir a Pisos Vinilicos" style="display:block;" border="0"> </a>
           </td>
 
           <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10832/Mosaicos?',@prefix))=%%" target="_blank"> 
-            <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/test/images/07-organizacion-7.jpg" alt="Ir a Mosaicos" style="display:block;" border="0"> </a>
+            <img src="https://www.sodimac.cl/static/envioweb/2025/04-abril/17-pisos/images/17-pisos-7.png" alt="Ir a Mosaicos" style="display:block;" border="0"> </a>
           </td>
         </tr>
 
@@ -2391,6 +2386,19 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
               <!-- ***** FOOTER ***** -->
 
 
+              <table width="600" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                  <td colspan="2" align="center" style="padding-bottom: 10px;" >
+                    <a href="%%=RedirectTo(concat(' https://www.sodimac.cl/sodimac-cl/content/temporada-de-ahorro?',@prefix))=%%" target="_blank"> 
+                  <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-10-pisos-tda-1.gif" alt="Ir Pisos-y-revestimientos" style="display:block; " border="0"> </a></td>
+              </tr> 
+
+              <tr>
+                <td colspan="2" align="center" style="padding-bottom: 10px;" >
+                  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/CATG10741/Pisos-y-revestimientos?facetSelected=true&f.derived.variant.sellerId=SODIMAC&',@prefix))=%%" target="_blank"> 
+                <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/banner-despacho-gratis-pisos-1.gif" alt="Ir Pisos-y-revestimientos" style="display:block; " border="0"> </a></td>
+            </tr> 
+              </table>  
 
             
 <!-- HUINCHAS-->
@@ -2453,6 +2461,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 <!--- ---> 
 
       <!-- INFO LEGAL PRECIOS -->
+
       <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
         <tr>
           <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
@@ -2480,43 +2489,45 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
       <!-- Fin INFO LEGAL PRECIOS -->
 
 
-              %%[ IF NOT EMPTY(TOTAL_PUNTOS_CMR) and TOTAL_PUNTOS_CMR > 0 and NOT
-              EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
-              <table cellpadding="0" cellspacing="0" align="center" width="600">
-                <tr>
-                  <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
-                    <b>Términos y condiciones CMR Puntos.</b> Stock y
-                    Categoría de CMR Puntos informada en correo
-                    electrónico.
-                  </td>
-                </tr>
+      %%[ IF NOT EMPTY(TOTAL_PUNTOS_CMR) and TOTAL_PUNTOS_CMR > 0 and NOT
+      EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
+      <table cellpadding="0" cellspacing="0" align="center" width="600">
+        <tr>
+          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:12px;color:#333;line-height:13px; padding:10px 5px;">
+            <b>Términos y condiciones CMR Puntos.</b> Stock y
+            Categoría de CMR Puntos informada en correo
+            electr�nico.
+          </td>
+        </tr>
+      </table>
+      %%[ ENDIF ]%%
+
+            <!-- Cancelar Suscripcion -->
+            <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
+              
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Este correo electrónico ha sido enviado a <b><a href="mailto:%%emailaddr%%">%%emailaddr%%</a></b></font>
+              <br><br>
+              </td>
+              </tr>
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Si no quiere seguir recibiendo nuestros emails, ingrese a este <a rel="noopener noreferrer" href="%%profile_center_url%%"><b>link</b></a>.</font><br><br>
+              </td>
+              </tr>
+              <tr>
+              <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px">
+              <font color="#444444">Dirección: Av. Presidente Riesco 5685, Piso 14, Las Condes, Santiago, Chile<br><strong>2023 Derechos Reservados</strong>
+              </font>
+              </td>
+              </tr> 
+              
               </table>
-              %%[ ENDIF ]%%
+ <!-- FIN - Cancelar Suscripcion -->
 
-              <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" class="dashedBorder" style="width: 550">
-                
-                <tr>
-                <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Este correo electrónico ha sido enviado a <b><a href="mailto:%%emailaddr%%">%%emailaddr%%</a></b></font>
-                <br><br>
-                </td>
-                </tr>
-                <tr>
-                <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px"><font color="#444444">Si no quiere seguir recibiendo nuestros emails, ingrese a este <a rel="noopener noreferrer" href="%%profile_center_url%%"><b>link</b></a>.</font><br><br>
-                </td>
-                </tr>
-                <tr>
-                <td align="center" valign="middle" style="FONT-FAMILY: Arial; WHITE-SPACE: normal; FONT-SIZE: 11px">
-                <font color="#444444">Dirección: Av. Presidente Riesco 5685, Piso 14, Las Condes, Santiago, Chile<br><strong>2023 Derechos Reservados</strong>
-                </font>
-                </td>
-                </tr> 
-                
-                </table>
-
-            </td>
-          </tr>
-        </table>
-      </custom>
     </td>
   </tr>
+</table>
+</custom>
+</td>
+</tr>
 </table>
