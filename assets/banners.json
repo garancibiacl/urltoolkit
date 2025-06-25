@@ -426,5 +426,11 @@
     "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/catalogo-ppi-invierno-pro?',@prefix))=%%",
     "img_src": "https://www.sodimac.cl/static/envioweb/2025/banners/images/Banner-Catalogo-PPI-v2.png",
     "alt": "Revisa Nuestro Catalogo"
+  },
+  {
+    "nombre": "HUINCHA 6 CUOTAS SIN INTERES EN CALEFACCIÓN",
+    "href": "%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/preparate-para-el-invierno?',@prefix))=%%",
+    "img_src": "https://www.sodimac.cl/static/envioweb/2025/huinchas/Huincha-6-cuotas.png",
+    "alt": "Hasta 6 cuotas sin interes"
   }
 ]

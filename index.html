@@ -48,6 +48,10 @@
           <a class="nav-link" href="#" id="navAmp">Editor URL/Imagen</a>
           </li>
 
+          <li class="nav-item" >
+            <a class="nav-link" href="#" id="navLayout">Elige tu Layout</a>
+            </li>
+
         </ul>
 
          
@@ -94,7 +98,7 @@
 
 
   <!-- Vista 1: Editor de URLs -->
-  <div class="container-fluid">
+  <div class="container-fluid" >
   
     <div class="row justify-content-center  ">
       <div class="col-md-9  py-4 p-5 ">
@@ -514,6 +518,453 @@
 
 </div>
 
+<!--  Start Vista: Elige tu layout -->
+
+<div class="row justify-content-center">
+  <div id="vistaAmpLayout" class="bg-body text-body">
+
+    <div class="container-fluid py-5" >
+      <h1 class="text-center display-5 fw-bold mb-5">🧠 Elige tu Layout</h1>
+      <div id="botonesGrids" class="grid-buttons d-flex flex-wrap justify-content-center gap-4 mb-4">
+        <!-- Se llena dinámicamente -->
+      </div>
+  
+      <h2 class="h5 mb-3">💡 Resultado HTML</h2>
+      <textarea id="salidaHTML" class="form-control bg-black text-success" rows="12" readonly></textarea>
+      <div class="text-end mt-3">
+        <button onclick="copiarHTML()" class="btn btn-outline-info px-4">📋 Copiar HTML</button>
+      </div>
+    </div>
+  
+    <div id="layouts" style="display: none">
+      <!--START LAYOUT 1-->
+      <div id="layout-1">
+        <table width="600" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td colspan="2" align="center" valign="top">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td colspan="2" align="center">
+                    <a
+                      href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/maestro-de-la-casa?',@prefix))=%%"
+                      target="_blank"
+                    >
+                      <img
+                        src="https://www.sodimac.cl/static/envioweb/2025/06-junio/13-grupo-b/images/13-grupo-B-1.png"
+                        alt="Ir a Maestro de la casa"
+                        style="display: block"
+                        border="0"
+                      />
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" align="center">
+                    <a
+                      href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%"
+                      target="_blank"
+                    >
+                      <img
+                        src="https://www.sodimac.cl/static/envioweb/2025/06-junio/13-grupo-b/images/13-grupo-B-2.png"
+                        alt="Ir a Guardian del jardin"
+                        style="display: block"
+                        border="0"
+                      />
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <!--FIN COLUMNA 1-->
+  
+            <!--START COLUMNA 3-->
+  
+            <td colspan="2" align="center" valign="top">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td colspan="2" align="center">
+                    <a
+                      href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/parrillero-de-la-casa?',@prefix))=%%"
+                      target="_blank"
+                    >
+                      <img
+                        src="https://www.sodimac.cl/static/envioweb/2025/06-junio/13-grupo-b/images/13-grupo-B-3.png"
+                        alt="Ir a Parrillero de la casa"
+                        style="display: block"
+                        border="0"
+                      />
+                    </a>
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td colspan="2" align="center">
+                    <a
+                      href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/el-mas-tecnologico?',@prefix))=%%"
+                      target="_blank"
+                    >
+                      <img
+                        src="https://www.sodimac.cl/static/envioweb/2025/06-junio/13-grupo-b/images/13-grupo-B-4.png"
+                        alt="Ir a El mas tecnologico"
+                        style="display: block"
+                        border="0"
+                      />
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!--FIN LAYOUT 1-->
+  
+      <!--START LAYOUT 2-->
+      <div id="layout-2">
+       
+        <table width="600" border="0" cellspacing="0" cellpadding="0">
+  
+  
+          <!--START COLUMNA 1-->
+          <tr>
+            <td colspan="2" align="center" valign="top">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+                <tr>
+                  <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320014/Herramientas-electricas-e-inalambricas?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/09-jugueteria-papa/images/09-jugueteria-papa-1-v3.png" alt="Ir a Herramientas electricas e inalambricas" style="display:block;" border="0"> </a>
+                  </td>
+                </tr>
+            
+  
+                  <tr>
+                    <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320016/Maquinarias-y-complementos?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/09-jugueteria-papa/images/09-jugueteria-papa-2-v3.png" alt="Ir a Maquinarias y complementos" style="display:block;" border="0"> </a>
+                    </td>
+                  </tr>
+             
+              </table>
+  
+  
+            
+  
+            </td>
+            <!--FIN COLUMNA 1-->
+  
+  
+  
+  
+            <!--START COLUMNA 2-->
+  
+            <td colspan="2" align="center" valign="top">
+              <table width="100%" cellspacing="0" cellpadding="0" align="center">
+  
+                <tr>
+                  <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat18320015/Maquinaria-de-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/09-jugueteria-papa/images/09-jugueteria-papa-3-v3.png" alt="Ir a Maquinaria de jardin" style="display:block;" border="0"> </a></td>
+                </tr>
+         
+              </table>
+  
+          
+         
+  
+  
+            </td>
+  
+      
+  
+            <!--FIN COLUMNA 2-->
+  
+                  <!--START COLUMNA 3-->
+  
+                  <td colspan="2" align="center" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+                      <tr>
+                        <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat2079/Parrillas-y-accesorios?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/09-jugueteria-papa/images/09-jugueteria-papa-4-v3.png" alt="Ir a Parrillas y accesorios" style="display:block;" border="0"> </a></td>
+                      </tr>
+                 
+              
+                      <tr>
+                        <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat1012/TV-y-Video?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/09-jugueteria-papa/images/09-jugueteria-papa-5-v3.png" alt="Ir a TV y Video" style="display:block;" border="0"> </a></td>
+                      </tr>
+  
+  
+               
+                    </table>
+  
+                
+  
+                  </td>
+  
+  
+  
+        </tr>
+      
+      </table>
+      </div>
+      <!--FIN LAYOUT 2-->
+  
+  
+   <!-- START LAYOUT 3-->
+   <div id="layout-3">
+       
+    <table width="600" border="0" cellspacing="0" cellpadding="0">
+  
+  
+      <!--START COLUMNA 1-->
+      <tr>
+        <td colspan="2" align="center" valign="top">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+            <tr>
+              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/maestro-de-la-casa?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-8.png" alt="Ir a Maestro de la casa" style="display:block;" border="0"> </a>
+              </td>
+            </tr>
+        
+  
+        
+         
+          </table>
+  
+  
+        
+  
+        </td>
+        <!--FIN COLUMNA 1-->
+  
+  
+  
+        <!--START COLUMNA 2-->
+  
+        <td colspan="2" align="center" valign="top">
+          <table width="100%" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-9.png" alt="Ir a Guardian del jardin" style="display:block;" border="0"> </a>
+              </td>
+            </tr>
+  
+            <tr>
+              <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-10.png" alt="Ir a Guardian del jardin" style="display:block;" border="0"> </a>
+              </td>
+            </tr>
+     
+          </table>
+  
+      
+     
+  
+  
+        </td>
+  
+  
+  
+        <!--FIN COLUMNA 2-->
+  
+              <!--START COLUMNA 3-->
+  
+          
+  
+  
+  
+    </tr>
+  
+  </table>
+  
+  </div>
+  <!-- FIN LAYOUT 3-->
+  
+     <!-- START LAYOUT 4 -->
+     <div id="layout-4">
+       
+      <table width="600" border="0" cellspacing="0" cellpadding="0">
+  
+  
+        <!--START COLUMNA 1-->
+        <tr>
+          <td colspan="2" align="center" valign="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+              <tr>
+                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/maestro-de-la-casa?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-2.png" alt="Ir a Maestro de la casa" style="display:block;" border="0"> </a>
+                </td>
+              </tr>
+          
+  
+                <tr>
+                  <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-3.png" alt="Ir a Guardian del jardin" style="display:block;" border="0"> </a>
+                  </td>
+                </tr>
+           
+            </table>
+  
+  
+          
+  
+          </td>
+          <!--FIN COLUMNA 1-->
+  
+  
+  
+          <!--START COLUMNA 2-->
+  
+          <td colspan="2" align="center" valign="top">
+            <table width="100%" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-4.png" alt="Ir a Guardian del jardin" style="display:block;" border="0"> </a>
+                </td>
+              </tr>
+  
+              <tr>
+                <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/guardian-del-jardin?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-5.png" alt="Ir a Guardian del jardin" style="display:block;" border="0"> </a>
+                </td>
+              </tr>
+       
+            </table>
+  
+        
+       
+  
+  
+          </td>
+  
+    
+  
+          <!--FIN COLUMNA 2-->
+  
+                <!--START COLUMNA 3-->
+  
+                <td colspan="2" align="center" valign="top">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+                    <tr>
+                      <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/parrillero-de-la-casa?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-6.png" alt="Ir a Parrillero de la casa" style="display:block;" border="0"> </a></td>
+                    </tr>
+               
+            
+                    <tr>
+                      <td colspan="2" align="center"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/seleccion/el-mas-tecnologico?',@prefix))=%%" target="_blank"> <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/11-productos-wow/images/11-productos-wow-7.png" alt="Ir a El mas tecnologico" style="display:block;" border="0"> </a></td>
+                    </tr>
+  
+  
+             
+                  </table>
+  
+              
+  
+                </td>
+  
+  
+  
+      </tr>
+    
+    </table>
+  
+    </div>
+    <!-- FIN LAYOUT 4 -->
+  
+         <!-- START LAYOUT 5 -->
+         <div id="layout-5">
+       
+          <table width="600" border="0" cellspacing="0" cellpadding="0">
+  
+            <tr>
+              <td valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        
+                  <tr>
+                    <td valign="top">
+                      
+                        <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/07-otono-inspiracional/images/inspiracional-8.png" alt="Pistolas-para-Pintar" style="display:block; width:100%;" border="0">
+                    </td>
+                  </tr>
+               
+                </table>
+        
+        
+              
+        
+              </td>
+        
+        
+        
+        
+        
+        
+        
+              <td valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        
+                  <tr>
+                    <td valign="top">
+                      <a href=" %%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat9910024/Estufas-Gas?',@prefix))=%%" target="_blank">
+                        <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/07-otono-inspiracional/images/inspiracional-9.png" alt="Estufas-Gas" style="display:block; width:100%;" border="0"></a>
+                    </td>
+                  </tr>
+        
+                  <tr>
+                    <td valign="top">
+                      <a href=" %%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat9910006/Estufas-Electricas?',@prefix))=%%" target="_blank">
+                        <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/07-otono-inspiracional/images/inspiracional-10.png" alt="Estufas-Electricas" style="display:block; width:100%;" border="0"></a>
+                    </td>
+                  </tr>
+           
+                </table>
+        
+            
+           
+        
+        
+              </td>
+        
+        
+        
+              <!--FIN COLUMNA 2-->
+        
+                    <!--START COLUMNA 3-->
+        
+                    <td valign="top">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        
+                        <tr>
+                          <td valign="top">
+                            <a href=" %%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat16250010/Estufas-Parafina?',@prefix))=%%" target="_blank">
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/07-otono-inspiracional/images/inspiracional-11.png" alt="stufas-Parafina" style="display:block; width:100%;" border="0"></a>
+                          </td>
+                        </tr>
+                   
+        
+                        <tr>
+                          <td valign="top">
+                            <a href=" %%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/lista/cat9910027/Estufas-Pellet?',@prefix))=%%" target="_blank">
+                              <img src="https://www.sodimac.cl/static/envioweb/2025/05-mayo/07-otono-inspiracional/images/inspiracional-12.png" alt="Estufas-Pellet" style="display:block; width:100%;" border="0"></a>
+                          </td>
+                        </tr>
+        
+        
+                 
+                      </table>
+        
+                  
+        
+                    </td>
+        
+        
+        
+          </tr>
+        
+        </table>
+        </div>
+        <!-- FIN LAYOUT 5 -->
+  
+  
+  
+    </div>
+  </div>
+
+
+</div>
+
+<!--  Fin Vista: Elige tu layout -->
+
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditarBanner" tabindex="-1" aria-labelledby="modalEditarBannerLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -570,14 +1021,14 @@
     
 
 
-<script src="assets/script.js"></script>
+
   <!-- Bootstrap JS (necesario para toast) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 <!-- SweetAlert2 (para mensajes visuales) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+<script src="assets/script.js"></script>
 </body>
 
 

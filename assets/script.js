@@ -1388,12 +1388,14 @@ const vistaSku = document.getElementById('vistaSku');
 const vistaCrearBanner = document.getElementById('vistaCrearBanner')
 const vistaConversor = document.getElementById('vistaConversor');
 const vistaAmpEditor = document.getElementById('vistaAmpEditor');
+const vistaAmpLayout = document.getElementById('vistaAmpLayout');
 
 const navEditor = document.getElementById('navEditor');
 const navSku = document.getElementById('navSku');
 const navBanner = document.getElementById('navBanner');
 const navConversor = document.getElementById('navConversor');
 const navAmp = document.getElementById('navAmp');
+const navLayout = document.getElementById('navLayout');
 
 function mostrarVista(vista) {
   vistaEditor.style.display = vista === 'editor' ? 'block' : 'none';
@@ -1401,12 +1403,16 @@ function mostrarVista(vista) {
   vistaSku.style.display = vista === 'sku' ? 'block' : 'none';
   vistaConversor.style.display = vista === 'conversor' ? 'block' : 'none';
   vistaAmpEditor.style.display = vista === 'amp' ? 'block' : 'none';
+  vistaAmpLayout.style.display = vista === 'layout' ? 'block' : 'none';
 
   navEditor.classList.toggle('active', vista === 'editor');
   navSku.classList.toggle('active', vista === 'sku');
   navBanner.classList.toggle('active', vista === 'banner');
   navConversor.classList.toggle('active', vista === 'conversor');
   navAmp.classList.toggle('active', vista === 'amp');
+  navLayout.classList.toggle('active', vista === 'layout');
+
+  
 }
 
 // Listeners
@@ -1415,6 +1421,7 @@ navSku.addEventListener('click', () => mostrarVista('sku'));
 navBanner.addEventListener('click', () => mostrarVista('banner'));
 navConversor.addEventListener('click', () => mostrarVista('conversor'));
 navAmp.addEventListener('click', () => mostrarVista('amp'));
+navLayout.addEventListener('click', () => mostrarVista('layout'));
 
 // Vista por defecto
 mostrarVista('editor');
@@ -2088,5 +2095,70 @@ function asignarFechaHoyInputDate() {
 
 
 
+
+
+// START VISTA ELIGE TU LAYOUT
+
+document.addEventListener("DOMContentLoaded", () => {
+  const layoutsContainer = document.getElementById("layouts");
+  const botonesContainer = document.getElementById("botonesGrids");
+
+  if (!layoutsContainer || !botonesContainer) {
+    console.error("❌ No se encontró #layouts o #botonesGrids");
+    return;
+  }
+
+  // 👇 Mostrar temporalmente para capturar los divs
+  layoutsContainer.style.display = "block";
+
+  const layoutNameDisplay = document.createElement("div");
+  layoutNameDisplay.className = "text-center fw-bold mt-2 text-light";
+  botonesContainer.parentNode.insertBefore(layoutNameDisplay, botonesContainer.nextSibling);
+
+  const layouts = layoutsContainer.querySelectorAll("div[id^='layout-']");
+  layouts.forEach((layoutDiv) => {
+    const id = layoutDiv.id;
+    const numero = id.split("-")[1];
+    const btn = document.createElement("div");
+    btn.className = "grid-option";
+    btn.setAttribute("data-id", id);
+    btn.innerHTML = `
+      <img src="assets/images/${id}.png" alt="Layout ${numero}">
+      <p class="text-white">Layout ${numero}</p>
+    `;
+    btn.onclick = () => {
+      mostrarLayout(id);
+      marcarSeleccionado(btn, `Layout ${numero}`);
+    };
+    botonesContainer.appendChild(btn);
+  });
+
+  // 👇 Ocultar de nuevo si no quieres que se vea
+  layoutsContainer.style.display = "none";
+
+  function marcarSeleccionado(elemento, nombre) {
+    document.querySelectorAll(".grid-option").forEach(e => e.classList.remove("seleccionado"));
+    elemento.classList.add("seleccionado");
+    layoutNameDisplay.textContent = `✅ Seleccionado: ${nombre}`;
+  }
+
+  function mostrarLayout(id) {
+    const layout = document.getElementById(id);
+    if (!layout) return alert("❌ Layout no encontrado");
+    document.getElementById("salidaHTML").value = layout.innerHTML.trim();
+  }
+
+  window.copiarHTML = function () {
+    const textarea = document.getElementById("salidaHTML");
+    const cleaned = textarea.value
+      .replace(/<tbody>/gi, "")
+      .replace(/<\/tbody>/gi, "");
+    navigator.clipboard.writeText(cleaned)
+      .then(() => alert("✅ HTML copiado sin tbody"))
+      .catch(() => alert("❌ Error al copiar"));
+  }
+});
+
+// FIN VISTA ELIGE TU LAYOUT
 
 

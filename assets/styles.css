@@ -277,3 +277,64 @@ font-style: italic;
 .preview-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
+
+
+.grid-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.grid-option {
+  cursor: pointer;
+  border: 2px solid #2563eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #1e293b;
+  transition: transform 0.2s ease;
+  width: 180px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.grid-option:hover {
+  transform: scale(1.03);
+  border-color: #38bdf8;
+}
+
+.grid-option img {
+  width: 100%;
+  height: auto; /* ✅ Mejor que 100% si quieres mantener proporción original */
+  object-fit: contain; /* ✅ Muestra todo el contenido, aunque haya espacio extra */
+  flex-grow: 1;
+  display: block;
+  background: #0f172a;
+}
+
+.grid-option p {
+  margin: 0;
+  padding: 0.5rem;
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: monospace;
+  background-color: #1f2937;
+  color: #10b981;
+  border: 1px solid #374151;
+  margin-bottom: 1rem;
+}
+
+ .grid-option.seleccionado {
+    border-color: #10b981;
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px #10b98155;
+  }
