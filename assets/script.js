@@ -2106,6 +2106,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!layoutsContainer || !botonesContainer) {
     console.error("❌ No se encontró #layouts o #botonesGrids");
     return;
+
+    
   }
 
   // 👇 Mostrar temporalmente para capturar los divs
@@ -2123,7 +2125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.className = "grid-option";
     btn.setAttribute("data-id", id);
     btn.innerHTML = `
-      <img src="assets/images/${id}.png" alt="Layout ${numero}">
+      <img src="images/${id}.png" alt="Layout ${numero}">
       <p class="text-white">Layout ${numero}</p>
     `;
     btn.onclick = () => {
@@ -2146,6 +2148,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const layout = document.getElementById(id);
     if (!layout) return alert("❌ Layout no encontrado");
     document.getElementById("salidaHTML").value = layout.innerHTML.trim();
+
+ 
   }
 
   window.copiarHTML = function () {
@@ -2161,4 +2165,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // FIN VISTA ELIGE TU LAYOUT
 
+
+// START BOTON CONVERTIR URL EN MARCA
+function construirHref(nuevaUrl) {
+  const especial = [
+    'facetSelected=true',
+    'sellerId=SODIMAC',
+    'f.product.L2_category_paths=',
+    '/sodimac-cl/buscar?Ntt='
+  ].some(p => nuevaUrl.includes(p));
+
+  if (especial && nuevaUrl.includes('?')) {
+    const i = nuevaUrl.indexOf('?');
+    nuevaUrl = nuevaUrl.slice(0, i) + '&' + nuevaUrl.slice(i + 1);
+  }
+  const sep = (nuevaUrl.includes('?')||nuevaUrl.includes('&'))?'&':'?';
+  return `%%=RedirectTo(concat('${nuevaUrl}${sep}',@prefix))=%%`;
+}
+
+function convertAndShow() {
+  const input = document.getElementById('hrefInputUrl');
+  const out   = document.getElementById('convertedUrl');
+  let raw = input.value.trim();
+  if (!raw) return alert('⚠️ Ingresa una URL');
+
+  if (raw.endsWith('?')) raw = raw.slice(0, -1);
+  const amp = construirHref(raw);
+  input.value = amp;
+  out.value   = amp;
+}
+
+function copyConverted() {
+  const out = document.getElementById('convertedUrl');
+  const txt = out.value.trim();
+  if (!txt) return alert('⚠️ Nada que copiar');
+
+  navigator.clipboard.writeText(txt).then(() => {
+    mostrarToast(`✅ Url copiada`, 'success');
+  });
+  
+}
+
+function clearFields() {
+  const input = document.getElementById('hrefInputUrl');
+  const out   = document.getElementById('convertedUrl');
+  input.value = '';
+  out.value = '';
+  input.focus();
+}
+// FIN BOTON CONVERTIR URL EN MARCA
 
