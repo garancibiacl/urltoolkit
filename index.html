@@ -107,12 +107,12 @@
   <div class="container-fluid" >
   
     <div class="row justify-content-center  ">
-      <div class="col-md-12  py-4 p-5 ">
+      <div class="col-md-12  py-4">
 
         <div id="vistaEditor">
-          <div class="card-body bg-card p-4 rounded-4 ">
+          <div class="card-body bg-card  rounded-4 ">
          
-      <div class="d-flex gap-3 row justify-content-around">
+      <div class="d-flex gap-2 row justify-content-center ">
         <div class="col-md-3 bg-body p-4 rounded-4">
           <div class="mb-3">
             <label for="fechaInicio" class="form-label fw-semibold text-body-secondary">  📅 Selecciona la fecha de inicio:</label>
@@ -184,111 +184,113 @@
           </div>
         </div>
     
-                  <div class="col-md-12 rounded-4">
-                    <div id="editorHref" class="d-none">
-                      <div class="row g-1">
-                        <div class="col-md-12">
-                       <div class="row align-items-start">
-  <!-- Columna izquierda: Label + input group -->
-  <div class="col-md-6 ">
-    <label for="hrefInput" class="form-label">Editar URL del enlace actual:</label>
-    
+        <div class="col-11 p-0 pt-2 rounded-4">
+          <div id="editorHref" class="d-none">
+            <div class="row g-1">
+              <div class="col-md-12">
+             <div class="row align-items-start">
+<!-- Columna izquierda: Label + input group -->
+<div class="col-md-6 ">
+<label for="hrefInput" class="form-label">Editar URL del enlace actual:</label>
+
+</div>
+
+
+<!--<div class="col-md-6 d-flex justify-content-md-end gap-2 mb-3">
+<label for="carpetaSelector" class="form-label">🗂️ Selecciona carpeta de imágenes:</label>
+<select id="carpetaSelector" class="form-select w-auto">
+<option value="05-mayo">05-mayo</option>
+<option value="/produccion/static/envioweb/2025/cyberday">CyberDay</option>
+
+
+
+
+</select>
+
+
+</div>-->
+
+<div class="col-md-12 ">
+<div class="input-group mb-3">
+<span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
+
+<!-- El input estará vacío, y el placeholder mostrará la URL -->
+<input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/...">
+
+<button id="anteriorBtn" class="btn btn-outline-secondary d-flex" type="button"><i class="bx bx-arrow-left-stroke bx-sm"></i> Anterior</button>
+<button id="siguienteBtn" class="btn btn-outline-secondary d-flex" type="button">Siguiente<i class="bx bx-arrow-right-stroke bx-sm"></i> </button>
+</div>
+
+<div class=" col-md-12 ">
+
+<div class="row align-items-center">
+<!-- Columna izquierda: input -->
+<div class="col-md-6 ">
+<div class="input-group">
+<span id="estadoEnlaceImagen" class="input-group-text">Url Imagen</span>
+<input type="text" id="imgSrcInput" class="form-control" placeholder="Url FTP Imagen">
+</div>
+</div>
+<!-- Columna derecha: botones -->
+
+<div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
+<div class="input-group">
+<input type="text" id="inputRutaFtpReemplazo" class="form-control"
+placeholder=" Reemplazar ruta basada en carpeta (sin alterar número final)">
+
+
+<button class="btn btn-outline-secondary" onclick="
+const ruta = document.getElementById('inputRutaFtpReemplazo').value;
+reemplazarRutaBaseDetectandoCarpeta(ruta);
+">
+Reemplazar ruta
+</button>
+</div>
+</div>
   </div>
 
-  
-  <!--<div class="col-md-6 d-flex justify-content-md-end gap-2 mb-3">
-    <label for="carpetaSelector" class="form-label">🗂️ Selecciona carpeta de imágenes:</label>
-    <select id="carpetaSelector" class="form-select w-auto">
-      <option value="05-mayo">05-mayo</option>
-      <option value="/produccion/static/envioweb/2025/cyberday">CyberDay</option>
-      
+  <div class="row align-items-center">
+    <!-- Columna izquierda: input -->
+    <div class="col-md-6">
+      <button onclick="limpiarCamposUrl()" class="btn btn-outline-light mt-3 mb-3 ms-2 d-flex gap-2">
+        <i class="bx bx-brush bx-sm"></i> Limpiar todo
+      </button>
 
-     
 
-    </select>
 
-    
-  </div>-->
-
-  <div class="col-md-12 ">
-    <div class="input-group mb-3">
-      <span id="estadoEnlace" class="input-group-text">Url Sodimac</span>
-    
-      <!-- El input estará vacío, y el placeholder mostrará la URL -->
-      <input type="text" id="hrefInput" class="form-control" placeholder="https://www.sodimac.cl/...">
-    
-      <button id="anteriorBtn" class="btn btn-outline-secondary d-flex" type="button"><i class="bx bx-arrow-left-stroke bx-sm"></i> Anterior</button>
-      <button id="siguienteBtn" class="btn btn-outline-secondary d-flex" type="button">Siguiente<i class="bx bx-arrow-right-stroke bx-sm"></i> </button>
-    </div>
-
-  <div class=" col-md-12 ">
-
-    <div class="row align-items-center">
-      <!-- Columna izquierda: input -->
-      <div class="col-md-6 ">
-        <div class="input-group">
-        <span id="estadoEnlaceImagen" class="input-group-text">Url Imagen</span>
-          <input type="text" id="imgSrcInput" class="form-control" placeholder="Url FTP Imagen">
-        </div>
       </div>
-<!-- Columna derecha: botones -->
-    
-      <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-3 mt-md-0">
-        <div class="input-group">
-          <input type="text" id="inputRutaFtpReemplazo" class="form-control"
-          placeholder=" Reemplazar ruta basada en carpeta (sin alterar número final)">
-
+            <!-- Columna derecha: Botón copiar HTML -->
+            <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 gap-3">
+              <button id="copiarHtmlBtn" class="btn btn-light d-flex align-items-md-center gap-1 d-none"><i class="bx bx-paste bx-sm"></i> Copiar HTML</button>
+            <button class="btn btn-primary d-flex gap-1" onclick="aplicarCambioHref('hrefInput')"><i class="bx bx-save bx-sm"></i> Guardar Cambios</button>
           
-          <button class="btn btn-outline-secondary" onclick="
-          const ruta = document.getElementById('inputRutaFtpReemplazo').value;
-          reemplazarRutaBaseDetectandoCarpeta(ruta);
-        ">
-          Reemplazar ruta
-        </button>
+            </div>
+               </div>
+  
+  </div>
+  
+
+</div>
+
+
+           
+          </div>
       </div>
-    </div>
-            </div>
-
-            <div class="row align-items-center">
-              <!-- Columna izquierda: input -->
-              <div class="col-md-6">
-                <button onclick="limpiarCamposUrl()" class="btn btn-outline-light mt-3 mb-3 ms-2 d-flex gap-2">
-                  <i class="bx bx-brush bx-sm"></i> Limpiar todo
-                </button>
-
-
-
-                </div>
-                      <!-- Columna derecha: Botón copiar HTML -->
-                      <div class="col-md-6 mb-2 d-flex justify-content-md-end mt-3 gap-3">
-                        <button id="copiarHtmlBtn" class="btn btn-light d-flex align-items-md-center gap-1 d-none"><i class="bx bx-paste bx-sm"></i> Copiar HTML</button>
-                      <button class="btn btn-primary d-flex gap-1" onclick="aplicarCambioHref('hrefInput')"><i class="bx bx-save bx-sm"></i> Guardar Cambios</button>
-                    
-                      </div>
-                         </div>
-            
-            </div>
-            
-
+    
     </div>
 
-
-                     
-                    </div>
-                </div>
-              
-              </div>
-
-              
-                     
+    
+           
 
 
 
 
-                   
-                      </div>
-                    </div>
+         
+            </div>
+          </div>
                   </div>
+
+                 
             </div>
     
 
