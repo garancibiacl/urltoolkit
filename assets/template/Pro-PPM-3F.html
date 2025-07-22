@@ -248,8 +248,6 @@ var oportunidadCyber = product['badges'] ? product['badges'][0]['label'] : '';
 
 /*SET DE CODIGOS SKU SKUS*/
 /*** Para agregar sku manual: SKU_01 sustituir por '0000000' quedar&iacute;a @SKU_011='0000000' ***/
-
-
 /*** Fila 1 ***/
 IF SKU_01 < 0 THEN SET @SKU_011='0' ELSE SET @SKU_011='110132535' ENDIF
 IF SKU_02 < 0 THEN SET @SKU_022='0' ELSE SET @SKU_022='110132731' ENDIF
@@ -438,8 +436,8 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                    
                         <!--- FIN - Vitrina--->
                     
-              
-                  
+               
+                
                 
                         <!-- Productos Fila 1 -->
                         <!--1 2 3 4-->
@@ -541,7 +539,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand1)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id1)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand1)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id1)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -673,7 +671,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand2)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id2)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand2)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id2)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -803,7 +801,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand3)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id3)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand3)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id3)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -858,7 +856,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-
+                        
 
                         <!--- Productos Fila 2--->
                         <!--5 6 7 8-->
@@ -959,7 +957,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand5)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id5)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand5)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id5)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1091,7 +1089,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand6)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id6)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand6)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id6)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1221,7 +1219,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand7)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id7)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand7)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id7)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1276,9 +1274,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
 
-            
-                  
-
+               
                         <!--- Productos Fila 3--->
                         <!--9 10 11 12-->
 
@@ -1378,7 +1374,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand9)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id9)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand9)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id9)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1510,7 +1506,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand10)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id10)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand10)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id10)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1640,7 +1636,7 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                                                   %%[ ENDIF ]%%
                                                   <tr>
                                                     <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #555555; padding-bottom: 5px;">
-                                                      <span class="marcaProducto">%%=v(@brand11)=%%</span> <span class="skuProducto" style="color: #BBBBBB">SKU:%%=v(@id11)=%%</span>
+                                                      <span class="marcaProducto">%%=v(@brand11)=%%</span> <span class="skuProducto" style="color: #BBBBBB">Cód:%%=v(@id11)=%%</span>
                                                     </td>
                                                   </tr>
 
@@ -1693,7 +1689,10 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
                         <!--- Fin Productos Fila 3--->
 
 
-    
+                        <!--- Fin Productos--->
+
+                  
+                         
                    
   <!-- ***** FOOTER ***** -->
 <!-- HUINCHAS-->
@@ -1755,30 +1754,31 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
       <!-- INFO LEGAL PRECIOS -->
 
-      <table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
-            *Precio referencial Regi&oacute;n Metropolitana. Este correo
-            muestra precios de nuestras tiendas en la Regi&oacute;n
-            Metropolitana, nuestros precios son siempre bajos. Su
-            vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
-            condiciones
-            de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
-            de retiro. Productos y promociones v&aacute;lidas
-            seg&uacute;n disponibilidad, para clientes y consumidores
-            finales; aplica exclusivamente para consumo familiar,
-            excluyendo expl&iacute;citamente ventas mayoristas o ventas
-            a precio distinto respecto del precio normal de tienda.
-            Bases y condiciones protocolizadas ante notario,
-            inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
-          
-          </td>
-        </tr>
+  
+<table id="bloquePlantillaFecha" cellpadding="0" cellspacing="0" align="center" width="600" style="padding-top: 10px;">
+  <tr>
+    <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:11px;color:#333;line-height:13px; padding:3%; ">
+      *Precio referencial Regi&oacute;n Metropolitana. Este correo
+      muestra precios de nuestras tiendas en la Regi&oacute;n
+      Metropolitana, nuestros precios son siempre bajos. Su
+      vigencia es desde el d&iacute;a {{FECHA_RANGO}}, pudiendo cambiar si var&iacute;an las
+      condiciones
+      de mercado y/o al cambiar la ubicaci&oacute;n de despacho o
+      de retiro. Productos y promociones v&aacute;lidas
+      seg&uacute;n disponibilidad, para clientes y consumidores
+      finales; aplica exclusivamente para consumo familiar,
+      excluyendo expl&iacute;citamente ventas mayoristas o ventas
+      a precio distinto respecto del precio normal de tienda.
+      Bases y condiciones protocolizadas ante notario,
+      inf&oacute;rmese en <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none; color: #333333;">www.sodimac.cl</a>
+    
+    </td>
+  </tr>
 
-        <tr>
-          <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
-      </tr>  
-        </table>
+  <tr>
+    <td colspan="2" align="center" style="font-family:Helvetica, sans-serif;text-align:center;font-size:14px;color:#333;line-height:13px;padding-bottom: 10px; "> Revisa las bases legales de promociones  <a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/content/concursos-sodimac?',@prefix))=%%" style="text-decoration: none;  ">aquí</a> </td>
+</tr>  
+  </table>
       <!-- Fin INFO LEGAL PRECIOS -->
 
 
