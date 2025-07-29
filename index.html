@@ -164,12 +164,15 @@
 
 <div id="contenedorInputTienda" class="mt-3 d-none">
   <label for="inputNombreTienda" class="form-label">🏬 Nombre de la tienda:</label>
-  <input type="text" id="inputNombreTienda" class="form-control" placeholder="Ej: Tienda HC747 Temuco">
+  <input type="text" id="inputNombreTienda" class="form-control" placeholder="Ej: HC747 Temuco">
 </div>
 
 <div id="contenedorInputRegion" class="mt-3 d-none">
-  <label for="inputRegion" class="form-label">🌎 Región:</label>
-  <input type="text" id="inputRegion" class="form-control" list="listaRegiones" placeholder="Ej: La Araucanía">
+  <label for="inputComuna" class="form-label">📍 Comuna o Provincia:</label>
+  <input type="text" id="inputComuna" class="form-control" placeholder="Ej: Temuco o Cautín">
+
+  <label for="inputRegion" class="form-label mt-2">🌎 Región detectada:</label>
+  <input type="text" id="inputRegion" class="form-control" list="listaRegiones" readonly>
   <datalist id="listaRegiones"></datalist>
 </div>
 

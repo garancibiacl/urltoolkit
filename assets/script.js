@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
   tooltips.forEach(el => new bootstrap.Tooltip(el))
 })
 
+// 🚀 Iniciar la carga de regiones desde JSON al cargar el DOM
+document.addEventListener("DOMContentLoaded", () => {
+  cargarRegiones();
+});
 
 
 
@@ -38,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  
 });
 
 
@@ -94,6 +100,7 @@ async function cargarBannersJson() {
 window.addEventListener("DOMContentLoaded", async () => {
   bannersJSON = await cargarBannersJson();
   console.log("📦 bannersJSON combinado:", bannersJSON);
+  
 });
 
 
@@ -724,6 +731,25 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
   mostrarHrefActual();
 });
 
+// Al escribir en inputComuna, se detecta la región y se rellena inputRegion
+document.getElementById("inputComuna").addEventListener("input", () => {
+  const valor = document.getElementById("inputComuna").value.trim();
+  const region = obtenerRegionDesdeComunaOProvincia(valor);
+
+  document.getElementById("inputRegion").value = region || ""; // si no encuentra, vacía
+});
+
+let regionesChile = [];
+
+async function cargarRegiones() {
+  try {
+    const res = await fetch('./assets/data/regiones-chile.json');
+    regionesChile = await res.json();
+    cargarDatalistRegiones(); // luego de cargar, llenar el datalist
+  } catch (error) {
+    console.error('❌ Error cargando regiones:', error);
+  }
+}
 
 
 
@@ -1132,21 +1158,43 @@ function guardarCambiosBannerDesdeInputs(index) {
 
 
   // START REGIONES CHILE
-  const regionesChile = [
-    "Arica y Parinacota", "Tarapacá", "Antofagasta", "Atacama", "Coquimbo",
-    "Valparaíso", "Metropolitana de Santiago", "Libertador General Bernardo O’Higgins",
-    "Maule", "Ñuble", "Biobío", "La Araucanía", "Los Ríos", "Los Lagos",
-    "Aysén del General Carlos Ibáñez del Campo", "Magallanes y de la Antártica Chilena"
-  ];
+  function cargarDatalistRegiones() {
+    const datalist = document.getElementById("listaRegiones");
+    if (!datalist) return;
+  
+    datalist.innerHTML = "";
+    regionesChile.forEach(region => {
+      const option = document.createElement("option");
+      option.value = region.nombre;
+      datalist.appendChild(option);
+    });
+  }
+  
   
   const datalistRegiones = document.getElementById("listaRegiones");
-  
-  // Cargar regiones automáticamente
   regionesChile.forEach(region => {
     const option = document.createElement("option");
-    option.value = region;
+    option.value = region.nombre;
     datalistRegiones.appendChild(option);
   });
+  
+  
+  
+  function obtenerRegionDesdeComunaOProvincia(nombre) {
+    const normalizado = nombre.trim().toLowerCase();
+  
+    for (const region of regionesChile) {
+      const matchComuna = region.comunas.some(c => c.toLowerCase() === normalizado);
+      const matchProvincia = region.provincias.some(p => p.toLowerCase() === normalizado);
+      if (matchComuna || matchProvincia) return region.nombre;
+    }
+  
+    return "";
+  }
+  
+  
+  
+  
   
 
 
@@ -1292,15 +1340,24 @@ let finalHTML = template.innerHTML;
 
 // ✅ Reemplazo de tienda dinámica y región
 const nombreTienda = document.getElementById('inputNombreTienda')?.value.trim();
-const regionSeleccionada = document.getElementById('inputRegion')?.value.trim();
+const valorComunaProvincia = document.getElementById('inputComuna')?.value.trim();
+let regionSeleccionada = document.getElementById('inputRegion')?.value.trim();
 
-if (finalHTML.includes('{{TIENDA_DINAMICA}}') && nombreTienda) {
-  finalHTML = finalHTML.replace(/\*\{\{TIENDA_DINAMICA\}\}/g, `*${nombreTienda}`);
+if (!regionSeleccionada && valorComunaProvincia) {
+  regionSeleccionada = obtenerRegionDesdeComunaOProvincia(valorComunaProvincia);
 }
 
+
+// ✅ Reemplazo directo de {{TIENDA_DINAMICA}} sin agregar "Tienda"
+if (finalHTML.includes('{{TIENDA_DINAMICA}}') && nombreTienda) {
+  finalHTML = finalHTML.replace(/\{\{TIENDA_DINAMICA\}\}/g, nombreTienda);
+}
+
+// ✅ Reemplazo inteligente de {{REGION}} (por comuna o provincia)
 if (finalHTML.includes('{{REGION}}') && regionSeleccionada) {
   finalHTML = finalHTML.replace(/\{\{REGION\}\}/g, regionSeleccionada);
 }
+
 
 
 
@@ -2023,20 +2080,8 @@ function inputRutaFtpReemplazo(ruta) {
   return nuevoPath;
 }
 
-document.getElementById("inputNombreTienda").addEventListener("input", () => {
 
-  
-  const nuevoNombre = inputNombreTienda.value.trim();
-  const bloqueLegal = document.getElementById("bloquePlantillaFecha");
 
-  if (!bloqueLegal || !nuevoNombre) return;
-
-  bloqueLegal.innerHTML = bloqueLegal.innerHTML.replace(
-    /\*\{\{(.*?)\}\}/,
-    `*{{${nuevoNombre}}}`
-  );
-  
-});
 
 
 function seleccionarTemplate() {
