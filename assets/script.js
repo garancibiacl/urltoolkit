@@ -1131,6 +1131,23 @@ function guardarCambiosBannerDesdeInputs(index) {
  // FIN BANNER DETECTADOS
 
 
+  // START REGIONES CHILE
+  const regionesChile = [
+    "Arica y Parinacota", "Tarapacá", "Antofagasta", "Atacama", "Coquimbo",
+    "Valparaíso", "Metropolitana de Santiago", "Libertador General Bernardo O’Higgins",
+    "Maule", "Ñuble", "Biobío", "La Araucanía", "Los Ríos", "Los Lagos",
+    "Aysén del General Carlos Ibáñez del Campo", "Magallanes y de la Antártica Chilena"
+  ];
+  
+  const datalistRegiones = document.getElementById("listaRegiones");
+  
+  // Cargar regiones automáticamente
+  regionesChile.forEach(region => {
+    const option = document.createElement("option");
+    option.value = region;
+    datalistRegiones.appendChild(option);
+  });
+  
 
 
 // START COPIAR HTML BTN
@@ -1139,7 +1156,7 @@ document.getElementById('copiarHtmlBtn').addEventListener('click', () => {
   const nuevaSrc = inputImg?.value.trim();
   const hrefInput = document.getElementById('hrefInput')?.value.trim();
 
-  
+
 
   const enlaceActual = enlacesConPatron[indiceActual];
   if (enlaceActual) {
@@ -1273,6 +1290,17 @@ let finalHTML = template.innerHTML;
 // sirve para el mostrar los banner modificados
 // let finalHTML = document.getElementById('htmlInput').value;
 
+// ✅ Reemplazo de tienda dinámica y región
+const nombreTienda = document.getElementById('inputNombreTienda')?.value.trim();
+const regionSeleccionada = document.getElementById('inputRegion')?.value.trim();
+
+if (finalHTML.includes('{{TIENDA_DINAMICA}}') && nombreTienda) {
+  finalHTML = finalHTML.replace(/\*\{\{TIENDA_DINAMICA\}\}/g, `*${nombreTienda}`);
+}
+
+if (finalHTML.includes('{{REGION}}') && regionSeleccionada) {
+  finalHTML = finalHTML.replace(/\{\{REGION\}\}/g, regionSeleccionada);
+}
 
 
 
@@ -1995,16 +2023,41 @@ function inputRutaFtpReemplazo(ruta) {
   return nuevoPath;
 }
 
+document.getElementById("inputNombreTienda").addEventListener("input", () => {
+
+  
+  const nuevoNombre = inputNombreTienda.value.trim();
+  const bloqueLegal = document.getElementById("bloquePlantillaFecha");
+
+  if (!bloqueLegal || !nuevoNombre) return;
+
+  bloqueLegal.innerHTML = bloqueLegal.innerHTML.replace(
+    /\*\{\{(.*?)\}\}/,
+    `*{{${nuevoNombre}}}`
+  );
+  
+});
 
 
 function seleccionarTemplate() {
   const select = document.getElementById('selectorTemplate');
   const archivoSeleccionado = select.value;
+  const contenedorTienda = document.getElementById("contenedorInputTienda");
+  const contenedorRegion = document.getElementById("contenedorInputRegion");
+
+  if (archivoSeleccionado === "Pro-tienda.html") {
+    contenedorTienda.classList.remove("d-none");
+    contenedorRegion.classList.remove("d-none");
+  } else {
+    contenedorTienda.classList.add("d-none");
+    contenedorRegion.classList.add("d-none");
+  }
 
   if (archivoSeleccionado) {
     cargarTemplateDesdeAssets(archivoSeleccionado);
   }
 }
+
 
 
 
