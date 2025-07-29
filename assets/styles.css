@@ -338,3 +338,8 @@ textarea {
     transform: scale(1.05);
     box-shadow: 0 0 0 3px #10b98155;
   }
+
+  .preview-scroll{
+    max-height: 480px;
+    overflow-y: auto;
+  }
