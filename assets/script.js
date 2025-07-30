@@ -734,9 +734,13 @@ document.getElementById('cargarBtn').addEventListener('click', () => {
 // Al escribir en inputComuna, se detecta la región y se rellena inputRegion
 document.getElementById("inputComuna").addEventListener("input", () => {
   const valor = document.getElementById("inputComuna").value.trim();
-  const region = obtenerRegionDesdeComunaOProvincia(valor);
 
-  document.getElementById("inputRegion").value = region || ""; // si no encuentra, vacía
+  // 🔠 Normalizar: quita tildes y pasa a minúsculas
+  const valorNormalizado = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const region = obtenerRegionDesdeComunaOProvincia(valorNormalizado);
+
+  document.getElementById("inputRegion").value = region || "";
 });
 
 let regionesChile = [];
@@ -1181,16 +1185,25 @@ function guardarCambiosBannerDesdeInputs(index) {
   
   
   function obtenerRegionDesdeComunaOProvincia(nombre) {
-    const normalizado = nombre.trim().toLowerCase();
+    const normalizado = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   
     for (const region of regionesChile) {
-      const matchComuna = region.comunas.some(c => c.toLowerCase() === normalizado);
-      const matchProvincia = region.provincias.some(p => p.toLowerCase() === normalizado);
-      if (matchComuna || matchProvincia) return region.nombre;
+      const matchComuna = region.comunas?.some(c => 
+        c.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === normalizado
+      );
+  
+      const matchProvincia = region.provincias?.some(p =>
+        p.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === normalizado
+      );
+  
+      if (matchComuna || matchProvincia) {
+        return region.nombre;
+      }
     }
   
     return "";
   }
+  
   
   
   
@@ -2090,7 +2103,10 @@ function seleccionarTemplate() {
   const contenedorTienda = document.getElementById("contenedorInputTienda");
   const contenedorRegion = document.getElementById("contenedorInputRegion");
 
-  if (archivoSeleccionado === "Pro-tienda.html") {
+  // Validar múltiples templates donde se requieren inputs adicionales
+  const requiereInputs = ["Pro-tienda.html", "Hogar-tienda.html"];
+
+  if (requiereInputs.includes(archivoSeleccionado)) {
     contenedorTienda.classList.remove("d-none");
     contenedorRegion.classList.remove("d-none");
   } else {
@@ -2102,6 +2118,7 @@ function seleccionarTemplate() {
     cargarTemplateDesdeAssets(archivoSeleccionado);
   }
 }
+
 
 
 
