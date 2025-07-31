@@ -428,18 +428,19 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
 
 
                         <table width="600" cellspacing="0" cellpadding="0" align="center">
+                          <tr>
+                            <td colspan="2" align="center"> 
+                                <img src="https://www.sodimac.cl/static/envioweb/2025/huinchas/huincha-despacho-gratis-generico-v2.png" alt="Envío gratis en productos seleccionados" style="display:block; width: 100%; " border="0"></td> 
+                        </tr> 
+                       
       
                           <tr>
-                            <td colspan="2" align="center" ><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/116557021/Taladro-Inalambrico-Percutor-13-mm-20-V-2-Baterias-100-Accesorios/116557023?',@prefix))=%%" target="_blank"> 
+                            <td colspan="2" align="center" style="padding-bottom: 20px;"><a href="%%=RedirectTo(concat('https://www.sodimac.cl/sodimac-cl/articulo/116557021/Taladro-Inalambrico-Percutor-13-mm-20-V-2-Baterias-100-Accesorios/116557023?',@prefix))=%%" target="_blank"> 
                               <img src="https://www.sodimac.cl/static/envioweb/2025/06-junio/10-herramientas/images/10-herramientas-0.png" alt="Ir a Taladro Inalambrico Percutor 13 mm 20 V 2 Baterias 100 Accesorios" style="display:block;" border="0"> </a>
                             </td>
                           </tr>
 
-                          <tr>
-                            <td colspan="2" align="center" style="padding-bottom: 20px;"> 
-                                <img src="https://www.sodimac.cl/static/envioweb/2025/huinchas/huincha-despacho-gratis-generico-v2.png" alt="Envío gratis en productos seleccionados" style="display:block; width: 100%; " border="0"></td> 
-                        </tr> 
-                       
+                     
 
                       
                         </table> 
@@ -1750,13 +1751,15 @@ EMPTY(MARCA_LOYALTY_CMR) THEN ]%%
               </td>
             </tr>
 
-  <tr>
-    <td colspan="2" align="center">
- 
-         <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/blackOut_mail_sodimac.jpg" alt="Abre tu cmr y llevate 20 mil para este black Out" style="display:block;" border="0">
-   
-    </td>
-  </tr>
+            %%[ IF AttributeValue("MARCA_CMR") == "PREAPROBADO" THEN ]%%
+            <tr>
+            <td colspan="2" align="center">
+            <a href="https://www.sodimac.cl/sodimac-cl/content/CMR-enlinea?utm_source=marketing-directo&utm_medium=email&utm_campaign=30/07/2025_falabella_tarjeta-credito-cmr_performance&utm_content=tactica_mail_sodimac_bo_ago25_cmr_20k&utm_term=no-cliente" target="_blank" title="¡Abre tu tarjeta CMR online y en 5 minutos! | Sodimac Chile">
+            <img src="https://www.sodimac.cl/static/envioweb/2025/banners/images/blackOut_mail_sodimac.jpg?v03" alt="Abre tu cmr y llévate 20 mil para este Black Out" style="display:block;" border="0">
+            </a>
+            </td>
+            </tr>
+            %%[ ENDIF ]%%
           </table>
                                 
             
