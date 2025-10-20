@@ -1476,45 +1476,69 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
   const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
   const dominioHTTPS = 'https://www.sodimac.cl';
 
-  const nuevaBase = rutaFtpUsuario
-    .replace(baseFTP, dominioHTTPS)
-    .replace(/\\/g, '/')
-    .trim();
+  let nuevaBase = rutaFtpUsuario.trim().replace(/\\/g, '/');
+  if (nuevaBase.startsWith(baseFTP)) {
+    nuevaBase = nuevaBase.replace(baseFTP, dominioHTTPS);
+  } else {
+    nuevaBase = nuevaBase.replace(/^ftp:\/\/[^/]+/i, dominioHTTPS);
+  }
 
-  const nuevaRelativa = nuevaBase.split('/static/envioweb/')[1];
-  if (!nuevaRelativa) {
+  const partesBase = nuevaBase.split('/static/envioweb/');
+  if (partesBase.length < 2) {
     return alert('❌ Ruta no válida para reemplazo');
   }
 
-  // ✅ Carpetas de campañas válidas (puedes extender esta lista)
-  const carpetasValidas = [
-    '/cyberday/emkt/',
-    '/05-mayo/',
-    '/navidad/emkt/',
-    '/aniversario/emkt/',
-    '/liquidades/emkt/'
-  ];
-  const imgs = template.content.querySelectorAll('img');
-  let contador = 0;
+  let relativaNueva = partesBase[1].replace(/^\/+/, '');
+  if (!relativaNueva) {
+    return alert('❌ Ruta no válida para reemplazo');
+  }
+
+  const extensionNuevaMatch = relativaNueva.match(/\.(png|jpg|jpeg|gif|webp)$/i);
+  let extensionNueva = extensionNuevaMatch ? extensionNuevaMatch[0] : '';
+  if (extensionNueva) {
+    relativaNueva = relativaNueva.slice(0, -extensionNueva.length);
+  }
+
+  const numeroNuevoMatch = relativaNueva.match(/-\d+$/);
+  if (numeroNuevoMatch) {
+    relativaNueva = relativaNueva.slice(0, -numeroNuevoMatch[0].length);
+  }
+  relativaNueva = relativaNueva.replace(/-$/, '');
 
   const enlaceActual = enlacesConPatron[indiceActual];
   const tdActual = enlaceActual?.closest('td');
   const imgActual = tdActual?.querySelector('img');
+  const referenciaSrc = imgActual?.getAttribute('src') || ultimaImagenEditada || '';
+
+  const matchReferencia = referenciaSrc.match(/\/static\/envioweb\/(.+?)(-\d+)(\.(png|jpg|jpeg|gif|webp))$/i);
+  if (!matchReferencia) {
+    return alert('❌ No se pudo detectar la carpeta actual en el template');
+  }
+
+  const baseActualRelativa = matchReferencia[1];
+  const extensionReferencia = matchReferencia[3];
+  if (!extensionNueva) {
+    extensionNueva = extensionReferencia;
+  }
+
+  const imgs = template.content.querySelectorAll('img[src*="/static/envioweb/"]');
+  let contador = 0;
 
   imgs.forEach(img => {
     const src = img.getAttribute('src');
+    if (!src) return;
 
-    // ✅ Validación dinámica: asegurar que incluya "/static/envioweb/2025/[carpeta]/emkt/"
-    const esValida = src && src.includes('/static/envioweb/2025') &&
-      carpetasValidas.some(ruta => src.includes(`/static/envioweb/2025${ruta}`));
+    const matchImg = src.match(/\/static\/envioweb\/(.+?)(-\d+)(\.(png|jpg|jpeg|gif|webp))$/i);
+    if (!matchImg) return;
 
-    if (!esValida) return;
+    const baseImg = matchImg[1];
+    if (baseImg !== baseActualRelativa) return;
 
-    const matchNumero = src.match(/(\d+\.(png|jpg|jpeg|gif))$/i);
-    if (!matchNumero) return;
+    const numeroFinal = matchImg[2];
+    const extensionImg = matchImg[3];
+    const extensionFinal = extensionNueva || extensionImg;
 
-    const numeroFinal = matchNumero[1];
-    const nuevaRuta = `${dominioHTTPS}/static/envioweb/${nuevaRelativa}${numeroFinal}`;
+    const nuevaRuta = `${dominioHTTPS}/static/envioweb/${relativaNueva}${numeroFinal}${extensionFinal}`;
     img.setAttribute('src', nuevaRuta);
     contador++;
 
@@ -1528,10 +1552,14 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
       if (input) {
         input.value = nuevaRuta;
       }
+      ultimaImagenEditada = nuevaRuta;
     }
   });
 
   actualizarVistaPrevia();
+  if (contador === 0) {
+    return mostrarToast('⚠️ No se encontraron imágenes para actualizar con esa carpeta', 'warning');
+  }
   mostrarToast(`✅ ${contador} imagen(es) actualizada(s) con nueva carpeta`, 'success');
 }
 
@@ -1541,19 +1569,43 @@ function reemplazarRutaBaseDetectandoCarpeta(rutaFtpUsuario) {
 
 
 function inputRutaFtpReemplazo(ruta) {
-  if (!ruta.includes('/static/envioweb/')) return ruta;
+  if (!ruta) return ruta;
 
-  // Extrae número final si existe
-  const match = ruta.match(/(-\d+\.(png|jpg|jpeg|gif))$/i);
-  const numeroFinal = match ? match[1] : '';
+  const baseFTP = 'ftp://soclAdmin@10.1.3.63/produccion';
+  const dominioHTTPS = 'https://www.sodimac.cl';
+  const regexSufijo = /(-\d+\.(png|jpg|jpeg|gif|webp))$/i;
 
-  // Elimina todo lo anterior a partir de "static/envioweb"
-  const base = ruta.split('/static/envioweb/')[1];
-  if (!base) return ruta;
+  let limpia = ruta.trim().replace(/\\/g, '/');
+  if (!limpia.includes('/static/envioweb/')) return limpia;
 
-  // Generar nueva ruta limpia
-  const nuevoPath = `https://www.sodimac.cl/static/envioweb/${base.replace(/-\d+\.(png|jpg|jpeg|gif)$/i, '')}${numeroFinal}`;
-  return nuevoPath;
+  if (limpia.startsWith(baseFTP)) {
+    limpia = limpia.replace(baseFTP, dominioHTTPS);
+  } else {
+    limpia = limpia.replace(/^ftp:\/\/[^/]+/i, dominioHTTPS);
+  }
+
+  const partes = limpia.split('/static/envioweb/');
+  if (partes.length < 2) return limpia;
+
+  let relativo = partes[1].replace(/^\/+/, '');
+  let sufijo = '';
+
+  const match = relativo.match(regexSufijo);
+  if (match) {
+    sufijo = match[1];
+    relativo = relativo.slice(0, -sufijo.length);
+  } else if (typeof ultimaImagenEditada === 'string') {
+    const matchActual = ultimaImagenEditada.match(regexSufijo);
+    if (matchActual) {
+      sufijo = matchActual[1];
+    }
+  }
+
+  if (sufijo.startsWith('-')) {
+    relativo = relativo.replace(/-$/, '');
+  }
+
+  return `${dominioHTTPS}/static/envioweb/${relativo}${sufijo}`;
 }
 
 
